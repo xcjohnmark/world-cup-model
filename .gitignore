@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pkl
+.env
+venv/
+.venv/
+
+# Node
+node_modules/
+.next/
+.vercel/
+
+# Data
+backend/data/raw/*.csv
+
+# Models
+backend/models/*.pkl
+
+# OS
+.DS_Store
+Thumbs.db
