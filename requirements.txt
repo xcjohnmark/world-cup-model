@@ -8,3 +8,7 @@ fastapi
 uvicorn
 plotly
 streamlit
+python-dotenv
+tqdm
+joblib
+pydantic
