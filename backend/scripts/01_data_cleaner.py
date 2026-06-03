@@ -155,14 +155,87 @@ def inspect_strength_datasets():
     print("-" * 50)
 
 
+def inspect_supporting_datasets():
+    """
+    STEP 3: Inspect supporting datasets
+    Loads, displays and analyzes shootouts.csv, goalscorers.csv, and former-names.csv.
+    """
+    print("\n" + "=" * 80)
+    print("STEP 3: Inspect supporting datasets")
+    print("=" * 80)
+
+    # --- shootouts.csv ---
+    print("--- PENALTY SHOOTOUTS (shootouts.csv) ---")
+    shootouts_path = os.path.join("backend", "data", "raw", "shootouts.csv")
+    print(f"Loading data from: {shootouts_path}\n")
+    df_shootouts = pd.read_csv(shootouts_path)
+
+    # 1. Load and print: shape, columns, first 5 rows, date range
+    print(f"Shape: {df_shootouts.shape}")
+    print(f"Columns: {df_shootouts.columns.tolist()}")
+    print("\nFirst 5 rows:")
+    print(df_shootouts.head())
+    min_date = df_shootouts["date"].min()
+    max_date = df_shootouts["date"].max()
+    print(f"\nDate Range: {min_date} to {max_date}")
+
+    # 2. Print: top 10 teams by total shootouts won (winner column)
+    print("\nTop 10 teams by total shootouts won:")
+    print(df_shootouts["winner"].value_counts().head(10))
+
+    # 3. Print: count of null values in first_shooter
+    print(f"\nCount of null values in first_shooter: {df_shootouts['first_shooter'].isnull().sum()}")
+
+    # 4. Note
+    print("\n[NOTE] This data will be used to compute each team's historical penalty win rate.")
+    print("-" * 50)
+
+    # --- goalscorers.csv ---
+    print("\n--- GOALSCORERS (goalscorers.csv) ---")
+    goalscorers_path = os.path.join("backend", "data", "raw", "goalscorers.csv")
+    print(f"Loading data from: {goalscorers_path}\n")
+    df_goalscorers = pd.read_csv(goalscorers_path)
+
+    # 1. Load and print: shape, columns, first 5 rows
+    print(f"Shape: {df_goalscorers.shape}")
+    print(f"Columns: {df_goalscorers.columns.tolist()}")
+    print("\nFirst 5 rows:")
+    print(df_goalscorers.head())
+
+    # 2. Print: total goals, penalty goals, own goals
+    total_goals = len(df_goalscorers)
+    penalty_goals = (df_goalscorers["penalty"] == True).sum()
+    own_goals = (df_goalscorers["own_goal"] == True).sum()
+    print(f"\nTotal Goals: {total_goals}")
+    print(f"Penalty Goals: {penalty_goals}")
+    print(f"Own Goals: {own_goals}")
+
+    # 3. Note
+    print("\n[NOTE] This file will NOT be used as a direct feature — it's supplementary context only.")
+    print("-" * 50)
+
+    # --- former-names.csv ---
+    print("\n--- FORMER NAMES (former-names.csv) ---")
+    former_names_path = os.path.join("backend", "data", "raw", "former-names.csv")
+    print(f"Loading data from: {former_names_path}\n")
+    df_former = pd.read_csv(former_names_path)
+
+    # 1. Load and print the entire file (only 36 rows)
+    print(df_former.to_string(index=False))
+
+    # 2. Explain
+    print("\n[EXPLANATION] This maps old country names to current names (e.g. 'West Germany' -> 'Germany').")
+    print("-" * 50)
+
+
 def clean_data():
     """
-    STEP 3: Clean and Standardize Datasets
+    STEP 4: Clean and Standardize Datasets
     Applies the TeamStandardizer to results.csv, fifa-ranking.csv, and wc_2026_groups.json.
     Saves results to backend/data/cleaned/.
     """
     print("\n" + "=" * 80)
-    print("STEP 3: Clean and Standardize Datasets")
+    print("STEP 4: Clean and Standardize Datasets")
     print("=" * 80)
 
     # Initialize standardizer
@@ -241,4 +314,5 @@ def clean_data():
 if __name__ == "__main__":
     inspect_results()
     inspect_strength_datasets()
+    inspect_supporting_datasets()
     clean_data()
