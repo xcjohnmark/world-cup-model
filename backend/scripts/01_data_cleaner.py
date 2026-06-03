@@ -311,8 +311,243 @@ def clean_data():
     print("-" * 50)
 
 
+def clean_results():
+    """
+    STEP 5: Clean and Process Match Results for Training and Fixtures
+    1. Load backend/data/raw/results.csv
+    2. Parse date column to datetime
+    3. Apply standardize_name() to both home_team and away_team columns
+    4. Remove rows where home_score OR away_score is null
+       - EXCEPTION: Keep rows where date >= 2026-06-11 (WC 2026 fixtures)
+       - Store WC 2026 fixtures separately as wc2026_fixtures DataFrame
+    5. Remove exact duplicate rows (same date + same teams)
+    6. Filter to matches on or after 2014-01-01 only (for the training set)
+    7. Sort chronologically by date
+    8. Add a competition_weight column
+    9. Print final stats
+    10. Save to backend/data/processed/clean_matches.csv
+    11. Save wc2026_fixtures to backend/data/processed/wc2026_fixtures.csv
+    """
+    print("\n" + "=" * 80)
+    print("STEP 5: Clean and Process Match Results")
+    print("=" * 80)
+
+    # Initialize standardizer
+    standardizer = TeamStandardizer()
+
+    # 1. Load backend/data/raw/results.csv
+    csv_path = os.path.join("backend", "data", "raw", "results.csv")
+    print(f"Loading raw results from: {csv_path}")
+    df = pd.read_csv(csv_path)
+
+    # 2. Parse date column to datetime
+    df["date"] = pd.to_datetime(df["date"])
+
+    # 3. Apply standardize_name() to both home_team and away_team columns
+    def standardize_name(name):
+        return standardizer.standardize(name)
+
+    print("Standardizing team names...")
+    df["home_team"] = df["home_team"].apply(standardize_name)
+    df["away_team"] = df["away_team"].apply(standardize_name)
+
+    # 4. Remove rows where home_score OR away_score is null
+    # EXCEPTION: Keep rows where date >= 2026-06-11 (WC 2026 fixtures)
+    cutoff_date = pd.to_datetime("2026-06-11")
+    is_wc2026 = df["date"] >= cutoff_date
+    has_score = df["home_score"].notnull() & df["away_score"].notnull()
+
+    df_filtered = df[has_score | is_wc2026].copy()
+
+    # 5. Remove exact duplicate rows (same date + same teams)
+    print("Removing exact duplicates (same date + same teams)...")
+    df_filtered = df_filtered.drop_duplicates(subset=["date", "home_team", "away_team"])
+
+    # 6. Filter to matches on or after 2014-01-01 only (for the training set)
+    # The WC 2026 fixtures are all in 2026, which is after 2014-01-01.
+    start_date = pd.to_datetime("2014-01-01")
+    df_filtered = df_filtered[df_filtered["date"] >= start_date]
+
+    # 7. Sort chronologically by date — this is MANDATORY
+    print("Sorting chronologically by date...")
+    df_filtered = df_filtered.sort_values(by="date").reset_index(drop=True)
+
+    # 8. Add a competition_weight column
+    print("Mapping competition weights...")
+    weight_map = {
+        "FIFA World Cup": 3.0,
+        "FIFA World Cup qualification": 2.0,
+        "UEFA Euro": 2.5,
+        "Copa América": 2.5,
+        "Copa Am\uFFFDrica": 2.5,
+        "African Cup of Nations": 2.0,
+        "AFC Asian Cup": 2.0,
+        "Gold Cup": 1.5,
+        "CONCACAF Nations League": 1.5,
+        "UEFA Nations League": 1.5,
+        "UEFA Euro qualification": 1.5,
+        "African Cup of Nations qualification": 1.5,
+        "Friendly": 0.5
+    }
+    df_filtered["competition_weight"] = df_filtered["tournament"].map(weight_map).fillna(1.0)
+
+    # Split into training matches and future fixtures
+    wc2026_fixtures = df_filtered[df_filtered["date"] >= cutoff_date].copy()
+    clean_matches = df_filtered[df_filtered["date"] < cutoff_date].copy()
+
+    # 9. Print final stats: total rows, date range, null counts, competition weight distribution
+    print("\n--- FINAL STATS for clean_matches (Training Set) ---")
+    print(f"Total rows: {len(clean_matches)}")
+    if not clean_matches.empty:
+        print(f"Date range: {clean_matches['date'].min().strftime('%Y-%m-%d')} to {clean_matches['date'].max().strftime('%Y-%m-%d')}")
+    else:
+        print("Date range: Empty")
+    print("\nNull counts:")
+    print(clean_matches.isnull().sum())
+    print("\nCompetition weight distribution:")
+    print(clean_matches["competition_weight"].value_counts())
+
+    print("\n--- FINAL STATS for wc2026_fixtures (Test Set) ---")
+    print(f"Total rows: {len(wc2026_fixtures)}")
+    if not wc2026_fixtures.empty:
+        print(f"Date range: {wc2026_fixtures['date'].min().strftime('%Y-%m-%d')} to {wc2026_fixtures['date'].max().strftime('%Y-%m-%d')}")
+    else:
+        print("Date range: Empty")
+    print("\nNull counts:")
+    print(wc2026_fixtures.isnull().sum())
+
+    # Save to directory
+    processed_dir = os.path.join("backend", "data", "processed")
+    os.makedirs(processed_dir, exist_ok=True)
+
+    # 10. Save to backend/data/processed/clean_matches.csv
+    clean_matches_path = os.path.join(processed_dir, "clean_matches.csv")
+    clean_matches.to_csv(clean_matches_path, index=False)
+    print(f"\nSaved clean matches to: {clean_matches_path}")
+
+    # 11. Save wc2026_fixtures to backend/data/processed/wc2026_fixtures.csv
+    wc2026_fixtures_path = os.path.join(processed_dir, "wc2026_fixtures.csv")
+    wc2026_fixtures.to_csv(wc2026_fixtures_path, index=False)
+    print(f"Saved WC 2026 fixtures to: {wc2026_fixtures_path}")
+    print("-" * 50)
+
+
+def clean_fifa_rankings():
+    """
+    STEP 6: Clean and Process FIFA Rankings
+    1. Load backend/data/raw/fifa-ranking.csv
+    2. Apply standardize_name() to country_full column, rename it to team
+    3. Parse rank_date to datetime
+    4. Keep only: team, rank, rank_date
+    5. Handle nulls in rank (9 null rows) — drop these rows
+    6. Sort by rank_date ascending, then team
+    7. For each team, ensure rankings are monotonically ordered by date (remove any out-of-order entries)
+    8. Save to backend/data/processed/clean_rankings.csv
+    """
+    print("\n" + "=" * 80)
+    print("STEP 6: Clean and Process FIFA Rankings")
+    print("=" * 80)
+
+    # Initialize standardizer
+    standardizer = TeamStandardizer()
+
+    # 1. Load backend/data/raw/fifa-ranking.csv
+    csv_path = os.path.join("backend", "data", "raw", "fifa-ranking.csv")
+    print(f"Loading raw FIFA rankings from: {csv_path}")
+    df = pd.read_csv(csv_path)
+
+    # 2. Apply standardize_name() to country_full column, rename it to team
+    def standardize_name(name):
+        return standardizer.standardize(name)
+
+    print("Standardizing team names in FIFA rankings...")
+    df["team"] = df["country_full"].apply(standardize_name)
+
+    # 3. Parse rank_date to datetime
+    df["rank_date"] = pd.to_datetime(df["rank_date"])
+
+    # 4. Keep only: team, rank, rank_date
+    df = df[["team", "rank", "rank_date"]]
+
+    # 5. Handle nulls in rank (9 null rows) — drop these rows
+    df = df.dropna(subset=["rank"])
+
+    # 6. Sort by rank_date ascending, then team
+    df = df.sort_values(by=["rank_date", "team"]).reset_index(drop=True)
+
+    # 7. For each team, ensure rankings are monotonically ordered by date (remove any out-of-order entries)
+    df = df.drop_duplicates(subset=["team", "rank_date"]).reset_index(drop=True)
+
+    # 9. Print final stats
+    print("\n--- FINAL STATS for clean_rankings ---")
+    print(f"Total rows after cleaning: {len(df)}")
+    if not df.empty:
+        print(f"Date range: {df['rank_date'].min().strftime('%Y-%m-%d')} to {df['rank_date'].max().strftime('%Y-%m-%d')}")
+        unique_teams = df["team"].nunique()
+        print(f"Number of unique teams: {unique_teams}")
+
+        # Top 10 teams in the most recent ranking available
+        most_recent_date = df["rank_date"].max()
+        df_recent = df[df["rank_date"] == most_recent_date]
+        print(f"\nTop 10 teams in the most recent ranking ({most_recent_date.strftime('%Y-%m-%d')}):")
+        print(df_recent.sort_values("rank")[["rank", "team"]].head(10).to_string(index=False))
+    else:
+        print("Date range: Empty")
+
+    # 10. Save to backend/data/processed/clean_rankings.csv
+    processed_dir = os.path.join("backend", "data", "processed")
+    os.makedirs(processed_dir, exist_ok=True)
+    clean_rankings_path = os.path.join(processed_dir, "clean_rankings.csv")
+    df.to_csv(clean_rankings_path, index=False)
+    print(f"\nSaved clean FIFA rankings to: {clean_rankings_path}")
+    print("-" * 50)
+
+
+# Cached data dictionary for get_fifa_rank optimization
+_fifa_rank_cache = {}
+
+def get_fifa_rank(team: str, match_date) -> float:
+    """
+    Finds the most recent FIFA ranking for team on or before match_date.
+    Returns the ranking value (int), or NaN if no ranking exists before that date.
+    This function will be called during feature engineering.
+    """
+    global _fifa_rank_cache
+    
+    # Lazy load and build the cache
+    if not _fifa_rank_cache:
+        path = os.path.join("backend", "data", "processed", "clean_rankings.csv")
+        if os.path.exists(path):
+            df_temp = pd.read_csv(path)
+            df_temp["rank_date"] = pd.to_datetime(df_temp["rank_date"])
+            # Ensure sorting
+            df_temp = df_temp.sort_values(by="rank_date")
+            for t, group in df_temp.groupby("team"):
+                _fifa_rank_cache[t] = (group["rank_date"].tolist(), group["rank"].tolist())
+                
+    if team not in _fifa_rank_cache:
+        return float('nan')
+        
+    dates, ranks = _fifa_rank_cache[team]
+    match_dt = pd.to_datetime(match_date)
+    
+    import bisect
+    idx = bisect.bisect_right(dates, match_dt)
+    if idx == 0:
+        return float('nan')
+    return int(ranks[idx - 1])
+
+
 if __name__ == "__main__":
+    # Temporarily set logging to ERROR to avoid warning spam for historical teams not in the WC mapping
+    import logging
+    logging.getLogger("backend.utils.team_standardizer").setLevel(logging.ERROR)
+
     inspect_results()
     inspect_strength_datasets()
     inspect_supporting_datasets()
     clean_data()
+    clean_results()
+    clean_fifa_rankings()
+
+
