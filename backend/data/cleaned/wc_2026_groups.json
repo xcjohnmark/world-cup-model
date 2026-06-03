@@ -1,0 +1,278 @@
+{
+  "groups": {
+    "A": [
+      "Mexico",
+      "South Africa",
+      "Korea Republic",
+      "Czechia"
+    ],
+    "B": [
+      "Canada",
+      "Bosnia and Herzegovina",
+      "Qatar",
+      "Switzerland"
+    ],
+    "C": [
+      "Brazil",
+      "Morocco",
+      "Haiti",
+      "Scotland"
+    ],
+    "D": [
+      "United States",
+      "Paraguay",
+      "Australia",
+      "T\u00fcrkiye"
+    ],
+    "E": [
+      "Germany",
+      "Cura\u00e7ao",
+      "C\u00f4te d'Ivoire",
+      "Ecuador"
+    ],
+    "F": [
+      "Netherlands",
+      "Japan",
+      "Sweden",
+      "Tunisia"
+    ],
+    "G": [
+      "Belgium",
+      "Egypt",
+      "IR Iran",
+      "New Zealand"
+    ],
+    "H": [
+      "Spain",
+      "Cabo Verde",
+      "Saudi Arabia",
+      "Uruguay"
+    ],
+    "I": [
+      "France",
+      "Senegal",
+      "Iraq",
+      "Norway"
+    ],
+    "J": [
+      "Argentina",
+      "Algeria",
+      "Austria",
+      "Jordan"
+    ],
+    "K": [
+      "Portugal",
+      "Congo DR",
+      "Uzbekistan",
+      "Colombia"
+    ],
+    "L": [
+      "England",
+      "Croatia",
+      "Ghana",
+      "Panama"
+    ]
+  },
+  "knockout_bracket": {
+    "round_of_32": [
+      {
+        "match_id": 73,
+        "home": "runner_up_A",
+        "away": "runner_up_B",
+        "venue": "Los Angeles Stadium"
+      },
+      {
+        "match_id": 74,
+        "home": "winner_E",
+        "away": "third_place_A_B_C_D_F",
+        "venue": "Boston Stadium"
+      },
+      {
+        "match_id": 75,
+        "home": "winner_F",
+        "away": "runner_up_C",
+        "venue": "Estadio Monterrey"
+      },
+      {
+        "match_id": 76,
+        "home": "winner_C",
+        "away": "runner_up_F",
+        "venue": "Houston Stadium"
+      },
+      {
+        "match_id": 77,
+        "home": "winner_I",
+        "away": "third_place_C_D_F_G_H",
+        "venue": "New York New Jersey Stadium"
+      },
+      {
+        "match_id": 78,
+        "home": "runner_up_E",
+        "away": "runner_up_I",
+        "venue": "Dallas Stadium"
+      },
+      {
+        "match_id": 79,
+        "home": "winner_A",
+        "away": "third_place_C_E_F_H_I",
+        "venue": "Mexico City Stadium"
+      },
+      {
+        "match_id": 80,
+        "home": "winner_L",
+        "away": "third_place_E_H_I_J_K",
+        "venue": "Atlanta Stadium"
+      },
+      {
+        "match_id": 81,
+        "home": "winner_D",
+        "away": "third_place_B_E_F_I_J",
+        "venue": "San Francisco Bay Area Stadium"
+      },
+      {
+        "match_id": 82,
+        "home": "winner_G",
+        "away": "third_place_A_E_H_I_J",
+        "venue": "Seattle Stadium"
+      },
+      {
+        "match_id": 83,
+        "home": "runner_up_K",
+        "away": "runner_up_L",
+        "venue": "Toronto Stadium"
+      },
+      {
+        "match_id": 84,
+        "home": "winner_H",
+        "away": "runner_up_J",
+        "venue": "Los Angeles Stadium"
+      },
+      {
+        "match_id": 85,
+        "home": "winner_B",
+        "away": "third_place_E_F_G_I_J",
+        "venue": "BC Place Vancouver"
+      },
+      {
+        "match_id": 86,
+        "home": "winner_J",
+        "away": "runner_up_H",
+        "venue": "Miami Stadium"
+      },
+      {
+        "match_id": 87,
+        "home": "winner_K",
+        "away": "third_place_D_E_I_J_L",
+        "venue": "Kansas City Stadium"
+      },
+      {
+        "match_id": 88,
+        "home": "runner_up_D",
+        "away": "runner_up_G",
+        "venue": "Dallas Stadium"
+      }
+    ],
+    "round_of_16": [
+      {
+        "match_id": 89,
+        "home": "winner_74",
+        "away": "winner_77",
+        "venue": "Philadelphia Stadium"
+      },
+      {
+        "match_id": 90,
+        "home": "winner_73",
+        "away": "winner_75",
+        "venue": "Houston Stadium"
+      },
+      {
+        "match_id": 91,
+        "home": "winner_76",
+        "away": "winner_78",
+        "venue": "New York New Jersey Stadium"
+      },
+      {
+        "match_id": 92,
+        "home": "winner_79",
+        "away": "winner_80",
+        "venue": "Mexico City Stadium"
+      },
+      {
+        "match_id": 93,
+        "home": "winner_83",
+        "away": "winner_84",
+        "venue": "Dallas Stadium"
+      },
+      {
+        "match_id": 94,
+        "home": "winner_81",
+        "away": "winner_82",
+        "venue": "Seattle Stadium"
+      },
+      {
+        "match_id": 95,
+        "home": "winner_86",
+        "away": "winner_88",
+        "venue": "Atlanta Stadium"
+      },
+      {
+        "match_id": 96,
+        "home": "winner_85",
+        "away": "winner_87",
+        "venue": "BC Place Vancouver"
+      }
+    ],
+    "quarter_finals": [
+      {
+        "match_id": 97,
+        "home": "winner_89",
+        "away": "winner_90",
+        "venue": "Boston Stadium"
+      },
+      {
+        "match_id": 98,
+        "home": "winner_93",
+        "away": "winner_94",
+        "venue": "Los Angeles Stadium"
+      },
+      {
+        "match_id": 99,
+        "home": "winner_91",
+        "away": "winner_92",
+        "venue": "Miami Stadium"
+      },
+      {
+        "match_id": 100,
+        "home": "winner_95",
+        "away": "winner_96",
+        "venue": "Kansas City Stadium"
+      }
+    ],
+    "semi_finals": [
+      {
+        "match_id": 101,
+        "home": "winner_97",
+        "away": "winner_98",
+        "venue": "Dallas Stadium"
+      },
+      {
+        "match_id": 102,
+        "home": "winner_99",
+        "away": "winner_100",
+        "venue": "Atlanta Stadium"
+      }
+    ],
+    "third_place": {
+      "match_id": 103,
+      "home": "loser_101",
+      "away": "loser_102",
+      "venue": "Miami Stadium"
+    },
+    "final": {
+      "match_id": 104,
+      "home": "winner_101",
+      "away": "winner_102",
+      "venue": "New York New Jersey Stadium"
+    }
+  }
+}
