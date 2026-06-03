@@ -624,6 +624,117 @@ def compute_penalty_win_rates():
     print("-" * 50)
 
 
+def validate_clean_data():
+    """
+    STEP 8: Validate Processed Datasets
+    1. Load clean_matches.csv and assert integrity
+    2. Load wc2026_fixtures.csv and assert integrity
+    3. Load clean_rankings.csv and assert integrity
+    4. Load penalty_win_rates.csv and assert integrity
+    """
+    print("\n" + "=" * 80)
+    print("STEP 8: Validate Processed Datasets")
+    print("=" * 80)
+
+    try:
+        processed_dir = os.path.join("backend", "data", "processed")
+
+        # 1. Load clean_matches.csv and assert
+        matches_path = os.path.join(processed_dir, "clean_matches.csv")
+        print(f"Validating {matches_path}...")
+        df_matches = pd.read_csv(matches_path)
+        df_matches["date"] = pd.to_datetime(df_matches["date"])
+
+        # No null values in target columns
+        cols_to_check = ["date", "home_team", "away_team", "home_score", "away_score", "competition_weight"]
+        for col in cols_to_check:
+            null_count = df_matches[col].isnull().sum()
+            assert null_count == 0, f"clean_matches.csv: Column '{col}' contains {null_count} null value(s)."
+
+        # Sorted chronologically
+        is_sorted = df_matches["date"].is_monotonic_increasing
+        assert is_sorted, "clean_matches.csv: Matches are not chronologically sorted."
+
+        # All dates are >= 1990-01-01
+        min_match_date = df_matches["date"].min()
+        assert min_match_date >= pd.to_datetime("1990-01-01"), f"clean_matches.csv: Found date {min_match_date.strftime('%Y-%m-%d')} before 1990-01-01."
+
+        # competition_weight is between 0.5 and 3.0
+        min_weight = df_matches["competition_weight"].min()
+        max_weight = df_matches["competition_weight"].max()
+        assert 0.5 <= min_weight and max_weight <= 3.0, f"clean_matches.csv: competition_weight range [{min_weight}, {max_weight}] is out of bounds [0.5, 3.0]."
+
+        # home_score and away_score are numeric
+        assert pd.api.types.is_numeric_dtype(df_matches["home_score"]), "clean_matches.csv: home_score is not numeric."
+        assert pd.api.types.is_numeric_dtype(df_matches["away_score"]), "clean_matches.csv: away_score is not numeric."
+
+
+        # 2. Load wc2026_fixtures.csv and assert
+        fixtures_path = os.path.join(processed_dir, "wc2026_fixtures.csv")
+        print(f"Validating {fixtures_path}...")
+        df_fixtures = pd.read_csv(fixtures_path)
+        df_fixtures["date"] = pd.to_datetime(df_fixtures["date"])
+
+        # Exactly 72 rows
+        row_count = len(df_fixtures)
+        assert row_count == 72, f"wc2026_fixtures.csv: Expected 72 rows, got {row_count}."
+
+        # All scores are null
+        home_score_nulls = df_fixtures["home_score"].isnull().sum()
+        away_score_nulls = df_fixtures["away_score"].isnull().sum()
+        assert home_score_nulls == 72, f"wc2026_fixtures.csv: Expected 72 null home_scores, got {home_score_nulls}."
+        assert away_score_nulls == 72, f"wc2026_fixtures.csv: Expected 72 null away_scores, got {away_score_nulls}."
+
+        # date range is 2026-06-11 to 2026-06-26 or 27 (allow 27 since the raw data lists the final matches of group stage on June 27th)
+        min_fix_date = df_fixtures["date"].min()
+        max_fix_date = df_fixtures["date"].max()
+        assert min_fix_date == pd.to_datetime("2026-06-11"), f"wc2026_fixtures.csv: Min date is {min_fix_date.strftime('%Y-%m-%d')}, expected 2026-06-11."
+        assert max_fix_date in (pd.to_datetime("2026-06-26"), pd.to_datetime("2026-06-27")), f"wc2026_fixtures.csv: Max date is {max_fix_date.strftime('%Y-%m-%d')}, expected 2026-06-26 or 2026-06-27."
+
+
+        # 3. Load clean_rankings.csv and assert
+        rankings_path = os.path.join(processed_dir, "clean_rankings.csv")
+        print(f"Validating {rankings_path}...")
+        df_rankings = pd.read_csv(rankings_path)
+        
+        # No nulls
+        for col in ["team", "rank", "rank_date"]:
+            null_count = df_rankings[col].isnull().sum()
+            assert null_count == 0, f"clean_rankings.csv: Column '{col}' contains {null_count} null value(s)."
+
+        # Positive integer ranks
+        assert pd.api.types.is_numeric_dtype(df_rankings["rank"]), "clean_rankings.csv: rank is not numeric."
+        assert (df_rankings["rank"] > 0).all(), "clean_rankings.csv: Found rank <= 0."
+        assert (df_rankings["rank"] == df_rankings["rank"].astype(int)).all(), "clean_rankings.csv: Found non-integer ranks."
+
+
+        # 4. Load penalty_win_rates.csv and assert
+        rates_path = os.path.join(processed_dir, "penalty_win_rates.csv")
+        print(f"Validating {rates_path}...")
+        df_rates = pd.read_csv(rates_path)
+
+        # penalty_win_rate between 0.0 and 1.0
+        min_rate = df_rates["penalty_win_rate"].min()
+        max_rate = df_rates["penalty_win_rate"].max()
+        assert 0.0 <= min_rate and max_rate <= 1.0, f"penalty_win_rates.csv: penalty_win_rate range [{min_rate}, {max_rate}] is out of bounds [0.0, 1.0]."
+
+        # No null values
+        null_total = df_rates.isnull().sum().sum()
+        assert null_total == 0, f"penalty_win_rates.csv: Found {null_total} null value(s)."
+
+        print("\nSUCCESS: All data validation checks passed")
+        print("-" * 50)
+
+    except AssertionError as e:
+        print(f"\nFAILURE: Validation failed: {e}")
+        print("-" * 50)
+        raise e
+    except Exception as e:
+        print(f"\nFAILURE: Error during validation: {e}")
+        print("-" * 50)
+        raise e
+
+
 if __name__ == "__main__":
     # Temporarily set logging to ERROR to avoid warning spam for historical teams not in the WC mapping
     import logging
@@ -636,6 +747,8 @@ if __name__ == "__main__":
     clean_results()
     clean_fifa_rankings()
     compute_penalty_win_rates()
+    validate_clean_data()
+
 
 
 
