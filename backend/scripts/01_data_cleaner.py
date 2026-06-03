@@ -538,6 +538,92 @@ def get_fifa_rank(team: str, match_date) -> float:
     return int(ranks[idx - 1])
 
 
+def compute_penalty_win_rates():
+    """
+    STEP 7: Compute Penalty Win Rates from Shootouts History
+    1. Load backend/data/raw/shootouts.csv
+    2. Apply standardize_name() to home_team, away_team, and winner columns
+    3. Determine participation and winner for both home and away teams
+    4. Aggregate by team (total_shootouts, shootouts_won, penalty_win_rate)
+    5. Set penalty_win_rate = 0.5 for teams with < 3 shootouts
+    6. Print top 10 and bottom 10 teams by penalty win rate (among those with >=3 shootouts)
+    7. Save to backend/data/processed/penalty_win_rates.csv
+    """
+    print("\n" + "=" * 80)
+    print("STEP 7: Compute Penalty Win Rates")
+    print("=" * 80)
+
+    # Initialize standardizer
+    standardizer = TeamStandardizer()
+
+    # 1. Load backend/data/raw/shootouts.csv
+    csv_path = os.path.join("backend", "data", "raw", "shootouts.csv")
+    print(f"Loading raw shootouts from: {csv_path}")
+    df_shootouts = pd.read_csv(csv_path)
+
+    # 2. Apply standardize_name() to home_team, away_team, and winner columns
+    def standardize_name(name):
+        return standardizer.standardize(name)
+
+    df_shootouts["home_team"] = df_shootouts["home_team"].apply(standardize_name)
+    df_shootouts["away_team"] = df_shootouts["away_team"].apply(standardize_name)
+    df_shootouts["winner"] = df_shootouts["winner"].apply(standardize_name)
+
+    # 3. For each match in shootouts.csv, determine participation and outcome
+    records = []
+    for _, row in df_shootouts.iterrows():
+        home = row["home_team"]
+        away = row["away_team"]
+        winner = row["winner"]
+
+        # Home team record
+        records.append({"team": home, "won": 1 if winner == home else 0})
+        # Away team record
+        records.append({"team": away, "won": 1 if winner == away else 0})
+
+    df_records = pd.DataFrame(records)
+
+    # 4. Aggregate by team
+    df_agg = df_records.groupby("team").agg(
+        total_shootouts=("won", "count"),
+        shootouts_won=("won", "sum")
+    ).reset_index()
+    
+    df_agg["penalty_win_rate"] = df_agg["shootouts_won"] / df_agg["total_shootouts"]
+
+    # 5. For teams with fewer than 3 shootouts, set penalty_win_rate = 0.5 (insufficient data -> default)
+    df_agg.loc[df_agg["total_shootouts"] < 3, "penalty_win_rate"] = 0.5
+
+    # 6. Print: top 10 and bottom 10 teams by penalty win rate (among those with >=3 shootouts)
+    df_eligible = df_agg[df_agg["total_shootouts"] >= 3]
+    
+    # Sort top 10 descending
+    top_10 = df_eligible.sort_values(
+        by=["penalty_win_rate", "total_shootouts", "team"], 
+        ascending=[False, False, True]
+    ).head(10)
+    
+    # Sort bottom 10 ascending
+    bottom_10 = df_eligible.sort_values(
+        by=["penalty_win_rate", "total_shootouts", "team"], 
+        ascending=[True, False, True]
+    ).head(10)
+
+    print("\nTop 10 teams by penalty win rate (among those with >=3 shootouts):")
+    print(top_10.to_string(index=False))
+    
+    print("\nBottom 10 teams by penalty win rate (among those with >=3 shootouts):")
+    print(bottom_10.to_string(index=False))
+
+    # 7. Save to backend/data/processed/penalty_win_rates.csv
+    processed_dir = os.path.join("backend", "data", "processed")
+    os.makedirs(processed_dir, exist_ok=True)
+    out_path = os.path.join(processed_dir, "penalty_win_rates.csv")
+    df_agg.to_csv(out_path, index=False)
+    print(f"\nSaved penalty win rates to: {out_path}")
+    print("-" * 50)
+
+
 if __name__ == "__main__":
     # Temporarily set logging to ERROR to avoid warning spam for historical teams not in the WC mapping
     import logging
@@ -549,5 +635,7 @@ if __name__ == "__main__":
     clean_data()
     clean_results()
     clean_fifa_rankings()
+    compute_penalty_win_rates()
+
 
 
