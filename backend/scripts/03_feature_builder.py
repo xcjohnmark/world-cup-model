@@ -154,6 +154,107 @@ def merge_fifa_rankings(rolling_stats_df: pd.DataFrame = None) -> pd.DataFrame:
     return merged
 
 
+def build_current_snapshots(complete_df: pd.DataFrame = None) -> pd.DataFrame:
+    """
+    Builds the current snapshot of Elo, FIFA rank, form, and goal statistics for the 48 World Cup 2026 teams.
+    """
+    # 1. Load team_stats_complete.csv if complete_df is not provided
+    if complete_df is None:
+        complete_path = os.path.join("backend", "data", "processed", "team_stats_complete.csv")
+        if not os.path.exists(complete_path):
+            raise FileNotFoundError(f"Complete stats not found at {complete_path}")
+        complete_df = pd.read_csv(complete_path)
+
+    # 2. Load current_elo.csv
+    elo_path = os.path.join("backend", "data", "processed", "current_elo.csv")
+    if not os.path.exists(elo_path):
+        raise FileNotFoundError(f"Current Elo not found at {elo_path}")
+    elo_df = pd.read_csv(elo_path)
+    elo_map = dict(zip(elo_df["team"], elo_df["elo"]))
+    
+    # 3. Load penalty_win_rates.csv
+    penalty_path = os.path.join("backend", "data", "processed", "penalty_win_rates.csv")
+    if not os.path.exists(penalty_path):
+        raise FileNotFoundError(f"Penalty win rates not found at {penalty_path}")
+    penalty_df = pd.read_csv(penalty_path)
+    penalty_map = dict(zip(penalty_df["team"], penalty_df["penalty_win_rate"]))
+    
+    # 4. Load wc2026_fixtures.csv to get the list of 48 WC 2026 teams
+    fixtures_path = os.path.join("backend", "data", "processed", "wc2026_fixtures.csv")
+    if not os.path.exists(fixtures_path):
+        raise FileNotFoundError(f"WC 2026 fixtures not found at {fixtures_path}")
+    fixtures_df = pd.read_csv(fixtures_path)
+    wc_teams = sorted(list(set(fixtures_df["home_team"].unique()) | set(fixtures_df["away_team"].unique())))
+    
+    print(f"Total WC 2026 Teams found: {len(wc_teams)}")
+    
+    snapshot_rows = []
+    
+    for team in wc_teams:
+        # Get team's career average goals scored and conceded from complete_df
+        team_all_matches = complete_df[complete_df["team"] == team]
+        career_avg_scored = team_all_matches["goals_scored"].mean() if not team_all_matches.empty else 1.0
+        career_avg_conceded = team_all_matches["goals_conceded"].mean() if not team_all_matches.empty else 1.0
+        
+        # Get most recent row from complete_df for latest form
+        if not team_all_matches.empty:
+            latest_row = team_all_matches.sort_values(by="date").iloc[-1]
+            form_last_5 = latest_row["form_last_5"]
+            form_last_10 = latest_row["form_last_10"]
+            goals_scored_10 = latest_row["goals_scored_10"]
+            goals_conceded_10 = latest_row["goals_conceded_10"]
+            goal_diff_10 = latest_row["goal_diff_10"]
+            fifa_rank = latest_row["fifa_rank"]
+            win_rate_competitive = latest_row["win_rate_competitive"]
+        else:
+            # Fallbacks if team has never played since 2014 in our data
+            form_last_5 = float('nan')
+            form_last_10 = float('nan')
+            goals_scored_10 = float('nan')
+            goals_conceded_10 = float('nan')
+            goal_diff_10 = float('nan')
+            fifa_rank = float('nan')
+            win_rate_competitive = float('nan')
+            
+        # Get final Elo (default to 1500)
+        elo = elo_map.get(team, 1500.0)
+        
+        # Get penalty win rate (default to 0.5)
+        penalty_win_rate = penalty_map.get(team, 0.5)
+        
+        # 6. Fill any remaining NaN values:
+        if pd.isna(form_last_5):
+            form_last_5 = 0.5  # neutral form
+        if pd.isna(form_last_10):
+            form_last_10 = 0.5  # neutral form
+        if pd.isna(goals_scored_10):
+            goals_scored_10 = career_avg_scored  # team career average
+        if pd.isna(goals_conceded_10):
+            goals_conceded_10 = career_avg_conceded  # team career average
+        if pd.isna(goal_diff_10):
+            goal_diff_10 = 0.0
+        if pd.isna(fifa_rank):
+            fifa_rank = 150.0  # low rank for missing data
+        if pd.isna(win_rate_competitive):
+            win_rate_competitive = 0.45
+            
+        snapshot_rows.append({
+            "team": team,
+            "elo": elo,
+            "fifa_rank": fifa_rank,
+            "form_last_5": form_last_5,
+            "form_last_10": form_last_10,
+            "goals_scored_10": goals_scored_10,
+            "goals_conceded_10": goals_conceded_10,
+            "goal_diff_10": goal_diff_10,
+            "win_rate_competitive": win_rate_competitive,
+            "penalty_win_rate": penalty_win_rate
+        })
+        
+    snapshot_df = pd.DataFrame(snapshot_rows)
+    return snapshot_df
+
+
 def main():
     # 1. Load clean_matches.csv
     clean_matches_path = os.path.join("backend", "data", "processed", "clean_matches.csv")
@@ -179,22 +280,27 @@ def main():
     print("\nMerging FIFA rankings...")
     complete_df = merge_fifa_rankings(stats_df)
     
-    # Print a sample: show Brazil's last 10 rows
-    print("\n=== Brazil Sample (Last 10 Matches with FIFA Rank) ===")
-    brazil_df = complete_df[complete_df["team"] == "Brazil"].sort_values(by="date").tail(10)
-    cols_to_print = [
-        "date", "opponent", "fifa_rank", "goals_scored", "goals_conceded", "result_value",
-        "form_last_5", "form_last_10", "goals_scored_10", "goals_conceded_10",
-        "goal_diff_10", "win_rate_competitive"
-    ]
-    print(brazil_df[cols_to_print].to_string(index=False))
-    
     # Save to backend/data/processed/team_stats_complete.csv
     complete_path = os.path.join(processed_dir, "team_stats_complete.csv")
-    # Sort chronologically by (team, date) just to keep it nicely organized before saving
     complete_df = complete_df.sort_values(by=["team", "date"]).reset_index(drop=True)
     complete_df.to_csv(complete_path, index=False)
-    print(f"\nSaved complete team stats to: {complete_path}")
+    print(f"Saved complete team stats to: {complete_path}")
+
+    # Build snapshots
+    print("\nBuilding WC 2026 team snapshots...")
+    snapshot_df = build_current_snapshots(complete_df)
+    
+    # 7. Print the snapshot table: all 48 teams with all features visible
+    print("\n=== WC 2026 Team Snapshots ===")
+    pd.set_option('display.max_rows', 100)
+    pd.set_option('display.max_columns', 20)
+    pd.set_option('display.width', 1000)
+    print(snapshot_df.to_string(index=False))
+    
+    # 8. Save to backend/data/processed/wc2026_team_snapshots.csv
+    snapshot_path = os.path.join(processed_dir, "wc2026_team_snapshots.csv")
+    snapshot_df.to_csv(snapshot_path, index=False)
+    print(f"\nSaved WC 2026 team snapshots to: {snapshot_path}")
 
 
 if __name__ == "__main__":
