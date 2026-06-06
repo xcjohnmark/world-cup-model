@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas as pd
+import numpy as np
 
 # Add project root to python path if needed
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -162,8 +163,96 @@ def build_match_features() -> pd.DataFrame:
     return df
 
 
+def apply_dataset_doubling(features_df: pd.DataFrame = None) -> pd.DataFrame:
+    """
+    Applies dataset doubling for perfect symmetry on neutral grounds.
+    For each match, creates a mirrored row where the team roles (home/away) are swapped,
+    difference features are negated, and outcome targets are flipped.
+    """
+    # 1. Load match_features.csv if features_df is not provided
+    if features_df is None:
+        features_df_path = os.path.join("backend", "data", "processed", "match_features.csv")
+        if not os.path.exists(features_df_path):
+            raise FileNotFoundError(f"Match features not found at {features_df_path}")
+        features_df = pd.read_csv(features_df_path)
+        
+    # 2. For each row, create a SECOND row where:
+    # — All difference features are NEGATED (multiply by -1):
+    #   elo_diff, rank_diff, form5_diff, form10_diff, attack_diff, defense_diff,
+    #   goal_diff_diff, competitive_form_diff all become their negatives.
+    # — competition_weight stays the same (match property, not team property).
+    # — Target label is FLIPPED (0 -> 2, 2 -> 0, 1 -> 1).
+    # — Metadata: swap home_team and away_team.
+    doubled_df = features_df.copy()
+    
+    diff_cols = [
+        "elo_diff",
+        "rank_diff",
+        "form5_diff",
+        "form10_diff",
+        "attack_diff",
+        "defense_diff",
+        "goal_diff_diff",
+        "competitive_form_diff"
+    ]
+    doubled_df[diff_cols] = doubled_df[diff_cols] * -1.0
+    
+    # Target label flipping map: 0 (home win) -> 2 (away win), 2 -> 0, 1 -> 1
+    target_map = {0: 2, 1: 1, 2: 0}
+    doubled_df["target"] = doubled_df["target"].map(target_map)
+    
+    # Metadata swap
+    temp_home = doubled_df["home_team"].copy()
+    doubled_df["home_team"] = doubled_df["away_team"]
+    doubled_df["away_team"] = temp_home
+    
+    # 3. Concatenate original rows + doubled rows -> final training dataset
+    final_df = pd.concat([features_df, doubled_df], ignore_index=True)
+    
+    # 4. Shuffle the dataset (using random_state=42 for reproducibility)
+    # Shuffle WITHIN dates (time periods) to preserve chronological splitting downstream.
+    # We standardise date column to datetime, generate random shuffle keys, sort by date
+    # and shuffle key, then convert date back to string.
+    final_df["date"] = pd.to_datetime(final_df["date"])
+    
+    rng = np.random.default_rng(42)
+    final_df["shuffle_key"] = rng.random(len(final_df))
+    
+    final_df = final_df.sort_values(by=["date", "shuffle_key"]).drop(columns=["shuffle_key"]).reset_index(drop=True)
+    final_df["date"] = final_df["date"].dt.strftime("%Y-%m-%d")
+    
+    # 5. Print statistics
+    print("\n=== Dataset Doubling & Symmetry Check ===")
+    print(f"Shape before doubling: {features_df.shape}")
+    print(f"Shape after doubling: {final_df.shape}")
+    
+    print("\nClass distribution in doubled dataset:")
+    class_counts = final_df["target"].value_counts().sort_index()
+    total_samples = len(final_df)
+    for label, count in class_counts.items():
+        outcome = "Home Win (0)" if label == 0 else "Draw (1)" if label == 1 else "Away Win (2)"
+        pct = (count / total_samples) * 100 if total_samples > 0 else 0
+        print(f"  {outcome}: {count} ({pct:.2f}%)")
+        
+    home_wins = class_counts.get(0, 0)
+    away_wins = class_counts.get(2, 0)
+    symmetry_verified = (home_wins == away_wins)
+    print(f"\nSymmetry Verification: Label 0 count ({home_wins}) == Label 2 count ({away_wins}) -> {symmetry_verified}")
+    if not symmetry_verified:
+        print("WARNING: Dataset is NOT symmetric!")
+        
+    # 6. Save to backend/data/processed/training_data.csv
+    output_path = os.path.join("backend", "data", "processed", "training_data.csv")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    final_df.to_csv(output_path, index=False)
+    print(f"Saved training dataset to: {output_path}")
+    
+    return final_df
+
+
 def main():
-    build_match_features()
+    features_df = build_match_features()
+    apply_dataset_doubling(features_df)
 
 
 if __name__ == "__main__":
