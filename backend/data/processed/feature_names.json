@@ -1,0 +1,11 @@
+[
+    "elo_diff",
+    "rank_diff",
+    "form5_diff",
+    "form10_diff",
+    "attack_diff",
+    "defense_diff",
+    "goal_diff_diff",
+    "competitive_form_diff",
+    "competition_weight"
+]

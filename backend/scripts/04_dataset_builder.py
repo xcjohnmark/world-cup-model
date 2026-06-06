@@ -2,6 +2,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import json
 
 # Add project root to python path if needed
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -250,9 +251,113 @@ def apply_dataset_doubling(features_df: pd.DataFrame = None) -> pd.DataFrame:
     return final_df
 
 
+def create_train_test_split(training_data_df: pd.DataFrame = None) -> tuple:
+    """
+    Performs a chronological split of the doubled training dataset.
+    Train: everything before 2022-01-01.
+    Test: 2022-01-01 to 2026-06-11 (WC 2026 start date).
+    Saves split matrices (X_train, X_test, y_train, y_test) and feature names list.
+    """
+    # 1. Load training_data.csv if training_data_df is not provided
+    if training_data_df is None:
+        training_data_path = os.path.join("backend", "data", "processed", "training_data.csv")
+        if not os.path.exists(training_data_path):
+            raise FileNotFoundError(f"Training data not found at {training_data_path}")
+        training_data_df = pd.read_csv(training_data_path)
+        
+    df = training_data_df.copy()
+    
+    # 2. Ensure sorted chronologically by date
+    df["date"] = pd.to_datetime(df["date"])
+    df = df.sort_values(by="date").reset_index(drop=True)
+    
+    # Rename target to label for down-stream modeling convenience
+    if "target" in df.columns:
+        df = df.rename(columns={"target": "label"})
+        
+    # 3. Create the split
+    train_mask = df["date"] < pd.to_datetime("2022-01-01")
+    test_mask = (df["date"] >= pd.to_datetime("2022-01-01")) & (df["date"] < pd.to_datetime("2026-06-11"))
+    
+    train_df = df[train_mask].copy()
+    test_df = df[test_mask].copy()
+    
+    # 4. Extract features (X) and target (y)
+    feature_cols = [
+        "elo_diff",
+        "rank_diff",
+        "form5_diff",
+        "form10_diff",
+        "attack_diff",
+        "defense_diff",
+        "goal_diff_diff",
+        "competitive_form_diff",
+        "competition_weight"
+    ]
+    target_col = "label"
+    
+    X_train = train_df[feature_cols]
+    y_train = train_df[[target_col]]
+    
+    X_test = test_df[feature_cols]
+    y_test = test_df[[target_col]]
+    
+    # Convert dates to string representation for display
+    train_min_date = train_df["date"].min().strftime("%Y-%m-%d")
+    train_max_date = train_df["date"].max().strftime("%Y-%m-%d")
+    test_min_date = test_df["date"].min().strftime("%Y-%m-%d")
+    test_max_date = test_df["date"].max().strftime("%Y-%m-%d")
+    
+    # 5. Print Split Stats
+    print("\n=== Time-Based Train/Test Split ===")
+    print(f"Train size: {len(X_train)} rows, date range: {train_min_date} to {train_max_date}")
+    print(f"Test size: {len(X_test)} rows, date range: {test_min_date} to {test_max_date}")
+    
+    print("\nClass distribution in Train set:")
+    train_total = len(y_train)
+    train_counts = y_train["label"].value_counts().sort_index()
+    for label, count in train_counts.items():
+        outcome = "Home Win (0)" if label == 0 else "Draw (1)" if label == 1 else "Away Win (2)"
+        pct = (count / train_total) * 100 if train_total > 0 else 0
+        print(f"  {outcome}: {count} ({pct:.2f}%)")
+        
+    print("\nClass distribution in Test set:")
+    test_total = len(y_test)
+    test_counts = y_test["label"].value_counts().sort_index()
+    for label, count in test_counts.items():
+        outcome = "Home Win (0)" if label == 0 else "Draw (1)" if label == 1 else "Away Win (2)"
+        pct = (count / test_total) * 100 if test_total > 0 else 0
+        print(f"  {outcome}: {count} ({pct:.2f}%)")
+        
+    # Date overlap verification
+    train_dates = set(train_df["date"])
+    test_dates = set(test_df["date"])
+    overlap = train_dates.intersection(test_dates)
+    print(f"\nDate overlap check: {len(overlap)} overlapping dates (expect 0)")
+    
+    # 6. Save split datasets to CSV
+    processed_dir = os.path.join("backend", "data", "processed")
+    os.makedirs(processed_dir, exist_ok=True)
+    
+    X_train.to_csv(os.path.join(processed_dir, "X_train.csv"), index=False)
+    X_test.to_csv(os.path.join(processed_dir, "X_test.csv"), index=False)
+    y_train.to_csv(os.path.join(processed_dir, "y_train.csv"), index=False)
+    y_test.to_csv(os.path.join(processed_dir, "y_test.csv"), index=False)
+    print(f"\nSaved X_train, X_test, y_train, y_test to: {processed_dir}")
+    
+    # 7. Save the feature column names list to backend/data/processed/feature_names.json
+    feature_names_path = os.path.join(processed_dir, "feature_names.json")
+    with open(feature_names_path, "w") as f:
+        json.dump(feature_cols, f, indent=4)
+    print(f"Saved feature name configurations to: {feature_names_path}")
+    
+    return X_train, X_test, y_train, y_test
+
+
 def main():
     features_df = build_match_features()
-    apply_dataset_doubling(features_df)
+    training_data_df = apply_dataset_doubling(features_df)
+    create_train_test_split(training_data_df)
 
 
 if __name__ == "__main__":
