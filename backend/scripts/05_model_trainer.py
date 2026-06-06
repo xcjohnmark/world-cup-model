@@ -2,12 +2,15 @@ import os
 import sys
 import pickle
 import json
+import joblib
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, TimeSeriesSplit
 from sklearn.metrics import log_loss, accuracy_score
+from xgboost import XGBClassifier
 
 # Add project root to python path if needed
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -122,8 +125,128 @@ def train_baselines() -> list:
         "type": "internal"
     })
     
-    # 6. Print comparison table
-    print("\nModel Evaluation Comparison:")
+    # Save to backend/outputs/leaderboard_results.json
+    leaderboard_path = os.path.join(outputs_dir, "leaderboard_results.json")
+    with open(leaderboard_path, "w") as f:
+        json.dump(results, f, indent=4)
+    
+    return results
+
+
+def train_xgboost() -> XGBClassifier:
+    """
+    Trains and tunes an XGBoost model using GridSearchCV with TimeSeriesSplit.
+    Retrains with early stopping and updates the leaderboard.
+    """
+    processed_dir = os.path.join("backend", "data", "processed")
+    models_dir = os.path.join("backend", "models")
+    outputs_dir = os.path.join("backend", "outputs")
+    
+    X_train_path = os.path.join(processed_dir, "X_train.csv")
+    X_test_path = os.path.join(processed_dir, "X_test.csv")
+    y_train_path = os.path.join(processed_dir, "y_train.csv")
+    y_test_path = os.path.join(processed_dir, "y_test.csv")
+    
+    X_train = pd.read_csv(X_train_path)
+    X_test = pd.read_csv(X_test_path)
+    y_train = pd.read_csv(y_train_path).values.ravel().astype(int)
+    y_test = pd.read_csv(y_test_path).values.ravel().astype(int)
+    
+    # 2. Define the hyperparameter search grid
+    param_grid = {
+        'max_depth': [3, 4, 5],
+        'learning_rate': [0.01, 0.05, 0.1],
+        'n_estimators': [300, 500],
+        'subsample': [0.8, 1.0],
+        'colsample_bytree': [0.8, 1.0],
+        'min_child_weight': [1, 3]
+    }
+    
+    # 3. Setup GridSearchCV
+    print("\nRunning hyperparameter tuning for XGBoost via GridSearchCV...")
+    tscv = TimeSeriesSplit(n_splits=5)
+    xgb_base = XGBClassifier(
+        objective='multi:softprob',
+        num_class=3,
+        eval_metric='mlogloss',
+        random_state=42
+    )
+    
+    grid_search = GridSearchCV(
+        estimator=xgb_base,
+        param_grid=param_grid,
+        scoring='neg_log_loss',
+        cv=tscv,
+        n_jobs=-1,
+        verbose=1
+    )
+    
+    # 4. Fit GridSearchCV on X_train, y_train
+    grid_search.fit(X_train, y_train)
+    
+    # 5. Print best parameters and cross-validation log loss
+    best_params = grid_search.best_params_
+    best_cv_loss = -grid_search.best_score_
+    print(f"\nBest XGBoost Hyperparameters: {best_params}")
+    print(f"Best CV Log Loss: {best_cv_loss:.4f}")
+    
+    # 6. Retrain XGBoost with best parameters on ALL of X_train (with early stopping)
+    print("\nRetraining XGBoost with best parameters and early stopping...")
+    best_model = XGBClassifier(
+        **best_params,
+        objective='multi:softprob',
+        num_class=3,
+        eval_metric='mlogloss',
+        early_stopping_rounds=30,
+        random_state=42
+    )
+    
+    best_model.fit(
+        X_train, 
+        y_train, 
+        eval_set=[(X_test, y_test)],
+        verbose=False
+    )
+    
+    # 7. Predict probabilities on X_test
+    y_pred_proba = best_model.predict_proba(X_test)
+    
+    # 8. Compute final log_loss and accuracy
+    xgb_loss = log_loss(y_test, y_pred_proba, labels=[0, 1, 2])
+    xgb_pred = best_model.predict(X_test)
+    xgb_acc = accuracy_score(y_test, xgb_pred)
+    
+    print(f"Final XGBoost Test Log Loss: {xgb_loss:.4f}")
+    print(f"Final XGBoost Test Accuracy: {xgb_acc:.4f}")
+    
+    # 10. Save model using joblib.dump()
+    xgboost_path = os.path.join(models_dir, "xgboost_best.pkl")
+    joblib.dump(best_model, xgboost_path)
+    print(f"Saved best XGBoost model to: {xgboost_path}")
+    
+    # 11. Add XGBoost results to leaderboard_results.json
+    leaderboard_path = os.path.join(outputs_dir, "leaderboard_results.json")
+    if os.path.exists(leaderboard_path):
+        with open(leaderboard_path, "r") as f:
+            results = json.load(f)
+    else:
+        results = []
+        
+    # Remove existing XGBoost (Ours) row to prevent duplicates
+    results = [r for r in results if r["model_name"] != "XGBoost (Ours)"]
+    results.append({
+        "model_name": "XGBoost (Ours)",
+        "log_loss": round(float(xgb_loss), 4),
+        "accuracy": round(float(xgb_acc), 4),
+        "type": "internal"
+    })
+    
+    # Save updated leaderboard
+    with open(leaderboard_path, "w") as f:
+        json.dump(results, f, indent=4)
+        
+    # 9. Print comparison table
+    print("\nModel Evaluation Comparison (Including XGBoost):")
     print("-" * 55)
     print(f"{'Model':<25} | {'Log Loss':<10} | {'Accuracy':<10}")
     print("-" * 55)
@@ -131,17 +254,12 @@ def train_baselines() -> list:
         print(f"{res['model_name']:<25} | {res['log_loss']:<10.4f} | {res['accuracy']:<10.4f}")
     print("-" * 55)
     
-    # 7. Save to backend/outputs/leaderboard_results.json
-    leaderboard_path = os.path.join(outputs_dir, "leaderboard_results.json")
-    with open(leaderboard_path, "w") as f:
-        json.dump(results, f, indent=4)
-    print(f"\nSaved leaderboard results to: {leaderboard_path}")
-    
-    return results
+    return best_model
 
 
 def main():
     train_baselines()
+    train_xgboost()
 
 
 if __name__ == "__main__":
