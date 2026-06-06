@@ -145,6 +145,145 @@ class MatchPredictor:
         )
 
 
+def generate_all_predictions() -> list:
+    """
+    Generates predictions for all 72 group stage matches from wc2026_fixtures.csv,
+    adds 32 knockout placeholders, sorts chronologically, and saves to match_predictions.json.
+    """
+    print("\nInitializing MatchPredictor for bulk generation...")
+    predictor = MatchPredictor()
+    
+    # Load groupings to map group stages to their group letters
+    groups_path = os.path.join("backend", "data", "cleaned", "wc_2026_groups.json")
+    if not os.path.exists(groups_path):
+        groups_path = os.path.join("backend", "data", "raw", "wc_2026_groups.json")
+        
+    team_to_group = {}
+    if os.path.exists(groups_path):
+        with open(groups_path, "r", encoding="utf-8") as f:
+            g_data = json.load(f)
+        for g_letter, g_teams in g_data.get("groups", {}).items():
+            for t in g_teams:
+                team_to_group[predictor.standardizer.standardize(t)] = g_letter
+                
+    # 2. Load wc2026_fixtures.csv (the 72 group stage matches)
+    fixtures_path = os.path.join("backend", "data", "processed", "wc2026_fixtures.csv")
+    if not os.path.exists(fixtures_path):
+        raise FileNotFoundError(f"Fixtures file not found at {fixtures_path}")
+    df_fixtures = pd.read_csv(fixtures_path)
+    
+    predictions = []
+    
+    # 3. For each of the 72 group stage matches:
+    for idx, row in df_fixtures.iterrows():
+        home_team = row["home_team"]
+        away_team = row["away_team"]
+        date_val = row["date"]
+        
+        # Determine group
+        std_home = predictor.standardizer.standardize(home_team)
+        group_letter = team_to_group.get(std_home, "N/A")
+        
+        # Predict outcome
+        try:
+            pred = predictor.predict_match(home_team, away_team)
+            p_a = pred["team_a_prob"]
+            p_draw = pred["draw_prob"]
+            p_b = pred["team_b_prob"]
+            display_a = pred["team_a"]
+            display_b = pred["team_b"]
+        except ValueError as e:
+            # Handle team name mismatches (use generic values)
+            print(f"  WARNING: Name mismatch in fixture lookup for '{home_team}' vs '{away_team}': {e}. Using default probabilities.")
+            p_a = 0.3333
+            p_draw = 0.3334
+            p_b = 0.3333
+            display_a = predictor.standardizer.get_display_name(home_team)
+            display_b = predictor.standardizer.get_display_name(away_team)
+            
+        predictions.append({
+            "match_id": f"G{idx + 1:03d}",
+            "stage": "Group Stage",
+            "group": group_letter,
+            "date": date_val,
+            "team_a": display_a,
+            "team_a_prob": round(float(p_a), 4),
+            "draw_prob": round(float(p_draw), 4),
+            "team_b": display_b,
+            "team_b_prob": round(float(p_b), 4)
+        })
+        
+    # 4. For the 32 knockout stage matches:
+    # Add 32 placeholder entries with stage labels only
+    knockout_stages = [
+        ("Round of 32", 16, "2026-06-28"),
+        ("Round of 16", 8, "2026-07-04"),
+        ("Quarter-finals", 4, "2026-07-09"),
+        ("Semi-finals", 2, "2026-07-14"),
+        ("Third place", 1, "2026-07-18"),
+        ("Final", 1, "2026-07-19")
+    ]
+    
+    k_idx = 73
+    for stage_name, count, date_val in knockout_stages:
+        for _ in range(count):
+            predictions.append({
+                "match_id": f"K{k_idx:03d}",
+                "stage": stage_name,
+                "group": None,
+                "date": date_val,
+                "team_a": "TBD",
+                "team_a_prob": None,
+                "draw_prob": None,
+                "team_b": "TBD",
+                "team_b_prob": None
+            })
+            k_idx += 1
+            
+    # 5. Sort by date, then stage order (Group Stage → R32 → R16 → QF → SF → Final)
+    stage_order = {
+        "Group Stage": 0,
+        "Round of 32": 1,
+        "Round of 16": 2,
+        "Quarter-finals": 3,
+        "Semi-finals": 4,
+        "Third place": 5,
+        "Final": 6
+    }
+    
+    predictions.sort(key=lambda x: (
+        x["date"] if x["date"] is not None else "9999-99-99",
+        stage_order.get(x["stage"], 99),
+        x["match_id"]
+    ))
+    
+    # 6. Save to backend/outputs/match_predictions.json
+    outputs_dir = os.path.join("backend", "outputs")
+    os.makedirs(outputs_dir, exist_ok=True)
+    out_path = os.path.join(outputs_dir, "match_predictions.json")
+    
+    with open(out_path, "w") as f:
+        json.dump(predictions, f, indent=4)
+        
+    # 7. Print total predictions saved and a sample of 5 group stage predictions
+    print(f"[SUCCESS] Saved {len(predictions)} match predictions/placeholders to: {out_path}")
+    
+    group_preds = [p for p in predictions if p["stage"] == "Group Stage"]
+    print(f"\nSample of 5 group stage predictions:")
+    print("-" * 75)
+    print(f"{'ID':<5} | {'Date':<10} | {'Group':<5} | {'Team A':<20} | {'A Win %':<8} | {'Draw %':<8} | {'Team B':<20} | {'B Win %'}")
+    print("-" * 75)
+    for p in group_preds[:5]:
+        print(
+            f"{p['match_id']:<5} | {p['date']:<10} | {p['group']:<5} | "
+            f"{p['team_a']:<20} | {p['team_a_prob']*100:<8.1f} | {p['draw_prob']*100:<8.1f} | "
+            f"{p['team_b']:<20} | {p['team_b_prob']*100:.1f}%"
+        )
+    print("-" * 75)
+    
+    return predictions
+
+
 def main():
     print("=== Match Predictor Test Script ===")
     
@@ -191,6 +330,11 @@ def main():
     assert pred_bra_arg["draw_prob"] == pred_arg_bra["draw_prob"], "Symmetry failed: Draw probabilities do not match."
     
     print("\n[SUCCESS] Symmetry verification passed! MatchPredictor handles team ordering symmetrically.")
+
+    print("\n" + "=" * 80)
+    print("=== Generating Predictions for Fixtures ===")
+    print("=" * 80)
+    generate_all_predictions()
 
 
 if __name__ == "__main__":
