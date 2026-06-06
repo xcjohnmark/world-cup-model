@@ -127,7 +127,8 @@ def calibrate_model() -> dict:
     """
     Splits the training data temporally into an 80% training portion and 20% calibration portion.
     Trains the base XGBoost model on the training portion, and fits both Isotonic and Sigmoid Calibrators.
-    Compares test performance to determine the best calibrator, updates leaderboard, and saves model.
+    Compares test performance (including uncalibrated model) to determine the best model,
+    updates the leaderboard, and saves the final chosen model.
     """
     processed_dir = os.path.join("backend", "data", "processed")
     models_dir = os.path.join("backend", "models")
@@ -243,8 +244,14 @@ def calibrate_model() -> dict:
     print(f"{'Sigmoid Calibration':<25} | {sig_loss:<12.4f} | {sig_ece:<12.4f} | {sig_acc:<10.4f}")
     print("-" * 75)
     
-    # Choose best calibrator based on lowest ECE
-    if iso_ece < sig_ece:
+    # Choose best model based on lowest ECE (including uncalibrated model)
+    if uncal_ece <= iso_ece and uncal_ece <= sig_ece:
+        best_method = "none (uncalibrated)"
+        best_model = uncal_model
+        best_loss = uncal_loss
+        best_ece = uncal_ece
+        best_acc = uncal_acc
+    elif iso_ece < sig_ece:
         best_method = "isotonic"
         best_model = calibrated_model_iso
         best_loss = iso_loss
@@ -259,7 +266,7 @@ def calibrate_model() -> dict:
         
     print(f"\nSelected calibration method: {best_method} (yielded lowest test set ECE of {best_ece:.4f})")
     
-    # 6. Update leaderboard_results.json with calibrated XGBoost metrics
+    # 6. Update leaderboard_results.json with best XGBoost metrics
     leaderboard_path = os.path.join(outputs_dir, "leaderboard_results.json")
     if os.path.exists(leaderboard_path):
         with open(leaderboard_path, "r") as f:
