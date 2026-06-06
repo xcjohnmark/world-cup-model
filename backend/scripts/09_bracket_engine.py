@@ -124,6 +124,38 @@ class BracketEngine:
         self.groups = self.wc_data["groups"]
         self.knockout_bracket = self.wc_data["knockout_bracket"]
         
+        # Load real results from bracket_full.json if available
+        self.real_results = {}
+        bracket_full_path = os.path.join("backend", "outputs", "bracket_full.json")
+        if os.path.exists(bracket_full_path):
+            try:
+                with open(bracket_full_path, "r", encoding="utf-8") as f:
+                    b_data = json.load(f)
+                # Group stage
+                for g_data in b_data.get("group_stage", {}).values():
+                    for m in g_data.get("matches", []):
+                        if m.get("actual_result") is not None:
+                            ta_std = self.standardizer.standardize(m["team_a"])
+                            tb_std = self.standardizer.standardize(m["team_b"])
+                            self.real_results[(ta_std, tb_std)] = {
+                                "result": m["actual_result"],
+                                "goals_a": int(m["actual_team_a_score"]),
+                                "goals_b": int(m["actual_team_b_score"])
+                            }
+                # Knockouts
+                for stage in ["round_of_32", "round_of_16", "quarterfinals", "semifinals", "final"]:
+                    for m in b_data.get(stage, {}).get("matches", []):
+                        if m.get("actual_result") is not None:
+                            ta_std = self.standardizer.standardize(m["team_a"])
+                            tb_std = self.standardizer.standardize(m["team_b"])
+                            self.real_results[(ta_std, tb_std)] = {
+                                "result": m["actual_result"],
+                                "goals_a": int(m.get("actual_team_a_score", 0)),
+                                "goals_b": int(m.get("actual_team_b_score", 0))
+                            }
+            except Exception as e:
+                pass
+        
         # Pre-cache list of all unique teams for fast dictionary creation
         self.all_teams = [
             team for group in self.groups.values() for team in group
@@ -227,9 +259,26 @@ class BracketEngine:
             }
             
             for ta, tb in matches:
-                p_a, p_draw, p_b = predictor_cache[(ta, tb)]
-                outcome = random.choices([0, 1, 2], weights=[p_a, p_draw, p_b], k=1)[0]
-                g_a, g_b = simulate_match_score(outcome)
+                ta_std = self.standardizer.standardize(ta)
+                tb_std = self.standardizer.standardize(tb)
+                
+                real_res = self.real_results.get((ta_std, tb_std))
+                real_res_rev = self.real_results.get((tb_std, ta_std))
+                
+                if real_res:
+                    res_val = real_res["result"]
+                    g_a = real_res["goals_a"]
+                    g_b = real_res["goals_b"]
+                    outcome = 0 if res_val == "team_a" else (2 if res_val == "team_b" else 1)
+                elif real_res_rev:
+                    res_val = real_res_rev["result"]
+                    g_a = real_res_rev["goals_b"]
+                    g_b = real_res_rev["goals_a"]
+                    outcome = 2 if res_val == "team_a" else (0 if res_val == "team_b" else 1)
+                else:
+                    p_a, p_draw, p_b = predictor_cache[(ta, tb)]
+                    outcome = random.choices([0, 1, 2], weights=[p_a, p_draw, p_b], k=1)[0]
+                    g_a, g_b = simulate_match_score(outcome)
                 
                 g_standings[ta]["goals_scored"] += g_a
                 g_standings[ta]["goals_conceded"] += g_b
@@ -300,7 +349,20 @@ class BracketEngine:
         return advancing_dict, tuple(qualified_groups)
 
     def simulate_knockout_match(self, team_a: str, team_b: str, predictor_cache: dict) -> str:
-        """Simulates a single knockout match, resolving draws via penalty shootouts."""
+        """Simulates a single knockout match, resolving draws via penalty shootouts or real results."""
+        ta_std = self.standardizer.standardize(team_a)
+        tb_std = self.standardizer.standardize(team_b)
+        
+        real_res = self.real_results.get((ta_std, tb_std))
+        real_res_rev = self.real_results.get((tb_std, ta_std))
+        
+        if real_res:
+            res_val = real_res["result"]
+            return team_a if res_val == "team_a" else team_b
+        elif real_res_rev:
+            res_val = real_res_rev["result"]
+            return team_b if res_val == "team_a" else team_a
+            
         p_a, p_draw, p_b = predictor_cache[(team_a, team_b)]
         outcome = random.choices([0, 1, 2], weights=[p_a, p_draw, p_b], k=1)[0]
         
@@ -835,6 +897,136 @@ def generate_bracket_json() -> dict:
         
     print(f"[SUCCESS] Saved static bracket tree to: {output_path}")
     return bracket_full
+
+
+# ==============================================================================
+# MANUAL WORKFLOW FOR LIVE TOURNAMENT TRACKING
+# ==============================================================================
+# After each real World Cup matchday:
+#
+# Step 1: Call update_with_real_result() for each completed match. E.g.:
+#         update_with_real_result("G001", 2, 1)
+#
+# Step 2: Re-run 08_simulator.py to refresh probabilities.
+#         This compiles new progression odds taking into account the fixed real results.
+#
+# Step 3: Re-run 09_bracket_engine.py to update knockout predictions.
+#         This regenerates the predicted tournament bracket using the new simulations.
+#
+# Step 4: The FastAPI backend auto-serves the updated JSON files.
+#         The frontend will automatically display the real scores, updated standings,
+#         and refreshed tournament tree.
+# ==============================================================================
+
+def update_with_real_result(match_id: str, actual_team_a_score: int, actual_team_b_score: int) -> dict:
+    """
+    Updates bracket_full.json with a real-life match result, recalculates group standings
+    and qualifiers if it is a group stage match, saves the JSON, and returns the updated match.
+    """
+    bracket_path = os.path.join("backend", "outputs", "bracket_full.json")
+    if not os.path.exists(bracket_path):
+        raise FileNotFoundError(f"bracket_full.json not found at {bracket_path}")
+        
+    with open(bracket_path, "r", encoding="utf-8") as f:
+        bracket = json.load(f)
+        
+    # Calculate actual_result
+    if actual_team_a_score > actual_team_b_score:
+        actual_result = "team_a"
+    elif actual_team_b_score > actual_team_a_score:
+        actual_result = "team_b"
+    else:
+        actual_result = "draw"
+        
+    target_match = None
+    is_group_stage = False
+    target_group_name = None
+    
+    # 1. Search in group_stage
+    for group_name, group_data in bracket.get("group_stage", {}).items():
+        for m in group_data.get("matches", []):
+            if m["match_id"] == match_id:
+                target_match = m
+                is_group_stage = True
+                target_group_name = group_name
+                break
+        if target_match:
+            break
+            
+    # 2. Search in knockout stages if not found in group stage
+    if not target_match:
+        for stage in ["round_of_32", "round_of_16", "quarterfinals", "semifinals", "final"]:
+            for m in bracket.get(stage, {}).get("matches", []):
+                if m["match_id"] == match_id:
+                    target_match = m
+                    break
+            if target_match:
+                break
+                
+    if not target_match:
+        raise ValueError(f"Match with ID '{match_id}' not found in bracket_full.json")
+        
+    # Update match entry
+    target_match["actual_team_a_score"] = actual_team_a_score
+    target_match["actual_team_b_score"] = actual_team_b_score
+    target_match["actual_result"] = actual_result
+    
+    # 3. Recalculate group standings & qualifiers if group stage match
+    if is_group_stage:
+        group_data = bracket["group_stage"][target_group_name]
+        group_teams = group_data["teams"]
+        group_matches = group_data["matches"]
+        
+        # Load simulation probabilities for tiebreakers
+        prob_path = os.path.join("backend", "outputs", "world_cup_probabilities.json")
+        if not os.path.exists(prob_path):
+            prob_path = os.path.join("backend", "outputs", "simulation_results.json")
+            
+        team_probs = {}
+        if os.path.exists(prob_path):
+            with open(prob_path, "r", encoding="utf-8") as f:
+                prob_data = json.load(f)
+            engine = BracketEngine()
+            for t_info in prob_data["teams"]:
+                std_name = engine.standardizer.standardize(t_info["team"])
+                team_probs[std_name] = t_info.get("r32_prob", 0.0)
+                
+        # Calculate expected/actual points
+        engine_std = TeamStandardizer()
+        expected_pts = {engine_std.standardize(t): 0.0 for t in group_teams}
+        for m in group_matches:
+            ta_std = engine_std.standardize(m["team_a"])
+            tb_std = engine_std.standardize(m["team_b"])
+            if m.get("actual_result") is not None:
+                res = m["actual_result"]
+                if res == "team_a":
+                    expected_pts[ta_std] += 3.0
+                elif res == "team_b":
+                    expected_pts[tb_std] += 3.0
+                elif res == "draw":
+                    expected_pts[ta_std] += 1.0
+                    expected_pts[tb_std] += 1.0
+            else:
+                p_a = m.get("team_a_prob", 0.33)
+                p_draw = m.get("draw_prob", 0.34)
+                p_b = m.get("team_b_prob", 0.33)
+                expected_pts[ta_std] += 3.0 * p_a + 1.0 * p_draw
+                expected_pts[tb_std] += 3.0 * p_b + 1.0 * p_draw
+                
+        # Sort by expected points descending, tiebreak by r32_prob
+        sorted_teams = sorted(
+            group_teams,
+            key=lambda t: (expected_pts[engine_std.standardize(t)], team_probs.get(engine_std.standardize(t), 0.0)),
+            reverse=True
+        )
+        group_data["predicted_qualifiers"] = sorted_teams[:2]
+        
+    # 4. Save updated bracket_full.json
+    with open(bracket_path, "w", encoding="utf-8") as f:
+        json.dump(bracket, f, indent=4)
+        
+    print(f"[SUCCESS] Updated match {match_id} in bracket_full.json (result: {actual_result})")
+    return target_match
 
 
 if __name__ == "__main__":
