@@ -1,9 +1,12 @@
 import os
 import sys
+import json
 import joblib
 import pandas as pd
 import numpy as np
-from sklearn.calibration import calibration_curve
+from sklearn.calibration import calibration_curve, CalibratedClassifierCV, FrozenEstimator
+from sklearn.metrics import log_loss, accuracy_score
+from xgboost import XGBClassifier
 
 # Add project root to python path if needed
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -76,8 +79,6 @@ def assess_calibration() -> dict:
             overconfident_bins += 1
             
     # Assess overall confidence behavior for Class 0
-    # If mean_predicted_value > fraction_of_positives for most bins -> overconfident
-    # If mean_predicted_value < fraction_of_positives -> underconfident
     if overconfident_bins > total_nonempty_bins / 2:
         class_0_assessment = "overconfident"
     elif overconfident_bins < total_nonempty_bins / 2:
@@ -122,8 +123,179 @@ def assess_calibration() -> dict:
     }
 
 
+def calibrate_model() -> dict:
+    """
+    Splits the training data temporally into an 80% training portion and 20% calibration portion.
+    Trains the base XGBoost model on the training portion, and fits both Isotonic and Sigmoid Calibrators.
+    Compares test performance to determine the best calibrator, updates leaderboard, and saves model.
+    """
+    processed_dir = os.path.join("backend", "data", "processed")
+    models_dir = os.path.join("backend", "models")
+    outputs_dir = os.path.join("backend", "outputs")
+    
+    # 1. Load xgboost_best.pkl, X_train, y_train, X_test, y_test
+    X_train_path = os.path.join(processed_dir, "X_train.csv")
+    X_test_path = os.path.join(processed_dir, "X_test.csv")
+    y_train_path = os.path.join(processed_dir, "y_train.csv")
+    y_test_path = os.path.join(processed_dir, "y_test.csv")
+    uncal_model_path = os.path.join(models_dir, "xgboost_best.pkl")
+    
+    X_train = pd.read_csv(X_train_path)
+    X_test = pd.read_csv(X_test_path)
+    y_train = pd.read_csv(y_train_path).values.ravel().astype(int)
+    y_test = pd.read_csv(y_test_path).values.ravel().astype(int)
+    
+    # 2. Split X_train chronologically: 80% training / 20% calibration
+    split_idx = int(len(X_train) * 0.8)
+    X_train_fit = X_train.iloc[:split_idx]
+    y_train_fit = y_train[:split_idx]
+    
+    X_train_calib = X_train.iloc[split_idx:]
+    y_train_calib = y_train[split_idx:]
+    
+    print(f"\nTraining portion:    {X_train_fit.shape[0]} matches")
+    print(f"Calibration portion: {X_train_calib.shape[0]} matches")
+    
+    # 3. Re-train XGBoost on training_portion only using best parameters
+    # The best parameters from Phase 5 tuning:
+    best_params = {
+        'colsample_bytree': 0.8,
+        'learning_rate': 0.01,
+        'max_depth': 3,
+        'min_child_weight': 3,
+        'n_estimators': 500,
+        'subsample': 0.8
+    }
+    
+    xgb_base = XGBClassifier(
+        **best_params,
+        objective='multi:softprob',
+        num_class=3,
+        eval_metric='mlogloss',
+        random_state=42
+    )
+    
+    print("Re-fitting base XGBoost on training portion...")
+    xgb_base.fit(X_train_fit, y_train_fit)
+    
+    # Setup custom cv split to calibrate on the entire validation set (without cross-validation)
+    n_calib = len(X_train_calib)
+    custom_cv = [(np.arange(n_calib), np.arange(n_calib))]
+    
+    # 4. Apply Isotonic regression calibration
+    # Wraps base estimator in FrozenEstimator (mandatory in sklearn >= 1.6 to prevent refitting)
+    print("Fitting Isotonic calibrator...")
+    calibrated_model_iso = CalibratedClassifierCV(
+        estimator=FrozenEstimator(xgb_base),
+        method='isotonic',
+        cv=custom_cv
+    )
+    calibrated_model_iso.fit(X_train_calib, y_train_calib)
+    
+    # Fit Sigmoid calibration for comparison
+    print("Fitting Sigmoid calibrator...")
+    calibrated_model_sig = CalibratedClassifierCV(
+        estimator=FrozenEstimator(xgb_base),
+        method='sigmoid',
+        cv=custom_cv
+    )
+    calibrated_model_sig.fit(X_train_calib, y_train_calib)
+    
+    # 5. Evaluate uncalibrated and calibrated models on X_test
+    # Load uncalibrated best model for baseline
+    uncal_model = joblib.load(uncal_model_path)
+    uncal_proba = uncal_model.predict_proba(X_test)
+    uncal_loss = log_loss(y_test, uncal_proba, labels=[0, 1, 2])
+    uncal_ece = (
+        compute_ece((y_test == 0).astype(int), uncal_proba[:, 0]) +
+        compute_ece((y_test == 1).astype(int), uncal_proba[:, 1]) +
+        compute_ece((y_test == 2).astype(int), uncal_proba[:, 2])
+    ) / 3.0
+    uncal_acc = accuracy_score(y_test, uncal_model.predict(X_test))
+    
+    # Isotonic evaluation
+    iso_proba = calibrated_model_iso.predict_proba(X_test)
+    iso_loss = log_loss(y_test, iso_proba, labels=[0, 1, 2])
+    iso_ece = (
+        compute_ece((y_test == 0).astype(int), iso_proba[:, 0]) +
+        compute_ece((y_test == 1).astype(int), iso_proba[:, 1]) +
+        compute_ece((y_test == 2).astype(int), iso_proba[:, 2])
+    ) / 3.0
+    iso_acc = accuracy_score(y_test, calibrated_model_iso.predict(X_test))
+    
+    # Sigmoid evaluation
+    sig_proba = calibrated_model_sig.predict_proba(X_test)
+    sig_loss = log_loss(y_test, sig_proba, labels=[0, 1, 2])
+    sig_ece = (
+        compute_ece((y_test == 0).astype(int), sig_proba[:, 0]) +
+        compute_ece((y_test == 1).astype(int), sig_proba[:, 1]) +
+        compute_ece((y_test == 2).astype(int), sig_proba[:, 2])
+    ) / 3.0
+    sig_acc = accuracy_score(y_test, calibrated_model_sig.predict(X_test))
+    
+    # Print side-by-side comparison
+    print("\nCalibration Correction Comparison:")
+    print("-" * 75)
+    print(f"{'Configuration':<25} | {'Log Loss':<12} | {'ECE':<12} | {'Accuracy':<10}")
+    print("-" * 75)
+    print(f"{'Uncalibrated XGBoost':<25} | {uncal_loss:<12.4f} | {uncal_ece:<12.4f} | {uncal_acc:<10.4f}")
+    print(f"{'Isotonic Calibration':<25} | {iso_loss:<12.4f} | {iso_ece:<12.4f} | {iso_acc:<10.4f}")
+    print(f"{'Sigmoid Calibration':<25} | {sig_loss:<12.4f} | {sig_ece:<12.4f} | {sig_acc:<10.4f}")
+    print("-" * 75)
+    
+    # Choose best calibrator based on lowest ECE
+    if iso_ece < sig_ece:
+        best_method = "isotonic"
+        best_model = calibrated_model_iso
+        best_loss = iso_loss
+        best_ece = iso_ece
+        best_acc = iso_acc
+    else:
+        best_method = "sigmoid"
+        best_model = calibrated_model_sig
+        best_loss = sig_loss
+        best_ece = sig_ece
+        best_acc = sig_acc
+        
+    print(f"\nSelected calibration method: {best_method} (yielded lowest test set ECE of {best_ece:.4f})")
+    
+    # 6. Update leaderboard_results.json with calibrated XGBoost metrics
+    leaderboard_path = os.path.join(outputs_dir, "leaderboard_results.json")
+    if os.path.exists(leaderboard_path):
+        with open(leaderboard_path, "r") as f:
+            results = json.load(f)
+    else:
+        results = []
+        
+    results = [r for r in results if r["model_name"] != "XGBoost (Ours)"]
+    results.append({
+        "model_name": "XGBoost (Ours)",
+        "log_loss": round(float(best_loss), 4),
+        "accuracy": round(float(best_acc), 4),
+        "type": "internal"
+    })
+    
+    with open(leaderboard_path, "w") as f:
+        json.dump(results, f, indent=4)
+        
+    # 7. Save calibrated model: backend/models/xgboost_calibrated.pkl
+    calib_model_path = os.path.join(models_dir, "xgboost_calibrated.pkl")
+    joblib.dump(best_model, calib_model_path)
+    print("[SUCCESS] Calibrated model saved. All predictions will now use the calibrated model.")
+    
+    return {
+        "best_method": best_method,
+        "log_loss": best_loss,
+        "ece": best_ece,
+        "accuracy": best_acc
+    }
+
+
 def main():
+    print("=== STEP 1: Assess Baseline Calibration ===")
     assess_calibration()
+    print("\n=== STEP 2: Apply Calibration Correction ===")
+    calibrate_model()
 
 
 if __name__ == "__main__":
