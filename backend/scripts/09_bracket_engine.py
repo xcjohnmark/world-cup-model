@@ -718,6 +718,126 @@ def generate_knockout_predictions() -> list:
     return all_predictions
 
 
+def generate_bracket_json() -> dict:
+    """
+    Combines group stage standings, group stage matches, predicted qualifiers,
+    knockout stage predictions, and simulation statistics into a single structured
+    JSON file (bracket_full.json) for the frontend bracket page.
+    """
+    print("=== Generating Bracket Full JSON for Frontend ===")
+    
+    # 1. Load probabilities data
+    prob_path = os.path.join("backend", "outputs", "world_cup_probabilities.json")
+    if not os.path.exists(prob_path):
+        prob_path = os.path.join("backend", "outputs", "simulation_results.json")
+        
+    print(f"Loading progression probabilities from: {prob_path}")
+    with open(prob_path, "r", encoding="utf-8") as f:
+        prob_data = json.load(f)
+        
+    # 2. Load match_predictions.json (which now contains 104 fully predicted matches)
+    predictions_path = os.path.join("backend", "outputs", "match_predictions.json")
+    print(f"Loading existing match predictions from: {predictions_path}")
+    with open(predictions_path, "r", encoding="utf-8") as f:
+        all_preds = json.load(f)
+        
+    engine = BracketEngine()
+    
+    # Map standardized team name to their r32_prob and win_prob
+    team_probs = {}
+    win_probs = {}
+    for t_info in prob_data["teams"]:
+        std_name = engine.standardizer.standardize(t_info["team"])
+        team_probs[std_name] = t_info.get("r32_prob", 0.0)
+        win_probs[t_info["team"]] = t_info.get("win_prob", 0.0)
+        
+    # Determine the most likely qualifiers for each group (A-L)
+    group_qualifiers = {}
+    for g_letter, team_list in engine.groups.items():
+        sorted_teams = sorted(
+            team_list,
+            key=lambda t: team_probs.get(engine.standardizer.standardize(t), 0.0),
+            reverse=True
+        )
+        group_qualifiers[g_letter] = sorted_teams[:2]
+        
+    # 3. Structure group_stage
+    group_stage_dict = {}
+    for g_letter, team_list in sorted(engine.groups.items()):
+        # Filter matches belonging to this group
+        group_matches = []
+        for m in all_preds[:72]:
+            if m.get("group") == g_letter:
+                group_matches.append({
+                    "match_id": m["match_id"],
+                    "date": m["date"],
+                    "team_a": m["team_a"],
+                    "team_a_prob": m["team_a_prob"],
+                    "draw_prob": m["draw_prob"],
+                    "team_b": m["team_b"],
+                    "team_b_prob": m["team_b_prob"],
+                    "actual_result": None
+                })
+        group_stage_dict[f"Group {g_letter}"] = {
+            "teams": team_list,
+            "matches": group_matches,
+            "predicted_qualifiers": group_qualifiers[g_letter]
+        }
+        
+    # Helper to map match from flat predictions list
+    def map_knockout_match(m):
+        return {
+            "match_id": m["match_id"],
+            "date": m["date"],
+            "team_a": m["team_a"],
+            "team_a_prob": m["team_a_prob"],
+            "draw_prob": m["draw_prob"],
+            "team_b": m["team_b"],
+            "team_b_prob": m["team_b_prob"],
+            "actual_result": None
+        }
+        
+    # 4. Structure knockout stages
+    round_of_32 = {"matches": [map_knockout_match(m) for m in all_preds[72:88]]}
+    round_of_16 = {"matches": [map_knockout_match(m) for m in all_preds[88:96]]}
+    quarterfinals = {"matches": [map_knockout_match(m) for m in all_preds[96:100]]}
+    semifinals = {"matches": [map_knockout_match(m) for m in all_preds[100:102]]}
+    final = {"matches": [map_knockout_match(m) for m in all_preds[102:104]]}
+    
+    # 5. Build simulation summary
+    import datetime
+    run_date_str = datetime.date.today().strftime("%Y-%m-%d")
+    
+    simulation_summary = {
+        "total_simulations": prob_data.get("total_simulations", 1000000),
+        "run_date": run_date_str,
+        "champion_probabilities": win_probs
+    }
+    
+    # Assemble full bracket dict
+    bracket_full = {
+        "group_stage": group_stage_dict,
+        "round_of_32": round_of_32,
+        "round_of_16": round_of_16,
+        "quarterfinals": quarterfinals,
+        "semifinals": semifinals,
+        "final": final,
+        "simulation_summary": simulation_summary
+    }
+    
+    # 6. Save to backend/outputs/bracket_full.json
+    output_dir = os.path.join("backend", "outputs")
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, "bracket_full.json")
+    
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(bracket_full, f, indent=4)
+        
+    print(f"[SUCCESS] Saved static bracket tree to: {output_path}")
+    return bracket_full
+
+
 if __name__ == "__main__":
     generate_knockout_predictions()
+    generate_bracket_json()
 
