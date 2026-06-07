@@ -174,3 +174,17 @@ def explain_match(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal explainability error: {e}")
+
+
+@app.get("/api/leaderboard")
+def get_leaderboard():
+    """Returns comparative leaderboard results across all models."""
+    leaderboard_path = os.path.join(project_root, "backend", "outputs", "leaderboard_results.json")
+    if not os.path.exists(leaderboard_path):
+        raise HTTPException(status_code=404, detail="Leaderboard results file not found on server.")
+    try:
+        with open(leaderboard_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read leaderboard: {e}")
+
