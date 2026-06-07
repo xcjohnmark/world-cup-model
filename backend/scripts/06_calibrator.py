@@ -272,16 +272,23 @@ def calibrate_model() -> dict:
         with open(leaderboard_path, "r") as f:
             results = json.load(f)
     else:
-        results = []
+        results = {}
+
+    if isinstance(results, dict) and "models" in results:
+        results["models"]["xgboost"]["log_loss"] = round(float(best_loss), 4)
+        results["models"]["xgboost"]["accuracy"] = round(float(best_acc), 4)
+    else:
+        # Fallback to old list format
+        if not isinstance(results, list):
+            results = []
+        results = [r for r in results if r.get("model_name") != "XGBoost (Ours)"]
+        results.append({
+            "model_name": "XGBoost (Ours)",
+            "log_loss": round(float(best_loss), 4),
+            "accuracy": round(float(best_acc), 4),
+            "type": "internal"
+        })
         
-    results = [r for r in results if r["model_name"] != "XGBoost (Ours)"]
-    results.append({
-        "model_name": "XGBoost (Ours)",
-        "log_loss": round(float(best_loss), 4),
-        "accuracy": round(float(best_acc), 4),
-        "type": "internal"
-    })
-    
     with open(leaderboard_path, "w") as f:
         json.dump(results, f, indent=4)
         

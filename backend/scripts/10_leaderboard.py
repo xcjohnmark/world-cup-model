@@ -5,6 +5,7 @@ import pickle
 import joblib
 import numpy as np
 import pandas as pd
+import math
 from sklearn.metrics import log_loss, accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -17,8 +18,230 @@ if project_root not in sys.path:
 from backend.utils.team_standardizer import TeamStandardizer
 
 
+def add_external_predictions():
+    """
+    Creates a template file backend/data/processed/external_predictions.csv
+    with columns: match_id, predictor_name, team_a_prob, draw_prob, team_b_prob
+    if it does not exist, and prints instructions for populating it.
+    """
+    processed_dir = os.path.join("backend", "data", "processed")
+    os.makedirs(processed_dir, exist_ok=True)
+    template_path = os.path.join(processed_dir, "external_predictions.csv")
+    
+    if not os.path.exists(template_path):
+        df_template = pd.DataFrame(columns=[
+            "match_id", "predictor_name", "team_a_prob", "draw_prob", "team_b_prob"
+        ])
+        # Add a placeholder row so users see how it's formatted
+        df_template.loc[0] = ["G001", "ibm", 0.45, 0.25, 0.30]
+        df_template.to_csv(template_path, index=False)
+        print(f"[SUCCESS] Created template external predictions file at: {template_path}")
+        
+    print("\n" + "=" * 80)
+    print("TO ADD IBM PREDICTIONS:")
+    print("Visit IBM's WC 2026 prediction page (search: IBM Watson World Cup 2026)")
+    print("For each group stage match, record their predicted win probability")
+    print("Add each match as a row in external_predictions.csv")
+    print("Then run: python 10_leaderboard.py --import-external")
+    print("=" * 80 + "\n")
+
+
+def import_external_predictions(csv_path: str):
+    """
+    Reads external_predictions.csv and imports predictions into leaderboard_results.json.
+    Validates that probabilities sum to 1.0 for each match.
+    """
+    if not os.path.exists(csv_path):
+        print(f"Error: External predictions file not found at {csv_path}")
+        return
+        
+    df = pd.read_csv(csv_path)
+    if df.empty:
+        print("External predictions CSV is empty.")
+        return
+        
+    results_path = os.path.join("backend", "outputs", "leaderboard_results.json")
+    if not os.path.exists(results_path):
+        print(f"Error: leaderboard_results.json not found at {results_path}")
+        return
+        
+    with open(results_path, "r", encoding="utf-8") as f:
+        leaderboard_results = json.load(f)
+        
+    updated_count = 0
+    predictors_to_recalc = set()
+    
+    for idx, row in df.iterrows():
+        match_id = str(row["match_id"]).strip()
+        predictor_name = str(row["predictor_name"]).strip()
+        p_a = float(row["team_a_prob"])
+        p_draw = float(row["draw_prob"])
+        p_b = float(row["team_b_prob"])
+        
+        # Validate sum to 1.0
+        prob_sum = p_a + p_draw + p_b
+        if not np.isclose(prob_sum, 1.0, atol=1e-4):
+            p_a /= prob_sum
+            p_draw /= prob_sum
+            p_b /= prob_sum
+            
+        # Update match predictions in match_scores
+        match_found = False
+        for m in leaderboard_results.get("match_scores", []):
+            if m["match_id"] == match_id:
+                match_found = True
+                if "predictions" not in m:
+                    m["predictions"] = {}
+                m["predictions"][predictor_name] = {
+                    "team_a_prob": round(p_a, 4),
+                    "draw_prob": round(p_draw, 4),
+                    "team_b_prob": round(p_b, 4)
+                }
+                updated_count += 1
+                predictors_to_recalc.add(predictor_name)
+                break
+                
+        if not match_found:
+            print(f"Warning: Match ID '{match_id}' not found in leaderboard_results.json")
+            
+    # Save updated JSON
+    with open(results_path, "w", encoding="utf-8") as f:
+        json.dump(leaderboard_results, f, indent=4)
+        
+    print(f"[SUCCESS] Imported {updated_count} external predictions into leaderboard_results.json")
+    
+    # Recalculate metrics for all updated predictors
+    for pred in predictors_to_recalc:
+        # Check if there are any completed matches for this predictor to score
+        for m in leaderboard_results.get("match_scores", []):
+            if m.get("match_id") and m.get("actual_outcome") is not None:
+                # We can score this predictor using one of the completed matches
+                outcome_str = m["actual_outcome"]
+                outcome_idx = 0 if outcome_str == "team_a" else (1 if outcome_str == "draw" else 2)
+                score_predictor_on_result(m["match_id"], outcome_idx, pred)
+                break
+
+
+def score_predictor_on_result(match_id: str, actual_outcome: int, predictor_name: str) -> float:
+    """
+    Scores a single match for a predictor, computes the log loss contribution,
+    and updates the cumulative log loss and accuracy of that predictor in leaderboard_results.json.
+    """
+    results_path = os.path.join("backend", "outputs", "leaderboard_results.json")
+    if not os.path.exists(results_path):
+        raise FileNotFoundError(f"leaderboard_results.json not found at {results_path}")
+        
+    with open(results_path, "r", encoding="utf-8") as f:
+        leaderboard_results = json.load(f)
+        
+    # Find the target match in match_scores
+    target_match = None
+    for m in leaderboard_results.get("match_scores", []):
+        if m["match_id"] == match_id:
+            target_match = m
+            break
+            
+    if not target_match:
+        raise ValueError(f"Match ID '{match_id}' not found in leaderboard_results.json")
+        
+    # Get the predictor's probabilities
+    predictions = target_match.get("predictions", {}).get(predictor_name)
+    if not predictions or predictions.get("team_a_prob") is None:
+        raise ValueError(f"No predictions found for predictor '{predictor_name}' in match '{match_id}'")
+        
+    p_a = float(predictions["team_a_prob"])
+    p_draw = float(predictions["draw_prob"])
+    p_b = float(predictions["team_b_prob"])
+    
+    # Calculate log loss contribution for this match
+    if actual_outcome == 0:
+        prob = p_a
+    elif actual_outcome == 1:
+        prob = p_draw
+    elif actual_outcome == 2:
+        prob = p_b
+    else:
+        raise ValueError(f"Invalid actual_outcome: {actual_outcome}. Must be 0, 1, or 2.")
+        
+    prob = max(min(prob, 1.0 - 1e-15), 1e-15)
+    log_loss_contrib = -math.log(prob)
+    
+    # Update this match's actual outcome in match_scores
+    outcome_str = "team_a" if actual_outcome == 0 else ("draw" if actual_outcome == 1 else "team_b")
+    target_match["actual_outcome"] = outcome_str
+    
+    # Recalculate cumulative metrics for this predictor
+    all_losses = []
+    correct_predictions = 0
+    evaluated_matches = 0
+    
+    for m in leaderboard_results.get("match_scores", []):
+        m_outcome = m.get("actual_outcome")
+        if m_outcome is None:
+            continue
+            
+        m_predictions = m.get("predictions", {}).get(predictor_name)
+        if not m_predictions or m_predictions.get("team_a_prob") is None:
+            continue
+            
+        m_pa = float(m_predictions["team_a_prob"])
+        m_pdraw = float(m_predictions["draw_prob"])
+        m_pb = float(m_predictions["team_b_prob"])
+        
+        if m_outcome == "team_a":
+            m_actual = 0
+            m_prob = m_pa
+        elif m_outcome == "draw":
+            m_actual = 1
+            m_prob = m_pdraw
+        elif m_outcome == "team_b":
+            m_actual = 2
+            m_prob = m_pb
+        else:
+            continue
+            
+        m_prob = max(min(m_prob, 1.0 - 1e-15), 1e-15)
+        all_losses.append(-math.log(m_prob))
+        
+        pred_idx = int(np.argmax([m_pa, m_pdraw, m_pb]))
+        if pred_idx == m_actual:
+            correct_predictions += 1
+        evaluated_matches += 1
+        
+    # Update models dictionary
+    if predictor_name not in leaderboard_results.get("models", {}):
+        leaderboard_results["models"][predictor_name] = {
+            "display_name": predictor_name.upper(),
+            "description": f"External predictor {predictor_name}",
+            "is_own_model": False
+        }
+        
+    model_entry = leaderboard_results["models"][predictor_name]
+    if evaluated_matches > 0:
+        model_entry["log_loss"] = round(float(np.mean(all_losses)), 4)
+        model_entry["accuracy"] = round(float(correct_predictions / evaluated_matches), 4)
+        model_entry["matches_evaluated"] = int(evaluated_matches)
+    else:
+        model_entry["log_loss"] = None
+        model_entry["accuracy"] = None
+        model_entry["matches_evaluated"] = 0
+        
+    # Save the updated JSON
+    with open(results_path, "w", encoding="utf-8") as f:
+        json.dump(leaderboard_results, f, indent=4)
+        
+    print(f"[SUCCESS] Scored match {match_id} for {predictor_name}. Log loss contribution: {log_loss_contrib:.4f}")
+    return float(log_loss_contrib)
+
+
 def main():
+    if "--import-external" in sys.argv:
+        csv_path = os.path.join("backend", "data", "processed", "external_predictions.csv")
+        import_external_predictions(csv_path)
+        return
+
     print("=== Compiling Tournament Predictor Leaderboard ===")
+    add_external_predictions()
 
     processed_dir = os.path.join("backend", "data", "processed")
     models_dir = os.path.join("backend", "models")

@@ -1,0 +1,2 @@
+match_id,predictor_name,team_a_prob,draw_prob,team_b_prob
+G001,ibm,0.45,0.25,0.3
