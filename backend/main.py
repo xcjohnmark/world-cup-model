@@ -1,9 +1,41 @@
 import os
 import sys
+
+# Resolve project root and add to sys.path to allow imports from root level
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import json
+import logging
 import importlib.util
+from functools import lru_cache
+from typing import List, Dict, Any
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+# Import Pydantic schemas
+from backend.schemas import (
+    PredictionItem,
+    SimulationResults,
+    TopTeam,
+    BracketFull,
+    CustomMatchResponse,
+    MatchExplanationResponse,
+    LeaderboardResults
+)
+
+# Load environment variables
+load_dotenv()
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
+logger = logging.getLogger("api")
 
 # Initialize FastAPI App
 app = FastAPI(
@@ -12,43 +44,169 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Enable CORS for frontend integration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins in development (can be restricted in production)
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
-# Add project root to sys.path to resolve imports correctly
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# Helper function to dynamically import number-prefixed scripts
+def import_prefixed_module(module_name: str, file_path: str):
+    logger.info(f"Importing script module: {module_name} from {file_path}")
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load spec for module {module_name} at {file_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
-# Dynamically import number-prefixed scripts
+# Structure imports of Phase 3–10 scripts cleanly at startup
 scripts_dir = os.path.join(project_root, "backend", "scripts")
 
 try:
-    # Import MatchPredictor
-    spec_pred = importlib.util.spec_from_file_location("predictor", os.path.join(scripts_dir, "07_predictor.py"))
-    pred_mod = importlib.util.module_from_spec(spec_pred)
-    spec_pred.loader.exec_module(pred_mod)
-    MatchPredictor = pred_mod.MatchPredictor
+    feature_builder = import_prefixed_module("feature_builder", os.path.join(scripts_dir, "03_feature_builder.py"))
+    dataset_builder = import_prefixed_module("dataset_builder", os.path.join(scripts_dir, "04_dataset_builder.py"))
+    model_trainer = import_prefixed_module("model_trainer", os.path.join(scripts_dir, "05_model_trainer.py"))
+    calibrator = import_prefixed_module("calibrator", os.path.join(scripts_dir, "06_calibrator.py"))
+    predictor_mod = import_prefixed_module("predictor", os.path.join(scripts_dir, "07_predictor.py"))
+    simulator = import_prefixed_module("simulator", os.path.join(scripts_dir, "08_simulator.py"))
+    bracket_engine = import_prefixed_module("bracket_engine", os.path.join(scripts_dir, "09_bracket_engine.py"))
+    leaderboard_mod = import_prefixed_module("leaderboard", os.path.join(scripts_dir, "10_leaderboard.py"))
+    explainability = import_prefixed_module("explainability", os.path.join(scripts_dir, "11_explainability.py"))
 
-    # Import explain_match_difference
-    spec_exp = importlib.util.spec_from_file_location("explainability", os.path.join(scripts_dir, "11_explainability.py"))
-    exp_mod = importlib.util.module_from_spec(spec_exp)
-    spec_exp.loader.exec_module(exp_mod)
-    explain_match_difference = exp_mod.explain_match_difference
-
-    # Initialize MatchPredictor once at module level
-    predictor = MatchPredictor()
-    print("[SUCCESS] MatchPredictor initialized successfully.")
+    MatchPredictor = predictor_mod.MatchPredictor
+    explain_match_difference = explainability.explain_match_difference
+    logger.info("Successfully imported all Phase 3–11 scripts.")
 except Exception as e:
-    print(f"[ERROR] Failed to initialize predictor/explainability modules: {e}")
-    predictor = None
+    logger.error(f"Failed to import Phase 3-11 scripts: {e}")
+    raise e
 
+# Configure CORS Middleware
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000")
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+logger.info(f"CORS middleware configured with origins: {allowed_origins}")
+
+# App state holders
+app.state.predictor = None
+app.state.world_cup_probs = None
+app.state.top5_teams = None
+app.state.bracket = None
+app.state.match_predictions = None
+app.state.leaderboard = None
+
+# Startup event handler to load assets in memory
+@app.on_event("startup")
+def startup_event():
+    logger.info("Starting up and loading all data assets into memory...")
+    
+    # 1. Load MatchPredictor
+    try:
+        app.state.predictor = MatchPredictor()
+        logger.info("MatchPredictor loaded and initialized successfully.")
+    except Exception as e:
+        logger.error(f"Failed to initialize MatchPredictor: {e}")
+        app.state.predictor = None
+
+    def load_json_file(rel_path: str):
+        full_path = os.path.join(project_root, "backend", rel_path)
+        logger.info(f"Loading data asset from: {full_path}")
+        if not os.path.exists(full_path):
+            raise FileNotFoundError(f"File not found: {full_path}")
+        with open(full_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+
+    # 2. Load JSON files
+    try:
+        app.state.world_cup_probs = load_json_file("outputs/world_cup_probabilities.json")
+        logger.info("world_cup_probabilities.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load world_cup_probabilities.json: {e}")
+        app.state.world_cup_probs = {}
+
+    try:
+        app.state.top5_teams = load_json_file("outputs/top5_teams.json")
+        logger.info("top5_teams.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load top5_teams.json: {e}")
+        app.state.top5_teams = []
+
+    try:
+        app.state.bracket = load_json_file("outputs/bracket_full.json")
+        logger.info("bracket_full.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load bracket_full.json: {e}")
+        app.state.bracket = {}
+
+    try:
+        app.state.match_predictions = load_json_file("outputs/match_predictions.json")
+        logger.info("match_predictions.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load match_predictions.json: {e}")
+        app.state.match_predictions = []
+
+    try:
+        app.state.leaderboard = load_json_file("outputs/leaderboard_results.json")
+        logger.info("leaderboard_results.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load leaderboard_results.json: {e}")
+        app.state.leaderboard = {}
+        
+    logger.info("FastAPI startup process complete.")
+
+
+# --- Cache helper functions ---
+
+@lru_cache(maxsize=2048)
+def get_cached_prediction(team_a: str, team_b: str):
+    if app.state.predictor is None:
+        raise ValueError("MatchPredictor engine is currently unavailable.")
+    return app.state.predictor.predict_match(team_a, team_b)
+
+@lru_cache(maxsize=2048)
+def get_cached_explanation(team_a: str, team_b: str):
+    if app.state.predictor is None:
+        raise ValueError("MatchPredictor engine is currently unavailable.")
+    explanation_text = explain_match_difference(team_a, team_b, app.state.predictor)
+    stats_a = app.state.predictor.get_team_features(team_a)
+    stats_b = app.state.predictor.get_team_features(team_b)
+    
+    # Load global feature importances
+    imp_path = os.path.join(project_root, "backend", "outputs", "shap_importance.json")
+    global_importance = {}
+    if os.path.exists(imp_path):
+        try:
+            with open(imp_path, "r", encoding="utf-8") as f:
+                global_importance = json.load(f)
+        except Exception as e:
+            logger.warning(f"Could not load shap_importance.json: {e}")
+            
+    return {
+        "team_a": app.state.predictor.standardizer.get_display_name(team_a),
+        "team_b": app.state.predictor.standardizer.get_display_name(team_b),
+        "explanation": explanation_text,
+        "team_a_stats": {
+            "elo": float(stats_a.get("elo", 1500.0)),
+            "fifa_rank": int(stats_a.get("fifa_rank", 100)),
+            "form_last_5": float(stats_a.get("form_last_5", 0.5)),
+            "goals_scored_10": float(stats_a.get("goals_scored_10", 1.0)),
+            "goals_conceded_10": float(stats_a.get("goals_conceded_10", 1.0))
+        },
+        "team_b_stats": {
+            "elo": float(stats_b.get("elo", 1500.0)),
+            "fifa_rank": int(stats_b.get("fifa_rank", 100)),
+            "form_last_5": float(stats_b.get("form_last_5", 0.5)),
+            "goals_scored_10": float(stats_b.get("goals_scored_10", 1.0)),
+            "goals_conceded_10": float(stats_b.get("goals_conceded_10", 1.0))
+        },
+        "global_importance": global_importance
+    }
+
+
+# --- API Routes ---
 
 @app.get("/")
 def read_root():
@@ -56,135 +214,98 @@ def read_root():
         "status": "online",
         "message": "2026 FIFA World Cup Prediction API is active.",
         "endpoints": [
+            "/health",
             "/api/predictions",
             "/api/simulations",
+            "/api/simulations/top5",
             "/api/bracket",
             "/api/predict",
-            "/api/explain"
+            "/api/explain",
+            "/api/leaderboard"
         ]
     }
 
 
-@app.get("/api/predictions")
+@app.get("/health")
+def health_check():
+    """Health check endpoint to verify backend status and model availability."""
+    sims = 1000000
+    if app.state.world_cup_probs and "total_simulations" in app.state.world_cup_probs:
+        sims = app.state.world_cup_probs["total_simulations"]
+    return {
+        "status": "ok",
+        "model_loaded": app.state.predictor is not None,
+        "simulations": sims
+    }
+
+
+@app.get("/api/predictions", response_model=List[PredictionItem])
 def get_predictions():
     """Returns predictions for all 104 matches (72 group stage + 32 knockout)."""
-    predictions_path = os.path.join(project_root, "backend", "outputs", "match_predictions.json")
-    if not os.path.exists(predictions_path):
-        raise HTTPException(status_code=404, detail="Predictions file not found on server.")
-    try:
-        with open(predictions_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to read predictions: {e}")
+    if not app.state.match_predictions:
+        raise HTTPException(status_code=404, detail="Predictions not found on server.")
+    return app.state.match_predictions
 
 
-@app.get("/api/simulations")
+@app.get("/api/simulations", response_model=SimulationResults)
 def get_simulations():
     """Returns the aggregated Monte Carlo tournament progression probabilities for all 48 teams."""
-    sim_path = os.path.join(project_root, "backend", "outputs", "simulation_results.json")
-    if not os.path.exists(sim_path):
-        raise HTTPException(status_code=404, detail="Simulation results file not found on server.")
-    try:
-        with open(sim_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to read simulation results: {e}")
+    if not app.state.world_cup_probs:
+        raise HTTPException(status_code=404, detail="Simulation results not found on server.")
+    return app.state.world_cup_probs
 
 
-@app.get("/api/bracket")
+@app.get("/api/simulations/top5", response_model=List[TopTeam])
+def get_top5_teams():
+    """Returns the top 5 teams ranked by World Cup win probability."""
+    if not app.state.top5_teams:
+        raise HTTPException(status_code=404, detail="Top 5 teams data not found on server.")
+    return app.state.top5_teams
+
+
+@app.get("/api/bracket", response_model=BracketFull)
 def get_bracket():
     """Returns the structured round-by-round tournament tree (bracket_full.json)."""
-    bracket_path = os.path.join(project_root, "backend", "outputs", "bracket_full.json")
-    if not os.path.exists(bracket_path):
-        raise HTTPException(status_code=404, detail="bracket_full.json file not found on server.")
-    try:
-        with open(bracket_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to read bracket tree data: {e}")
+    if not app.state.bracket:
+        raise HTTPException(status_code=404, detail="bracket_full.json not found on server.")
+    return app.state.bracket
 
 
-@app.get("/api/predict")
+@app.get("/api/predict", response_model=CustomMatchResponse)
 def predict_match(
     team_a: str = Query(..., description="Name of Team A"),
     team_b: str = Query(..., description="Name of Team B")
 ):
-    """Predicts symmetric probabilities for a custom match between two teams."""
-    if predictor is None:
-        raise HTTPException(status_code=500, detail="MatchPredictor engine is currently unavailable.")
+    """Predicts symmetric probabilities for a custom match between two teams (with in-memory caching)."""
     try:
-        res = predictor.predict_match(team_a, team_b)
-        return {
-            "team_a": res["team_a"],
-            "team_a_prob": float(res["team_a_prob"]),
-            "draw_prob": float(res["draw_prob"]),
-            "team_b": res["team_b"],
-            "team_b_prob": float(res["team_b_prob"])
-        }
+        res = get_cached_prediction(team_a, team_b)
+        return res
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Internal prediction error: {e}")
         raise HTTPException(status_code=500, detail=f"Internal prediction error: {e}")
 
 
-@app.get("/api/explain")
+@app.get("/api/explain", response_model=MatchExplanationResponse)
 def explain_match(
     team_a: str = Query(..., description="Name of Team A"),
     team_b: str = Query(..., description="Name of Team B")
 ):
-    """Exposes SHAP global feature importances and human-readable team differences."""
-    if predictor is None:
-        raise HTTPException(status_code=500, detail="MatchPredictor engine is currently unavailable.")
+    """Exposes SHAP global feature importances and human-readable team differences (with in-memory caching)."""
     try:
-        # 1. Compute human-readable difference explanation text
-        explanation_text = explain_match_difference(team_a, team_b, predictor)
-        
-        # 2. Get individual team snapshots
-        stats_a = predictor.get_team_features(team_a)
-        stats_b = predictor.get_team_features(team_b)
-        
-        # 3. Load global feature importances
-        imp_path = os.path.join(project_root, "backend", "outputs", "shap_importance.json")
-        global_importance = {}
-        if os.path.exists(imp_path):
-            with open(imp_path, "r", encoding="utf-8") as f:
-                global_importance = json.load(f)
-                
-        return {
-            "team_a": predictor.standardizer.get_display_name(team_a),
-            "team_b": predictor.standardizer.get_display_name(team_b),
-            "explanation": explanation_text,
-            "team_a_stats": {
-                "elo": float(stats_a.get("elo", 1500.0)),
-                "fifa_rank": int(stats_a.get("fifa_rank", 100)),
-                "form_last_5": float(stats_a.get("form_last_5", 0.5)),
-                "goals_scored_10": float(stats_a.get("goals_scored_10", 1.0)),
-                "goals_conceded_10": float(stats_a.get("goals_conceded_10", 1.0))
-            },
-            "team_b_stats": {
-                "elo": float(stats_b.get("elo", 1500.0)),
-                "fifa_rank": int(stats_b.get("fifa_rank", 100)),
-                "form_last_5": float(stats_b.get("form_last_5", 0.5)),
-                "goals_scored_10": float(stats_b.get("goals_scored_10", 1.0)),
-                "goals_conceded_10": float(stats_b.get("goals_conceded_10", 1.0))
-            },
-            "global_importance": global_importance
-        }
+        res = get_cached_explanation(team_a, team_b)
+        return res
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Internal explainability error: {e}")
         raise HTTPException(status_code=500, detail=f"Internal explainability error: {e}")
 
 
-@app.get("/api/leaderboard")
+@app.get("/api/leaderboard", response_model=LeaderboardResults)
 def get_leaderboard():
     """Returns comparative leaderboard results across all models."""
-    leaderboard_path = os.path.join(project_root, "backend", "outputs", "leaderboard_results.json")
-    if not os.path.exists(leaderboard_path):
-        raise HTTPException(status_code=404, detail="Leaderboard results file not found on server.")
-    try:
-        with open(leaderboard_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to read leaderboard: {e}")
-
+    if not app.state.leaderboard:
+        raise HTTPException(status_code=404, detail="Leaderboard results not found on server.")
+    return app.state.leaderboard

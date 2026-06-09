@@ -105,7 +105,7 @@ class BracketEngine:
         self.standardizer = TeamStandardizer()
         
         # Load penalty win rates
-        penalty_rates_path = os.path.join("backend", "data", "processed", "penalty_win_rates.csv")
+        penalty_rates_path = os.path.join(project_root, "backend", "data", "processed", "penalty_win_rates.csv")
         self.penalty_rates = {}
         if os.path.exists(penalty_rates_path):
             df_rates = pd.read_csv(penalty_rates_path)
@@ -114,9 +114,9 @@ class BracketEngine:
                 self.penalty_rates[std_team] = float(row["penalty_win_rate"])
                 
         # Load group assignments
-        groups_path = os.path.join("backend", "data", "cleaned", "wc_2026_groups.json")
+        groups_path = os.path.join(project_root, "backend", "data", "cleaned", "wc_2026_groups.json")
         if not os.path.exists(groups_path):
-            groups_path = os.path.join("backend", "data", "raw", "wc_2026_groups.json")
+            groups_path = os.path.join(project_root, "backend", "data", "raw", "wc_2026_groups.json")
             
         with open(groups_path, "r", encoding="utf-8") as f:
             self.wc_data = json.load(f)
@@ -126,7 +126,7 @@ class BracketEngine:
         
         # Load real results from bracket_full.json if available
         self.real_results = {}
-        bracket_full_path = os.path.join("backend", "outputs", "bracket_full.json")
+        bracket_full_path = os.path.join(project_root, "backend", "outputs", "bracket_full.json")
         if os.path.exists(bracket_full_path):
             try:
                 with open(bracket_full_path, "r", encoding="utf-8") as f:

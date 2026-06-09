@@ -16,8 +16,8 @@ from backend.utils.team_standardizer import TeamStandardizer
 class MatchPredictor:
     def __init__(self):
         """Initializes the MatchPredictor with models, features, and team snapshots."""
-        models_dir = os.path.join("backend", "models")
-        processed_dir = os.path.join("backend", "data", "processed")
+        models_dir = os.path.join(project_root, "backend", "models")
+        processed_dir = os.path.join(project_root, "backend", "data", "processed")
         
         # 1. Load xgboost_calibrated.pkl at initialization
         model_path = os.path.join(models_dir, "xgboost_calibrated.pkl")
