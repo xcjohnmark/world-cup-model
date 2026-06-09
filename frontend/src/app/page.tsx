@@ -1,101 +1,159 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import { 
+  fetchBracket,
+  fetchBracketStatus,
+  fetchGroupAccuracy,
+  fetchFifaStandings,
+  fetchTop5,
+  fetchExternalPredictions 
+} from "@/lib/api";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BracketView from "@/components/BracketView";
+import PredictionsView from "@/components/PredictionsView";
+import { 
+  AccuracyMetric, 
+  TeamChampionProb,
+  BracketFull,
+  FifaStandingsResponse,
+  ExternalPredictionsResponse
+} from "@/lib/types";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  // Views: 'bracket' or 'predictions'
+  const [activeView, setActiveView] = useState<"bracket" | "predictions">("bracket");
+  
+  // Selected World Cup group for Bracket view (A to L)
+  const [selectedGroup, setSelectedGroup] = useState<string>("A");
+  
+  // API Data States
+  const [bracketData, setBracketData] = useState<BracketFull | null>(null);
+  const [bracketStatus, setBracketStatus] = useState<{ group_stage_complete: boolean } | null>(null);
+  const [fifaStandings, setFifaStandings] = useState<FifaStandingsResponse | null>(null);
+  const [groupAccuracy, setGroupAccuracy] = useState<AccuracyMetric | null>(null);
+  const [externalPredictions, setExternalPredictions] = useState<ExternalPredictionsResponse | null>(null);
+  const [top5Teams, setTop5Teams] = useState<TeamChampionProb[]>([]);
+  
+  // Loading & Error States
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Group-level loading & error states
+  const [groupLoading, setGroupLoading] = useState<boolean>(false);
+  const [groupError, setGroupError] = useState<boolean>(false);
+  
+  // Refresh controller for when matches are updated
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  // Fetch initial data (bracket structure, status, external predictions, and top 5)
+  useEffect(() => {
+    async function loadInitialData() {
+      try {
+        setLoading(true);
+        const [bracket, status, external, top5] = await Promise.all([
+          fetchBracket(),
+          fetchBracketStatus(),
+          fetchExternalPredictions(),
+          fetchTop5()
+        ]);
+        
+        setBracketData(bracket);
+        setBracketStatus(status);
+        setExternalPredictions(external);
+        setTop5Teams(top5);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to load initial predictor data:", err);
+        setError("The prediction engine is temporarily unavailable.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadInitialData();
+  }, [refreshTrigger]);
+
+  // Fetch group standings and accuracy when selected group or refresh trigger changes
+  useEffect(() => {
+    async function loadGroupData() {
+      if (!selectedGroup) return;
+      try {
+        setGroupLoading(true);
+        setGroupError(false);
+        const [standings, accuracy] = await Promise.all([
+          fetchFifaStandings(selectedGroup),
+          fetchGroupAccuracy(selectedGroup)
+        ]);
+        setFifaStandings(standings);
+        setGroupAccuracy(accuracy);
+      } catch (err) {
+        console.error(`Failed to load data for Group ${selectedGroup}:`, err);
+        setGroupError(true);
+      } finally {
+        setGroupLoading(false);
+      }
+    }
+    
+    loadGroupData();
+  }, [selectedGroup, refreshTrigger]);
+
+  const triggerRefresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
+
+  const runDate = bracketData?.simulation_summary?.run_date || "2026-06-09";
+  const totalSimulations = bracketData?.simulation_summary?.total_simulations || 1000000;
+
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* Navbar */}
+      <Navbar activeView={activeView} setActiveView={setActiveView} />
+
+      {/* Main Content Container */}
+      <div className="journal-shell flex-1 py-6">
+        {/* Loading and Error States */}
+        {loading && !bracketData ? (
+          <div className="py-20 text-center font-sans text-sm text-gray-500">
+            Loading...
+          </div>
+        ) : error ? (
+          <div className="py-12 border border-black p-6 text-center my-6 bg-white font-sans max-w-lg mx-auto">
+            <p className="font-bold text-red-600 mb-2">Error</p>
+            <p className="text-sm text-gray-700 font-medium mb-4">{error}</p>
+            <button 
+              onClick={triggerRefresh}
+              className="px-4 py-2 border border-black text-xs font-bold uppercase hover:bg-gray-100 transition-none"
+            >
+              Retry Connection
+            </button>
+          </div>
+        ) : (
+          <main className="min-h-[500px]">
+            {activeView === "bracket" ? (
+              <BracketView
+                bracketData={bracketData}
+                bracketStatus={bracketStatus}
+                selectedGroup={selectedGroup}
+                setSelectedGroup={setSelectedGroup}
+                fifaStandings={fifaStandings}
+                groupAccuracy={groupAccuracy}
+                groupLoading={groupLoading}
+                groupError={groupError}
+              />
+            ) : (
+              <PredictionsView
+                top5Teams={top5Teams}
+                externalPredictions={externalPredictions}
+              />
+            )}
+          </main>
+        )}
+      </div>
+
+      {/* Footer */}
+      <Footer runDate={runDate} totalSimulations={totalSimulations} />
     </div>
   );
 }

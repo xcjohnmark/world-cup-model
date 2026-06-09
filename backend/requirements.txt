@@ -13,4 +13,5 @@ tqdm
 joblib
 pydantic
 beautifulsoup4
+requests
 

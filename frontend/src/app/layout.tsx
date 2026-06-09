@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Bebas_Neue, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-heading",
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
-  title: "WC2026 Predictor",
-  description: "ML-powered 2026 FIFA World Cup prediction platform.",
+  title: "World Cup 2026 Prediction Model",
+  description: "An ML-powered XGBoost simulator computing progression probabilities for all 48 participating countries.",
 };
 
 export default function RootLayout({
@@ -26,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn(bebasNeue.variable, plusJakartaSans.variable)}>
-      <body className="antialiased">
+    <html lang="en" className={cn(inter.variable)}>
+      <body className="antialiased font-sans">
         {children}
       </body>
     </html>
