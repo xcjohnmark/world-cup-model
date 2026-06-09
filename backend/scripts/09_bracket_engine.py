@@ -923,7 +923,7 @@ def update_with_real_result(match_id: str, actual_team_a_score: int, actual_team
     Updates bracket_full.json with a real-life match result, recalculates group standings
     and qualifiers if it is a group stage match, saves the JSON, and returns the updated match.
     """
-    bracket_path = os.path.join("backend", "outputs", "bracket_full.json")
+    bracket_path = os.path.join(project_root, "backend", "outputs", "bracket_full.json")
     if not os.path.exists(bracket_path):
         raise FileNotFoundError(f"bracket_full.json not found at {bracket_path}")
         
@@ -978,9 +978,9 @@ def update_with_real_result(match_id: str, actual_team_a_score: int, actual_team
         group_matches = group_data["matches"]
         
         # Load simulation probabilities for tiebreakers
-        prob_path = os.path.join("backend", "outputs", "world_cup_probabilities.json")
+        prob_path = os.path.join(project_root, "backend", "outputs", "world_cup_probabilities.json")
         if not os.path.exists(prob_path):
-            prob_path = os.path.join("backend", "outputs", "simulation_results.json")
+            prob_path = os.path.join(project_root, "backend", "outputs", "simulation_results.json")
             
         team_probs = {}
         if os.path.exists(prob_path):

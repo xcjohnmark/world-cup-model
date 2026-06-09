@@ -157,3 +157,43 @@ class TeamSnapshot(BaseModel):
     finalist_prob: float
     semifinalist_prob: float
 
+
+# --- New simulation, bracket, and match endpoints schemas ---
+
+class Top5TeamItem(BaseModel):
+    rank: int
+    team: str
+    champion_prob: float
+    finalist_prob: float
+
+class SimulationResultsResponseTeam(BaseModel):
+    team: str
+    champion_prob: float
+    finalist_prob: float
+    semifinalist_prob: float
+    quarterfinalist_prob: float
+
+class SimulationResultsResponse(BaseModel):
+    total_simulations: int
+    run_date: str
+    teams: List[SimulationResultsResponseTeam]
+
+class UpdateResultRequest(BaseModel):
+    match_id: str = Field(..., min_length=1)
+    team_a_score: int = Field(..., ge=0)
+    team_b_score: int = Field(..., ge=0)
+
+class PredictMatchRequest(BaseModel):
+    team_a: str = Field(..., min_length=1, description="Name of Team A")
+    team_b: str = Field(..., min_length=1, description="Name of Team B")
+
+class LeaderboardFormattedEntry(BaseModel):
+    model_name: str
+    log_loss: Optional[float] = None
+    accuracy: Optional[float] = None
+    matches_evaluated: int
+    is_own_model: bool
+    rank: int
+
+
+

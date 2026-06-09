@@ -10,9 +10,9 @@ import json
 import logging
 import importlib.util
 from functools import lru_cache
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -26,7 +26,14 @@ from backend.schemas import (
     MatchExplanationResponse,
     LeaderboardResults,
     PredictMatchResult,
-    TeamSnapshot
+    TeamSnapshot,
+    Top5TeamItem,
+    SimulationResultsResponse,
+    UpdateResultRequest,
+    BracketGroup,
+    PredictMatchRequest,
+    LeaderboardFormattedEntry,
+    BracketMatch
 )
 
 # Load environment variables
@@ -91,6 +98,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 logger.info(f"CORS middleware configured with origins: {allowed_origins}")
+
+# Add response time logging middleware
+import time
+@app.middleware("http")
+async def add_process_time_header(request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = (time.time() - start_time) * 1000
+    logger.info(f"{request.method} {request.url.path} - Duration: {process_time:.2f}ms")
+    response.headers["X-Process-Time"] = f"{process_time:.2f}ms"
+    return response
+
+# Add global exception handler
+from fastapi.responses import JSONResponse
+@app.exception_handler(Exception)
+def global_exception_handler(request, exc):
+    status_code = 500
+    if isinstance(exc, HTTPException):
+        status_code = exc.status_code
+        message = exc.detail
+    else:
+        message = str(exc)
+    return JSONResponse(
+        status_code=status_code,
+        content={"error": message}
+    )
 
 # App state holders
 app.state.predictor = None
@@ -316,13 +349,10 @@ def get_leaderboard():
 # --- New interactive endpoints ---
 
 @app.get("/predict-match", response_model=PredictMatchResult)
-def predict_match_interactive(
-    team_a: str = Query(..., description="Name of Team A"),
-    team_b: str = Query(..., description="Name of Team B")
-):
+def predict_match_interactive(params: PredictMatchRequest = Depends()):
     """Predicts match outcome with percentage strings and validation."""
     try:
-        res = get_cached_prediction(team_a, team_b)
+        res = get_cached_prediction(params.team_a, params.team_b)
         return {
             "team_a": res["team_a"],
             "team_a_prob": res["team_a_prob"],
@@ -382,4 +412,152 @@ def get_team_detail(team_name: str):
         "finalist_prob": float(mc_stats.get("final_prob", 0.0)),
         "semifinalist_prob": float(mc_stats.get("semifinal_prob", 0.0))
     }
+
+
+@app.get("/top5", response_model=List[Top5TeamItem])
+def get_top5_probability():
+    """Returns the top 5 teams ranked by World Cup champion probability."""
+    top5 = []
+    if app.state.world_cup_probs and "teams" in app.state.world_cup_probs:
+        for idx, t in enumerate(app.state.world_cup_probs["teams"][:5]):
+            top5.append({
+                "rank": idx + 1,
+                "team": t["team"],
+                "champion_prob": t.get("win_prob", 0.0),
+                "finalist_prob": t.get("final_prob", 0.0)
+            })
+        return top5
+    raise HTTPException(status_code=404, detail="Simulation probabilities not found.")
+
+
+@app.get("/simulation-results", response_model=SimulationResultsResponse)
+def get_detailed_simulation_results():
+    """Returns all 48 teams with their tournament progression probabilities, sorted by champion_prob."""
+    teams_mapped = []
+    run_date = "2026-06-09"
+    total_sims = 1000000
+    
+    if app.state.bracket and "simulation_summary" in app.state.bracket:
+        run_date = app.state.bracket["simulation_summary"].get("run_date", "2026-06-09")
+        total_sims = app.state.bracket["simulation_summary"].get("total_simulations", 1000000)
+        
+    if app.state.world_cup_probs and "teams" in app.state.world_cup_probs:
+        total_sims = app.state.world_cup_probs.get("total_simulations", total_sims)
+        for t in app.state.world_cup_probs["teams"]:
+            teams_mapped.append({
+                "team": t["team"],
+                "champion_prob": t.get("win_prob", 0.0),
+                "finalist_prob": t.get("final_prob", 0.0),
+                "semifinalist_prob": t.get("semifinal_prob", 0.0),
+                "quarterfinalist_prob": t.get("quarterfinal_prob", 0.0)
+            })
+            
+    if not teams_mapped:
+        raise HTTPException(status_code=404, detail="Simulation results not found.")
+        
+    # Sort by champion_prob descending
+    teams_mapped.sort(key=lambda x: x["champion_prob"], reverse=True)
+    
+    return {
+        "total_simulations": total_sims,
+        "run_date": run_date,
+        "teams": teams_mapped
+    }
+
+
+@app.get("/matches", response_model=List[PredictionItem])
+def get_all_predicted_matches(
+    stage: str = Query(None, description="Filter by stage name (e.g. Group Stage)"),
+    group: str = Query(None, description="Filter by group letter (A-L)")
+):
+    """Returns the list of all predicted matches, optionally filtered by stage and group."""
+    matches = app.state.match_predictions
+    if not matches:
+        raise HTTPException(status_code=404, detail="Match predictions database is not loaded.")
+        
+    filtered = matches
+    if stage:
+        filtered = [m for m in filtered if m.get("stage") == stage]
+    if group:
+        filtered = [m for m in filtered if m.get("group") == group]
+        
+    return filtered
+
+
+@app.get("/bracket", response_model=BracketFull)
+def get_bracket_structure():
+    """Returns the full tournament bracket tree data structure."""
+    if not app.state.bracket:
+        raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
+    return app.state.bracket
+
+
+@app.get("/bracket/group/{group_letter}", response_model=BracketGroup)
+def get_bracket_group_details(group_letter: str):
+    """Returns the teams, matches, and predicted qualifiers for a specific group (A-L)."""
+    if not app.state.bracket:
+        raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
+        
+    g_letter = group_letter.upper().strip()
+    key = f"Group {g_letter}"
+    
+    group_stage = app.state.bracket.get("group_stage", {})
+    if key not in group_stage:
+        raise HTTPException(status_code=400, detail=f"Group '{group_letter}' is not a valid World Cup group (A-L).")
+        
+    return group_stage[key]
+
+
+@app.post("/update-result", response_model=BracketMatch)
+def post_update_match_result(body: UpdateResultRequest):
+    """Updates a match with actual scores, recalculates standings, and refreshes the memory cache."""
+    try:
+        updated_match = bracket_engine.update_with_real_result(
+            body.match_id,
+            body.team_a_score,
+            body.team_b_score
+        )
+        
+        # Refresh memory cache with the new files
+        def load_json_file(rel_path: str):
+            full_path = os.path.join(project_root, "backend", rel_path)
+            with open(full_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+                
+        app.state.bracket = load_json_file("outputs/bracket_full.json")
+        app.state.match_predictions = load_json_file("outputs/match_predictions.json")
+        
+        return updated_match
+    except Exception as e:
+        logger.error(f"Error in /update-result: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/leaderboard", response_model=List[LeaderboardFormattedEntry])
+def get_formatted_leaderboard():
+    """Returns formatted and sorted comparative leaderboard results across all models."""
+    if not app.state.leaderboard or "models" not in app.state.leaderboard:
+        raise HTTPException(status_code=404, detail="Leaderboard results not found on server.")
+        
+    models_list = []
+    for key, val in app.state.leaderboard["models"].items():
+        models_list.append({
+            "model_name": val.get("display_name", key.upper()),
+            "log_loss": val.get("log_loss"),
+            "accuracy": val.get("accuracy"),
+            "matches_evaluated": val.get("matches_evaluated", 0),
+            "is_own_model": val.get("is_own_model", False)
+        })
+        
+    # Sort: models with log_loss=None should go to the end
+    # Lower log_loss is better, so sort ascending by log_loss
+    models_list.sort(key=lambda x: x["log_loss"] if x["log_loss"] is not None else float('inf'))
+    
+    # Add rank
+    for idx, item in enumerate(models_list):
+        item["rank"] = idx + 1
+        
+    return models_list
+
+
 
