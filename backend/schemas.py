@@ -132,3 +132,28 @@ class LeaderboardMatchScore(BaseModel):
 class LeaderboardResults(BaseModel):
     models: Dict[str, LeaderboardModel]
     match_scores: List[LeaderboardMatchScore]
+
+
+# --- New interactive endpoints schemas ---
+
+class PredictMatchResult(BaseModel):
+    team_a: str
+    team_a_prob: float
+    team_a_prob_pct: str
+    draw_prob: float
+    draw_prob_pct: str
+    team_b: str
+    team_b_prob: float
+    team_b_prob_pct: str
+
+class TeamSnapshot(BaseModel):
+    team: str
+    elo: float
+    fifa_rank: int
+    form_last_5: float
+    goals_scored_10: float
+    goals_conceded_10: float
+    champion_prob: float
+    finalist_prob: float
+    semifinalist_prob: float
+

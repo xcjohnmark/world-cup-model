@@ -24,7 +24,9 @@ from backend.schemas import (
     BracketFull,
     CustomMatchResponse,
     MatchExplanationResponse,
-    LeaderboardResults
+    LeaderboardResults,
+    PredictMatchResult,
+    TeamSnapshot
 )
 
 # Load environment variables
@@ -309,3 +311,75 @@ def get_leaderboard():
     if not app.state.leaderboard:
         raise HTTPException(status_code=404, detail="Leaderboard results not found on server.")
     return app.state.leaderboard
+
+
+# --- New interactive endpoints ---
+
+@app.get("/predict-match", response_model=PredictMatchResult)
+def predict_match_interactive(
+    team_a: str = Query(..., description="Name of Team A"),
+    team_b: str = Query(..., description="Name of Team B")
+):
+    """Predicts match outcome with percentage strings and validation."""
+    try:
+        res = get_cached_prediction(team_a, team_b)
+        return {
+            "team_a": res["team_a"],
+            "team_a_prob": res["team_a_prob"],
+            "team_a_prob_pct": f"{res['team_a_prob'] * 100:.1f}%",
+            "draw_prob": res["draw_prob"],
+            "draw_prob_pct": f"{res['draw_prob'] * 100:.1f}%",
+            "team_b": res["team_b"],
+            "team_b_prob": res["team_b_prob"],
+            "team_b_prob_pct": f"{res['team_b_prob'] * 100:.1f}%"
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Prediction error in /predict-match: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/teams", response_model=List[str])
+def get_all_teams():
+    """Returns a sorted list of all 48 participating World Cup 2026 teams."""
+    if app.state.predictor is not None and hasattr(app.state.predictor, "snapshots_df"):
+        teams = sorted(app.state.predictor.snapshots_df["team"].tolist())
+        return teams
+    if app.state.world_cup_probs and "teams" in app.state.world_cup_probs:
+        teams = sorted([t["team"] for t in app.state.world_cup_probs["teams"]])
+        return teams
+    raise HTTPException(status_code=500, detail="Team database is not loaded.")
+
+
+@app.get("/team/{team_name}", response_model=TeamSnapshot)
+def get_team_detail(team_name: str):
+    """Returns a detailed snapshot of a team's features and simulation probabilities."""
+    if app.state.predictor is None:
+        raise HTTPException(status_code=500, detail="MatchPredictor engine is currently unavailable.")
+    
+    try:
+        stats = app.state.predictor.get_team_features(team_name)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    std_name = app.state.predictor.standardizer.standardize(team_name)
+    mc_stats = {}
+    if app.state.world_cup_probs and "teams" in app.state.world_cup_probs:
+        for t in app.state.world_cup_probs["teams"]:
+            if app.state.predictor.standardizer.standardize(t["team"]) == std_name:
+                mc_stats = t
+                break
+                
+    return {
+        "team": app.state.predictor.standardizer.get_display_name(team_name),
+        "elo": float(stats.get("elo", 1500.0)),
+        "fifa_rank": int(stats.get("fifa_rank", 100)),
+        "form_last_5": float(stats.get("form_last_5", 0.5)),
+        "goals_scored_10": float(stats.get("goals_scored_10", 1.0)),
+        "goals_conceded_10": float(stats.get("goals_conceded_10", 1.0)),
+        "champion_prob": float(mc_stats.get("win_prob", 0.0)),
+        "finalist_prob": float(mc_stats.get("final_prob", 0.0)),
+        "semifinalist_prob": float(mc_stats.get("semifinal_prob", 0.0))
+    }
+
