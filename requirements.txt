@@ -12,3 +12,5 @@ python-dotenv
 tqdm
 joblib
 pydantic
+beautifulsoup4
+

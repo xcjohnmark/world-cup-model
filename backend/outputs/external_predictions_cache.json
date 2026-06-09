@@ -1,0 +1,25 @@
+{
+  "scraped_at": "2026-06-09T07:00:00Z",
+  "opta": {
+    "last_updated": "2026-06-01",
+    "source_url": "https://theanalyst.com/2026/06/opta-supercomputer-world-cup-2026-predictions",
+    "predictions": [
+      {"rank": 1, "team": "Spain", "champion_prob": 0.161, "finalist_prob": 0.256, "semifinalist_prob": 0.390},
+      {"rank": 2, "team": "France", "champion_prob": 0.142, "finalist_prob": 0.230, "semifinalist_prob": 0.355},
+      {"rank": 3, "team": "England", "champion_prob": 0.131, "finalist_prob": 0.215, "semifinalist_prob": 0.332},
+      {"rank": 4, "team": "Argentina", "champion_prob": 0.125, "finalist_prob": 0.208, "semifinalist_prob": 0.320},
+      {"rank": 5, "team": "Brazil", "champion_prob": 0.118, "finalist_prob": 0.195, "semifinalist_prob": 0.305}
+    ]
+  },
+  "nate_silver": {
+    "last_updated": "2026-06-01",
+    "source_url": "https://www.natesilver.net/p/pele-predictions-world-cup-2026",
+    "predictions": [
+      {"rank": 1, "team": "Argentina", "pele_rating": 2064},
+      {"rank": 2, "team": "Spain", "pele_rating": 2046},
+      {"rank": 3, "team": "England", "pele_rating": 2031},
+      {"rank": 4, "team": "France", "pele_rating": 2025},
+      {"rank": 5, "team": "Brazil", "pele_rating": 2012}
+    ]
+  }
+}

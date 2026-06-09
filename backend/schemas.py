@@ -196,4 +196,59 @@ class LeaderboardFormattedEntry(BaseModel):
     rank: int
 
 
+# --- External Predictions, Accuracy, Status and Standings Schemas ---
+
+class OptaPrediction(BaseModel):
+    rank: int
+    team: str
+    champion_prob: float
+    finalist_prob: float
+    semifinalist_prob: float
+
+class OptaSection(BaseModel):
+    last_updated: str
+    source_url: str
+    predictions: List[OptaPrediction]
+
+class NateSilverPrediction(BaseModel):
+    rank: int
+    team: str
+    pele_rating: int
+
+class NateSilverSection(BaseModel):
+    last_updated: str
+    source_url: str
+    predictions: List[NateSilverPrediction]
+
+class ExternalPredictionsResponse(BaseModel):
+    opta: OptaSection
+    nate_silver: NateSilverSection
+    cache_date: Optional[str] = None
+
+class BracketStatusResponse(BaseModel):
+    group_stage_complete: bool
+
+class GroupAccuracyResponse(BaseModel):
+    ranking_correct: Optional[int]
+    ranking_total: int
+    avg_points_diff: Optional[float]
+
+class FifaStandingsEntry(BaseModel):
+    team: str
+    played: int
+    won: int
+    drawn: int
+    lost: int
+    points: int
+    goals_for: int
+    goals_against: int
+    goal_difference: int
+
+class FifaStandingsResponse(BaseModel):
+    group: str
+    status: str
+    standings: List[FifaStandingsEntry]
+
+
+
 
