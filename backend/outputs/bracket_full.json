@@ -16,7 +16,9 @@
                     "draw_prob": 0.228,
                     "team_b": "South Africa",
                     "team_b_prob": 0.1942,
-                    "actual_result": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 2,
+                    "actual_team_b_score": 0
                 },
                 {
                     "match_id": "G002",
@@ -227,7 +229,7 @@
                 "United States",
                 "Paraguay",
                 "Australia",
-                "Türkiye"
+                "T\u00fcrkiye"
             ],
             "matches": [
                 {
@@ -246,7 +248,7 @@
                     "team_a": "Australia",
                     "team_a_prob": 0.4488,
                     "draw_prob": 0.2917,
-                    "team_b": "Türkiye",
+                    "team_b": "T\u00fcrkiye",
                     "team_b_prob": 0.2595,
                     "actual_result": null
                 },
@@ -263,7 +265,7 @@
                 {
                     "match_id": "G032",
                     "date": "2026-06-19",
-                    "team_a": "Türkiye",
+                    "team_a": "T\u00fcrkiye",
                     "team_a_prob": 0.5102,
                     "draw_prob": 0.2709,
                     "team_b": "Paraguay",
@@ -286,7 +288,7 @@
                     "team_a": "United States",
                     "team_a_prob": 0.4055,
                     "draw_prob": 0.2681,
-                    "team_b": "Türkiye",
+                    "team_b": "T\u00fcrkiye",
                     "team_b_prob": 0.3265,
                     "actual_result": null
                 }
@@ -299,8 +301,8 @@
         "Group E": {
             "teams": [
                 "Germany",
-                "Curaçao",
-                "Côte d'Ivoire",
+                "Cura\u00e7ao",
+                "C\u00f4te d'Ivoire",
                 "Ecuador"
             ],
             "matches": [
@@ -310,14 +312,14 @@
                     "team_a": "Germany",
                     "team_a_prob": 0.7075,
                     "draw_prob": 0.1925,
-                    "team_b": "Curaçao",
+                    "team_b": "Cura\u00e7ao",
                     "team_b_prob": 0.0999,
                     "actual_result": null
                 },
                 {
                     "match_id": "G010",
                     "date": "2026-06-14",
-                    "team_a": "Côte d'Ivoire",
+                    "team_a": "C\u00f4te d'Ivoire",
                     "team_a_prob": 0.2439,
                     "draw_prob": 0.2679,
                     "team_b": "Ecuador",
@@ -330,7 +332,7 @@
                     "team_a": "Ecuador",
                     "team_a_prob": 0.6168,
                     "draw_prob": 0.2129,
-                    "team_b": "Curaçao",
+                    "team_b": "Cura\u00e7ao",
                     "team_b_prob": 0.1703,
                     "actual_result": null
                 },
@@ -340,7 +342,7 @@
                     "team_a": "Germany",
                     "team_a_prob": 0.4898,
                     "draw_prob": 0.2668,
-                    "team_b": "Côte d'Ivoire",
+                    "team_b": "C\u00f4te d'Ivoire",
                     "team_b_prob": 0.2434,
                     "actual_result": null
                 },
@@ -357,10 +359,10 @@
                 {
                     "match_id": "G058",
                     "date": "2026-06-25",
-                    "team_a": "Curaçao",
+                    "team_a": "Cura\u00e7ao",
                     "team_a_prob": 0.1764,
                     "draw_prob": 0.2099,
-                    "team_b": "Côte d'Ivoire",
+                    "team_b": "C\u00f4te d'Ivoire",
                     "team_b_prob": 0.6137,
                     "actual_result": null
                 }
@@ -957,7 +959,7 @@
                 "team_a": "Mexico",
                 "team_a_prob": 0.5924,
                 "draw_prob": 0.0,
-                "team_b": "Côte d'Ivoire",
+                "team_b": "C\u00f4te d'Ivoire",
                 "team_b_prob": 0.4076,
                 "actual_result": null
             },
@@ -1037,7 +1039,7 @@
                 "team_a": "Portugal",
                 "team_a_prob": 0.6472,
                 "draw_prob": 0.0,
-                "team_b": "Türkiye",
+                "team_b": "T\u00fcrkiye",
                 "team_b_prob": 0.3528,
                 "actual_result": null
             },
@@ -1255,9 +1257,9 @@
             "Uruguay": 0.01114,
             "Ecuador": 0.01027,
             "Norway": 0.00908,
-            "Côte d'Ivoire": 0.00804,
+            "C\u00f4te d'Ivoire": 0.00804,
             "Austria": 0.00719,
-            "Türkiye": 0.00636,
+            "T\u00fcrkiye": 0.00636,
             "Egypt": 0.00618,
             "Algeria": 0.0052,
             "Panama": 0.00439,
@@ -1277,7 +1279,7 @@
             "Bosnia and Herzegovina": 0.00034,
             "Cabo Verde": 0.00032,
             "Ghana": 0.0002,
-            "Curaçao": 0.00015,
+            "Cura\u00e7ao": 0.00015,
             "Haiti": 0.00011,
             "Jordan": 5e-05,
             "New Zealand": 3e-05

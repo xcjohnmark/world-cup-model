@@ -351,6 +351,24 @@ def get_leaderboard():
     return app.state.leaderboard
 
 
+@app.post("/api/scrape-results")
+def trigger_scrape_results():
+    """Triggers the automated results scraper to update completed matches and recalculate standings."""
+    try:
+        from backend.scripts.11_results_scraper import run_scraper
+        result = run_scraper()
+        
+        # Refresh the in-memory cache if new results were scraped and written
+        if result.get("updated_matches"):
+            logger.info("New results found and updated. Refreshing in-memory data assets...")
+            startup_event()
+            
+        return result
+    except Exception as e:
+        logger.error(f"Error executing scraper endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Scraper error: {str(e)}")
+
+
 # --- New interactive endpoints ---
 
 @app.get("/predict-match", response_model=PredictMatchResult)
