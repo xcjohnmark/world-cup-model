@@ -173,7 +173,7 @@ export default function GroupTableComparison({
           
           {!isStandingsActive || officialStandings.length === 0 ? (
             <div className="border border-dashed border-gray-300 py-10 text-center text-xs text-gray-500 font-sans italic">
-              No results yet — check back after June 11
+              No results yet — standings will update upon match completion
             </div>
           ) : (
             <table className="min-w-full text-xs font-mono">
