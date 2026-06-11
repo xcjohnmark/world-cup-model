@@ -1,7 +1,6 @@
 import React from "react";
 import { TeamChampionProb, ExternalPredictionsResponse } from "@/lib/types";
 import Top5Comparison from "./predictions/Top5Comparison";
-import ArticleSection from "./predictions/ArticleSection";
 
 interface PredictionsViewProps {
   top5Teams: TeamChampionProb[];
@@ -29,9 +28,7 @@ export default function PredictionsView({
         top5Teams={top5Teams}
         externalPredictions={externalPredictions}
       />
-
-      {/* Editorial Article Section */}
-      <ArticleSection />
     </div>
   );
 }
+
