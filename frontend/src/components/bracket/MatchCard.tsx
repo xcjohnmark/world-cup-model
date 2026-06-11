@@ -40,21 +40,21 @@ export default function MatchCard({ match }: MatchCardProps) {
   const getProbabilityColors = (prob: number, isDraw: boolean, isHigherWin: boolean) => {
     if (isDraw) {
       return {
-        bg: "#E8F0FE", // soft blue
+        bg: "#2563EB", // vibrant primary blue
         text: "#1A73E8", // blue
         dot: "#1A73E8"
       };
     }
     if (isHigherWin) {
       return {
-        bg: "#E6F4EA", // soft green
+        bg: "#16A34A", // vibrant primary green
         text: "#137333", // green
         dot: "#137333"
       };
     }
     // Lower win probability
     return {
-      bg: "#FCE8E6", // soft red
+      bg: "#DC2626", // vibrant primary red
       text: "#C5221F", // red
       dot: "#C5221F"
     };
