@@ -1,5 +1,6 @@
 import React from "react";
 import { MatchPrediction } from "@/lib/types";
+import { getMatchScheduleDetails } from "@/lib/schedule";
 
 interface MatchCardProps {
   match: MatchPrediction;
@@ -14,6 +15,26 @@ export default function MatchCard({ match }: MatchCardProps) {
   const hasResult = match.actual_result !== null && match.actual_result !== undefined;
   const teamAScore = match.actual_team_a_score ?? 0;
   const teamBScore = match.actual_team_b_score ?? 0;
+
+  // Retrieve schedule details (date, stadium, city, kickoff time)
+  const schedule = getMatchScheduleDetails(match.team_a, match.team_b);
+
+  // Timezone-safe date formatting (Thu, Jun 11, 2026)
+  const formatDateString = (dateStr: string) => {
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const year = parseInt(parts[0], 10);
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    
+    const date = new Date(year, monthIdx, day);
+    return date.toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  };
 
   // Option 1 color resolver
   const getProbabilityColors = (prob: number, isDraw: boolean) => {
@@ -106,6 +127,17 @@ export default function MatchCard({ match }: MatchCardProps) {
       {hasResult && (
         <div className="text-sm text-gray-500 font-sans italic mt-1.5">
           Result: {match.team_a} {teamAScore}–{teamBScore} {match.team_b}
+        </div>
+      )}
+
+      {/* Schedule Info Row (Stadium, City, Date, Kickoff Time) */}
+      {schedule && (
+        <div className="text-[11px] text-gray-500 font-mono mt-1.5 flex flex-wrap gap-x-2 gap-y-0.5 items-center leading-normal">
+          <span>{formatDateString(schedule.date)}</span>
+          <span className="text-gray-300">•</span>
+          <span>{schedule.time}</span>
+          <span className="text-gray-300">•</span>
+          <span className="italic">{schedule.stadium} ({schedule.city})</span>
         </div>
       )}
     </div>
