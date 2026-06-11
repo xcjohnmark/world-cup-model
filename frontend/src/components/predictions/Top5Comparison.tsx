@@ -1,4 +1,5 @@
 import { TeamChampionProb, ExternalPredictionsResponse } from "@/lib/types";
+import { Flag } from "@/lib/flags";
 
 interface Top5ComparisonProps {
   top5Teams: TeamChampionProb[];
@@ -94,9 +95,12 @@ export default function Top5Comparison({
                 {/* Column 1: My Model */}
                 <td className="py-2 px-3 border-r border-gray-200">
                   <div className="flex justify-between items-center">
-                    <span>
+                    <span className="inline-flex items-center">
                       <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black">{row.my.text}</span>
+                      <span className="font-bold text-black inline-flex items-center">
+                        <Flag countryName={row.my.text} />
+                        {row.my.text}
+                      </span>
                     </span>
                     <span className="font-bold text-gray-700">{row.my.val}</span>
                   </div>
@@ -104,9 +108,12 @@ export default function Top5Comparison({
                 {/* Column 2: Opta */}
                 <td className="py-2 px-3 border-r border-gray-200">
                   <div className="flex justify-between items-center">
-                    <span>
+                    <span className="inline-flex items-center">
                       <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black">{row.opta.text}</span>
+                      <span className="font-bold text-black inline-flex items-center">
+                        <Flag countryName={row.opta.text} />
+                        {row.opta.text}
+                      </span>
                     </span>
                     <span className="font-bold text-gray-700">{row.opta.val}</span>
                   </div>
@@ -114,9 +121,12 @@ export default function Top5Comparison({
                 {/* Column 3: Nate Silver */}
                 <td className="py-2 px-3">
                   <div className="flex justify-between items-center">
-                    <span>
+                    <span className="inline-flex items-center">
                       <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black">{row.ns.text}</span>
+                      <span className="font-bold text-black inline-flex items-center">
+                        <Flag countryName={row.ns.text} />
+                        {row.ns.text}
+                      </span>
                     </span>
                     <span className="font-bold text-gray-700">{row.ns.val}</span>
                   </div>

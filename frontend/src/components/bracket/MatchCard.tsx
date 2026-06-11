@@ -1,6 +1,7 @@
 import React from "react";
 import { MatchPrediction } from "@/lib/types";
 import { getMatchScheduleDetails } from "@/lib/schedule";
+import { Flag } from "@/lib/flags";
 
 interface MatchCardProps {
   match: MatchPrediction;
@@ -71,7 +72,8 @@ export default function MatchCard({ match }: MatchCardProps) {
       <div className="flex flex-col gap-1 my-1">
         {/* Team A Row */}
         <div className="flex justify-between items-center text-sm">
-          <span className={`${match.actual_result === "team_a" ? "font-bold text-black" : "text-gray-900"}`}>
+          <span className={`${match.actual_result === "team_a" ? "font-bold text-black" : "text-gray-900"} flex items-center`}>
+            <Flag countryName={match.team_a} />
             {match.team_a}
           </span>
           <div className="flex items-center gap-1.5">
@@ -91,7 +93,8 @@ export default function MatchCard({ match }: MatchCardProps) {
 
         {/* Team B Row */}
         <div className="flex justify-between items-center text-sm">
-          <span className={`${match.actual_result === "team_b" ? "font-bold text-black" : "text-gray-900"}`}>
+          <span className={`${match.actual_result === "team_b" ? "font-bold text-black" : "text-gray-900"} flex items-center`}>
+            <Flag countryName={match.team_b} />
             {match.team_b}
           </span>
           <div className="flex items-center gap-1.5">
@@ -100,6 +103,7 @@ export default function MatchCard({ match }: MatchCardProps) {
           </div>
         </div>
       </div>
+
 
       {/* Proportional Probability Bar */}
       <div className="flex h-1.5 w-full bg-[#f5f5f5] gap-[1px] my-2">
