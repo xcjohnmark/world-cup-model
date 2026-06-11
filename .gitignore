@@ -22,3 +22,6 @@ backend/models/*.pkl
 # OS
 .DS_Store
 Thumbs.db
+
+# Custom
+newplan.md
