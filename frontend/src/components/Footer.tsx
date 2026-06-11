@@ -15,7 +15,7 @@ export default function Footer({ runDate = "2026-06-09", totalSimulations = 1000
         {/* Social Links Row */}
         <div className="flex flex-wrap justify-center items-center gap-2 text-sm font-sans font-medium text-black">
           <a
-            href="https://x.com/worldcupmodel"
+            href="https://x.com/xcjohnmark"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
@@ -24,30 +24,12 @@ export default function Footer({ runDate = "2026-06-09", totalSimulations = 1000
           </a>
           <span className="text-gray-300 mx-1">·</span>
           <a
-            href="https://linkedin.com/in/worldcupmodel"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            LinkedIn
-          </a>
-          <span className="text-gray-300 mx-1">·</span>
-          <a
-            href="https://github.com/xcjohnmark/world-cup-model"
+            href="https://github.com/xcjohnmark"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline"
           >
             GitHub
-          </a>
-          <span className="text-gray-300 mx-1">·</span>
-          <a
-            href="https://instagram.com/worldcupmodel"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            Instagram
           </a>
         </div>
 
