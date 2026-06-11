@@ -32,7 +32,7 @@ export default function Navbar({ activeView, setActiveView }: NavbarProps) {
             rel="noopener noreferrer"
             className="px-3 py-1.5 border border-black text-[10px] font-bold uppercase hover:bg-black hover:text-white transition-none text-black text-center"
           >
-            ☕ Support This Project
+            Support This Project
           </a>
         </div>
 

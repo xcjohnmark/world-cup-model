@@ -227,7 +227,7 @@
             "r32_prob": 0.554
         },
         {
-            "team": "C\u00f4te d'Ivoire",
+            "team": "Côte d'Ivoire",
             "win_prob": 0.004,
             "final_prob": 0.012,
             "semifinal_prob": 0.049,
@@ -263,7 +263,7 @@
             "r32_prob": 0.576
         },
         {
-            "team": "T\u00fcrkiye",
+            "team": "Türkiye",
             "win_prob": 0.002,
             "final_prob": 0.009,
             "semifinal_prob": 0.035,
@@ -398,7 +398,7 @@
             "r32_prob": 0.287
         },
         {
-            "team": "Cura\u00e7ao",
+            "team": "Curaçao",
             "win_prob": 0.0,
             "final_prob": 0.0,
             "semifinal_prob": 0.006,

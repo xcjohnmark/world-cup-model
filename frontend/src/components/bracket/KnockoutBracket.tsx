@@ -16,7 +16,7 @@ export default function KnockoutBracket({
     return (
       <div className="border border-black p-8 text-center my-6 bg-white font-sans text-black">
         <p className="text-base font-bold mb-1">
-          🔒 Knockout bracket unlocks when group stage is complete
+          Knockout bracket unlocks when group stage is complete
         </p>
         <p className="text-xs text-gray-500 font-mono">(Check back after June 27, 2026)</p>
       </div>

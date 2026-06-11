@@ -15,10 +15,10 @@
         "stage": "Group Stage",
         "group": "A",
         "date": "2026-06-11",
-        "team_a": "South Korea",
+        "team_a": "Korea Republic",
         "team_a_prob": 0.4334,
         "draw_prob": 0.2863,
-        "team_b": "Czech Republic",
+        "team_b": "Czechia",
         "team_b_prob": 0.2803
     },
     {
@@ -51,7 +51,7 @@
         "team_a": "Australia",
         "team_a_prob": 0.4488,
         "draw_prob": 0.2917,
-        "team_b": "Turkey",
+        "team_b": "Türkiye",
         "team_b_prob": 0.2595
     },
     {
@@ -95,7 +95,7 @@
         "team_a": "Germany",
         "team_a_prob": 0.7075,
         "draw_prob": 0.1925,
-        "team_b": "Cura\u00e7ao",
+        "team_b": "Curaçao",
         "team_b_prob": 0.0999
     },
     {
@@ -103,7 +103,7 @@
         "stage": "Group Stage",
         "group": "E",
         "date": "2026-06-14",
-        "team_a": "Ivory Coast",
+        "team_a": "Côte d'Ivoire",
         "team_a_prob": 0.2439,
         "draw_prob": 0.2679,
         "team_b": "Ecuador",
@@ -147,7 +147,7 @@
         "stage": "Group Stage",
         "group": "G",
         "date": "2026-06-15",
-        "team_a": "Iran",
+        "team_a": "IR Iran",
         "team_a_prob": 0.6766,
         "draw_prob": 0.1754,
         "team_b": "New Zealand",
@@ -161,7 +161,7 @@
         "team_a": "Spain",
         "team_a_prob": 0.7345,
         "draw_prob": 0.1866,
-        "team_b": "Cape Verde",
+        "team_b": "Cabo Verde",
         "team_b_prob": 0.0789
     },
     {
@@ -249,7 +249,7 @@
         "team_a": "Portugal",
         "team_a_prob": 0.6337,
         "draw_prob": 0.2014,
-        "team_b": "DR Congo",
+        "team_b": "Congo DR",
         "team_b_prob": 0.1648
     },
     {
@@ -268,7 +268,7 @@
         "stage": "Group Stage",
         "group": "A",
         "date": "2026-06-18",
-        "team_a": "Czech Republic",
+        "team_a": "Czechia",
         "team_a_prob": 0.3709,
         "draw_prob": 0.2976,
         "team_b": "South Africa",
@@ -282,7 +282,7 @@
         "team_a": "Mexico",
         "team_a_prob": 0.5004,
         "draw_prob": 0.2708,
-        "team_b": "South Korea",
+        "team_b": "Korea Republic",
         "team_b_prob": 0.2287
     },
     {
@@ -345,7 +345,7 @@
         "stage": "Group Stage",
         "group": "D",
         "date": "2026-06-19",
-        "team_a": "Turkey",
+        "team_a": "Türkiye",
         "team_a_prob": 0.5102,
         "draw_prob": 0.2709,
         "team_b": "Paraguay",
@@ -381,7 +381,7 @@
         "team_a": "Ecuador",
         "team_a_prob": 0.6168,
         "draw_prob": 0.2129,
-        "team_b": "Cura\u00e7ao",
+        "team_b": "Curaçao",
         "team_b_prob": 0.1703
     },
     {
@@ -392,7 +392,7 @@
         "team_a": "Germany",
         "team_a_prob": 0.4898,
         "draw_prob": 0.2668,
-        "team_b": "Ivory Coast",
+        "team_b": "Côte d'Ivoire",
         "team_b_prob": 0.2434
     },
     {
@@ -403,7 +403,7 @@
         "team_a": "Belgium",
         "team_a_prob": 0.413,
         "draw_prob": 0.2502,
-        "team_b": "Iran",
+        "team_b": "IR Iran",
         "team_b_prob": 0.3368
     },
     {
@@ -436,7 +436,7 @@
         "team_a": "Uruguay",
         "team_a_prob": 0.5919,
         "draw_prob": 0.2189,
-        "team_b": "Cape Verde",
+        "team_b": "Cabo Verde",
         "team_b_prob": 0.1892
     },
     {
@@ -524,7 +524,7 @@
         "team_a": "Colombia",
         "team_a_prob": 0.609,
         "draw_prob": 0.2118,
-        "team_b": "DR Congo",
+        "team_b": "Congo DR",
         "team_b_prob": 0.1792
     },
     {
@@ -535,7 +535,7 @@
         "team_a": "Mexico",
         "team_a_prob": 0.5125,
         "draw_prob": 0.2627,
-        "team_b": "Czech Republic",
+        "team_b": "Czechia",
         "team_b_prob": 0.2248
     },
     {
@@ -546,7 +546,7 @@
         "team_a": "South Africa",
         "team_a_prob": 0.2603,
         "draw_prob": 0.2558,
-        "team_b": "South Korea",
+        "team_b": "Korea Republic",
         "team_b_prob": 0.4839
     },
     {
@@ -631,10 +631,10 @@
         "stage": "Group Stage",
         "group": "E",
         "date": "2026-06-25",
-        "team_a": "Cura\u00e7ao",
+        "team_a": "Curaçao",
         "team_a_prob": 0.1764,
         "draw_prob": 0.2099,
-        "team_b": "Ivory Coast",
+        "team_b": "Côte d'Ivoire",
         "team_b_prob": 0.6137
     },
     {
@@ -656,7 +656,7 @@
         "team_a": "United States",
         "team_a_prob": 0.4055,
         "draw_prob": 0.2681,
-        "team_b": "Turkey",
+        "team_b": "Türkiye",
         "team_b_prob": 0.3265
     },
     {
@@ -667,7 +667,7 @@
         "team_a": "Egypt",
         "team_a_prob": 0.2325,
         "draw_prob": 0.2766,
-        "team_b": "Iran",
+        "team_b": "IR Iran",
         "team_b_prob": 0.4908
     },
     {
@@ -686,7 +686,7 @@
         "stage": "Group Stage",
         "group": "H",
         "date": "2026-06-26",
-        "team_a": "Cape Verde",
+        "team_a": "Cabo Verde",
         "team_a_prob": 0.2824,
         "draw_prob": 0.2965,
         "team_b": "Saudi Arabia",
@@ -730,7 +730,7 @@
         "stage": "Group Stage",
         "group": "K",
         "date": "2026-06-27",
-        "team_a": "DR Congo",
+        "team_a": "Congo DR",
         "team_a_prob": 0.2631,
         "draw_prob": 0.2961,
         "team_b": "Uzbekistan",
@@ -796,7 +796,7 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "South Korea",
+        "team_a": "Korea Republic",
         "team_a_prob": 0.4997,
         "draw_prob": 0.0,
         "team_b": "Canada",
@@ -871,7 +871,7 @@
         "team_a": "Mexico",
         "team_a_prob": 0.5924,
         "draw_prob": 0.0,
-        "team_b": "Ivory Coast",
+        "team_b": "Côte d'Ivoire",
         "team_b_prob": 0.4076,
         "probabilistic": true
     },
@@ -967,7 +967,7 @@
         "team_a": "Portugal",
         "team_a_prob": 0.6472,
         "draw_prob": 0.0,
-        "team_b": "Turkey",
+        "team_b": "Türkiye",
         "team_b_prob": 0.3528,
         "probabilistic": true
     },
@@ -979,7 +979,7 @@
         "team_a": "United States",
         "team_a_prob": 0.4765,
         "draw_prob": 0.0,
-        "team_b": "Iran",
+        "team_b": "IR Iran",
         "team_b_prob": 0.5235,
         "probabilistic": true
     },
@@ -1063,7 +1063,7 @@
         "team_a": "Argentina",
         "team_a_prob": 0.6887,
         "draw_prob": 0.0,
-        "team_b": "Iran",
+        "team_b": "IR Iran",
         "team_b_prob": 0.3113,
         "probabilistic": true
     },

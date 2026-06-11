@@ -35,10 +35,10 @@ class TestTeamStandardizer(unittest.TestCase):
 
     def test_display_names(self):
         # Test friendly display name rendering
-        self.assertEqual(self.standardizer.get_display_name("Korea Republic"), "South Korea")
-        self.assertEqual(self.standardizer.get_display_name("South Korea"), "South Korea")
+        self.assertEqual(self.standardizer.get_display_name("Korea Republic"), "Korea Republic")
+        self.assertEqual(self.standardizer.get_display_name("South Korea"), "Korea Republic")
         self.assertEqual(self.standardizer.get_display_name("USA"), "United States")
-        self.assertEqual(self.standardizer.get_display_name("Côte d'Ivoire"), "Ivory Coast")
+        self.assertEqual(self.standardizer.get_display_name("Côte d'Ivoire"), "Côte d'Ivoire")
 
     def test_fifa_codes(self):
         # Test retrieving FIFA codes

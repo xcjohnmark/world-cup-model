@@ -21,17 +21,17 @@
                 {
                     "match_id": "G002",
                     "date": "2026-06-11",
-                    "team_a": "South Korea",
+                    "team_a": "Korea Republic",
                     "team_a_prob": 0.4334,
                     "draw_prob": 0.2863,
-                    "team_b": "Czech Republic",
+                    "team_b": "Czechia",
                     "team_b_prob": 0.2803,
                     "actual_result": null
                 },
                 {
                     "match_id": "G025",
                     "date": "2026-06-18",
-                    "team_a": "Czech Republic",
+                    "team_a": "Czechia",
                     "team_a_prob": 0.3709,
                     "draw_prob": 0.2976,
                     "team_b": "South Africa",
@@ -44,7 +44,7 @@
                     "team_a": "Mexico",
                     "team_a_prob": 0.5004,
                     "draw_prob": 0.2708,
-                    "team_b": "South Korea",
+                    "team_b": "Korea Republic",
                     "team_b_prob": 0.2287,
                     "actual_result": null
                 },
@@ -54,7 +54,7 @@
                     "team_a": "Mexico",
                     "team_a_prob": 0.5125,
                     "draw_prob": 0.2627,
-                    "team_b": "Czech Republic",
+                    "team_b": "Czechia",
                     "team_b_prob": 0.2248,
                     "actual_result": null
                 },
@@ -64,7 +64,7 @@
                     "team_a": "South Africa",
                     "team_a_prob": 0.2603,
                     "draw_prob": 0.2558,
-                    "team_b": "South Korea",
+                    "team_b": "Korea Republic",
                     "team_b_prob": 0.4839,
                     "actual_result": null
                 }
@@ -227,7 +227,7 @@
                 "United States",
                 "Paraguay",
                 "Australia",
-                "T\u00fcrkiye"
+                "Türkiye"
             ],
             "matches": [
                 {
@@ -246,7 +246,7 @@
                     "team_a": "Australia",
                     "team_a_prob": 0.4488,
                     "draw_prob": 0.2917,
-                    "team_b": "Turkey",
+                    "team_b": "Türkiye",
                     "team_b_prob": 0.2595,
                     "actual_result": null
                 },
@@ -263,7 +263,7 @@
                 {
                     "match_id": "G032",
                     "date": "2026-06-19",
-                    "team_a": "Turkey",
+                    "team_a": "Türkiye",
                     "team_a_prob": 0.5102,
                     "draw_prob": 0.2709,
                     "team_b": "Paraguay",
@@ -286,7 +286,7 @@
                     "team_a": "United States",
                     "team_a_prob": 0.4055,
                     "draw_prob": 0.2681,
-                    "team_b": "Turkey",
+                    "team_b": "Türkiye",
                     "team_b_prob": 0.3265,
                     "actual_result": null
                 }
@@ -299,8 +299,8 @@
         "Group E": {
             "teams": [
                 "Germany",
-                "Cura\u00e7ao",
-                "C\u00f4te d'Ivoire",
+                "Curaçao",
+                "Côte d'Ivoire",
                 "Ecuador"
             ],
             "matches": [
@@ -310,14 +310,14 @@
                     "team_a": "Germany",
                     "team_a_prob": 0.7075,
                     "draw_prob": 0.1925,
-                    "team_b": "Cura\u00e7ao",
+                    "team_b": "Curaçao",
                     "team_b_prob": 0.0999,
                     "actual_result": null
                 },
                 {
                     "match_id": "G010",
                     "date": "2026-06-14",
-                    "team_a": "Ivory Coast",
+                    "team_a": "Côte d'Ivoire",
                     "team_a_prob": 0.2439,
                     "draw_prob": 0.2679,
                     "team_b": "Ecuador",
@@ -330,7 +330,7 @@
                     "team_a": "Ecuador",
                     "team_a_prob": 0.6168,
                     "draw_prob": 0.2129,
-                    "team_b": "Cura\u00e7ao",
+                    "team_b": "Curaçao",
                     "team_b_prob": 0.1703,
                     "actual_result": null
                 },
@@ -340,7 +340,7 @@
                     "team_a": "Germany",
                     "team_a_prob": 0.4898,
                     "draw_prob": 0.2668,
-                    "team_b": "Ivory Coast",
+                    "team_b": "Côte d'Ivoire",
                     "team_b_prob": 0.2434,
                     "actual_result": null
                 },
@@ -357,10 +357,10 @@
                 {
                     "match_id": "G058",
                     "date": "2026-06-25",
-                    "team_a": "Cura\u00e7ao",
+                    "team_a": "Curaçao",
                     "team_a_prob": 0.1764,
                     "draw_prob": 0.2099,
-                    "team_b": "Ivory Coast",
+                    "team_b": "Côte d'Ivoire",
                     "team_b_prob": 0.6137,
                     "actual_result": null
                 }
@@ -465,7 +465,7 @@
                 {
                     "match_id": "G014",
                     "date": "2026-06-15",
-                    "team_a": "Iran",
+                    "team_a": "IR Iran",
                     "team_a_prob": 0.6766,
                     "draw_prob": 0.1754,
                     "team_b": "New Zealand",
@@ -478,7 +478,7 @@
                     "team_a": "Belgium",
                     "team_a_prob": 0.413,
                     "draw_prob": 0.2502,
-                    "team_b": "Iran",
+                    "team_b": "IR Iran",
                     "team_b_prob": 0.3368,
                     "actual_result": null
                 },
@@ -498,7 +498,7 @@
                     "team_a": "Egypt",
                     "team_a_prob": 0.2325,
                     "draw_prob": 0.2766,
-                    "team_b": "Iran",
+                    "team_b": "IR Iran",
                     "team_b_prob": 0.4908,
                     "actual_result": null
                 },
@@ -532,7 +532,7 @@
                     "team_a": "Spain",
                     "team_a_prob": 0.7345,
                     "draw_prob": 0.1866,
-                    "team_b": "Cape Verde",
+                    "team_b": "Cabo Verde",
                     "team_b_prob": 0.0789,
                     "actual_result": null
                 },
@@ -562,14 +562,14 @@
                     "team_a": "Uruguay",
                     "team_a_prob": 0.5919,
                     "draw_prob": 0.2189,
-                    "team_b": "Cape Verde",
+                    "team_b": "Cabo Verde",
                     "team_b_prob": 0.1892,
                     "actual_result": null
                 },
                 {
                     "match_id": "G063",
                     "date": "2026-06-26",
-                    "team_a": "Cape Verde",
+                    "team_a": "Cabo Verde",
                     "team_a_prob": 0.2824,
                     "draw_prob": 0.2965,
                     "team_b": "Saudi Arabia",
@@ -754,7 +754,7 @@
                     "team_a": "Portugal",
                     "team_a_prob": 0.6337,
                     "draw_prob": 0.2014,
-                    "team_b": "DR Congo",
+                    "team_b": "Congo DR",
                     "team_b_prob": 0.1648,
                     "actual_result": null
                 },
@@ -784,14 +784,14 @@
                     "team_a": "Colombia",
                     "team_a_prob": 0.609,
                     "draw_prob": 0.2118,
-                    "team_b": "DR Congo",
+                    "team_b": "Congo DR",
                     "team_b_prob": 0.1792,
                     "actual_result": null
                 },
                 {
                     "match_id": "G067",
                     "date": "2026-06-27",
-                    "team_a": "DR Congo",
+                    "team_a": "Congo DR",
                     "team_a_prob": 0.2631,
                     "draw_prob": 0.2961,
                     "team_b": "Uzbekistan",
@@ -894,7 +894,7 @@
             {
                 "match_id": "K073",
                 "date": "2026-06-28",
-                "team_a": "South Korea",
+                "team_a": "Korea Republic",
                 "team_a_prob": 0.4997,
                 "draw_prob": 0.0,
                 "team_b": "Canada",
@@ -957,7 +957,7 @@
                 "team_a": "Mexico",
                 "team_a_prob": 0.5924,
                 "draw_prob": 0.0,
-                "team_b": "Ivory Coast",
+                "team_b": "Côte d'Ivoire",
                 "team_b_prob": 0.4076,
                 "actual_result": null
             },
@@ -1037,7 +1037,7 @@
                 "team_a": "Portugal",
                 "team_a_prob": 0.6472,
                 "draw_prob": 0.0,
-                "team_b": "Turkey",
+                "team_b": "Türkiye",
                 "team_b_prob": 0.3528,
                 "actual_result": null
             },
@@ -1047,7 +1047,7 @@
                 "team_a": "United States",
                 "team_a_prob": 0.4765,
                 "draw_prob": 0.0,
-                "team_b": "Iran",
+                "team_b": "IR Iran",
                 "team_b_prob": 0.5235,
                 "actual_result": null
             }
@@ -1121,7 +1121,7 @@
                 "team_a": "Argentina",
                 "team_a_prob": 0.6887,
                 "draw_prob": 0.0,
-                "team_b": "Iran",
+                "team_b": "IR Iran",
                 "team_b_prob": 0.3113,
                 "actual_result": null
             },
@@ -1255,9 +1255,9 @@
             "Uruguay": 0.01114,
             "Ecuador": 0.01027,
             "Norway": 0.00908,
-            "C\u00f4te d'Ivoire": 0.00804,
+            "Côte d'Ivoire": 0.00804,
             "Austria": 0.00719,
-            "T\u00fcrkiye": 0.00636,
+            "Türkiye": 0.00636,
             "Egypt": 0.00618,
             "Algeria": 0.0052,
             "Panama": 0.00439,
@@ -1277,7 +1277,7 @@
             "Bosnia and Herzegovina": 0.00034,
             "Cabo Verde": 0.00032,
             "Ghana": 0.0002,
-            "Cura\u00e7ao": 0.00015,
+            "Curaçao": 0.00015,
             "Haiti": 0.00011,
             "Jordan": 5e-05,
             "New Zealand": 3e-05

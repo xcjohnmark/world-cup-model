@@ -3,290 +3,435 @@
     {
       "canonical_name": "Korea Republic",
       "fifa_code": "KOR",
-      "display_name": "South Korea",
-      "aliases": ["Korea Republic", "South Korea", "Republic of Korea", "South Korea Republic", "Korea, South", "Korea DPR", "North Korea"]
+      "display_name": "Korea Republic",
+      "aliases": [
+        "Korea Republic",
+        "South Korea",
+        "Republic of Korea",
+        "South Korea Republic",
+        "Korea, South",
+        "Korea DPR",
+        "North Korea"
+      ]
     },
     {
       "canonical_name": "United States",
       "fifa_code": "USA",
       "display_name": "United States",
-      "aliases": ["United States", "USA", "US", "United States of America", "U.S.A.", "U.S.", "US Virgin Islands", "USA-"]
+      "aliases": [
+        "United States",
+        "USA",
+        "US",
+        "United States of America",
+        "U.S.A.",
+        "U.S.",
+        "US Virgin Islands",
+        "USA-"
+      ]
     },
     {
       "canonical_name": "IR Iran",
       "fifa_code": "IRN",
-      "display_name": "Iran",
-      "aliases": ["IR Iran", "Iran", "Islamic Republic of Iran", "Persia"]
+      "display_name": "IR Iran",
+      "aliases": [
+        "IR Iran",
+        "Iran",
+        "Islamic Republic of Iran",
+        "Persia"
+      ]
     },
     {
       "canonical_name": "Congo DR",
       "fifa_code": "COD",
-      "display_name": "DR Congo",
-      "aliases": ["Congo DR", "DR Congo", "Democratic Republic of the Congo", "Congo-Kinshasa", "RD Congo"]
+      "display_name": "Congo DR",
+      "aliases": [
+        "Congo DR",
+        "DR Congo",
+        "Democratic Republic of the Congo",
+        "Congo-Kinshasa",
+        "RD Congo"
+      ]
     },
     {
       "canonical_name": "Türkiye",
       "fifa_code": "TUR",
-      "display_name": "Turkey",
-      "aliases": ["Türkiye", "Turkey", "Turkiye"]
+      "display_name": "Türkiye",
+      "aliases": [
+        "Türkiye",
+        "Turkey",
+        "Turkiye"
+      ]
     },
     {
       "canonical_name": "Côte d'Ivoire",
       "fifa_code": "CIV",
-      "display_name": "Ivory Coast",
-      "aliases": ["Côte d'Ivoire", "Cote d'Ivoire", "Ivory Coast", "Cote d`Ivoire", "Cote d’Ivoire"]
+      "display_name": "Côte d'Ivoire",
+      "aliases": [
+        "Côte d'Ivoire",
+        "Cote d'Ivoire",
+        "Ivory Coast",
+        "Cote d`Ivoire",
+        "Cote d’Ivoire"
+      ]
     },
     {
       "canonical_name": "Netherlands",
       "fifa_code": "NED",
       "display_name": "Netherlands",
-      "aliases": ["Netherlands", "Holland", "Dutch"]
+      "aliases": [
+        "Netherlands",
+        "Holland",
+        "Dutch"
+      ]
     },
     {
       "canonical_name": "England",
       "fifa_code": "ENG",
       "display_name": "England",
-      "aliases": ["England", "Great Britain", "UK", "United Kingdom"]
+      "aliases": [
+        "England",
+        "Great Britain",
+        "UK",
+        "United Kingdom"
+      ]
     },
     {
       "canonical_name": "Cabo Verde",
       "fifa_code": "CPV",
-      "display_name": "Cape Verde",
-      "aliases": ["Cabo Verde", "Cape Verde", "Cape Verde Islands"]
+      "display_name": "Cabo Verde",
+      "aliases": [
+        "Cabo Verde",
+        "Cape Verde",
+        "Cape Verde Islands"
+      ]
     },
     {
       "canonical_name": "Curaçao",
       "fifa_code": "CUW",
       "display_name": "Curaçao",
-      "aliases": ["Curaçao", "Curaþao", "Curacao", "Curaçao Island"]
+      "aliases": [
+        "Curaçao",
+        "Curaþao",
+        "Curacao",
+        "Curaçao Island"
+      ]
     },
     {
       "canonical_name": "Czechia",
       "fifa_code": "CZE",
-      "display_name": "Czech Republic",
-      "aliases": ["Czechia", "Czech Republic", "Czech Rep."]
+      "display_name": "Czechia",
+      "aliases": [
+        "Czechia",
+        "Czech Republic",
+        "Czech Rep."
+      ]
     },
     {
       "canonical_name": "Mexico",
       "fifa_code": "MEX",
       "display_name": "Mexico",
-      "aliases": ["Mexico", "México"]
+      "aliases": [
+        "Mexico",
+        "México"
+      ]
     },
     {
       "canonical_name": "South Africa",
       "fifa_code": "RSA",
       "display_name": "South Africa",
-      "aliases": ["South Africa", "RSA"]
+      "aliases": [
+        "South Africa",
+        "RSA"
+      ]
     },
     {
       "canonical_name": "Canada",
       "fifa_code": "CAN",
       "display_name": "Canada",
-      "aliases": ["Canada"]
+      "aliases": [
+        "Canada"
+      ]
     },
     {
       "canonical_name": "Bosnia and Herzegovina",
       "fifa_code": "BIH",
       "display_name": "Bosnia and Herzegovina",
-      "aliases": ["Bosnia and Herzegovina", "Bosnia-Herzegovina", "Bosnia", "Herzegovina"]
+      "aliases": [
+        "Bosnia and Herzegovina",
+        "Bosnia-Herzegovina",
+        "Bosnia",
+        "Herzegovina"
+      ]
     },
     {
       "canonical_name": "Qatar",
       "fifa_code": "QAT",
       "display_name": "Qatar",
-      "aliases": ["Qatar"]
+      "aliases": [
+        "Qatar"
+      ]
     },
     {
       "canonical_name": "Switzerland",
       "fifa_code": "SUI",
       "display_name": "Switzerland",
-      "aliases": ["Switzerland"]
+      "aliases": [
+        "Switzerland"
+      ]
     },
     {
       "canonical_name": "Brazil",
       "fifa_code": "BRA",
       "display_name": "Brazil",
-      "aliases": ["Brazil", "Brasil"]
+      "aliases": [
+        "Brazil",
+        "Brasil"
+      ]
     },
     {
       "canonical_name": "Morocco",
       "fifa_code": "MAR",
       "display_name": "Morocco",
-      "aliases": ["Morocco", "Maroc"]
+      "aliases": [
+        "Morocco",
+        "Maroc"
+      ]
     },
     {
       "canonical_name": "Haiti",
       "fifa_code": "HAI",
       "display_name": "Haiti",
-      "aliases": ["Haiti"]
+      "aliases": [
+        "Haiti"
+      ]
     },
     {
       "canonical_name": "Scotland",
       "fifa_code": "SCO",
       "display_name": "Scotland",
-      "aliases": ["Scotland"]
+      "aliases": [
+        "Scotland"
+      ]
     },
     {
       "canonical_name": "Paraguay",
       "fifa_code": "PAR",
       "display_name": "Paraguay",
-      "aliases": ["Paraguay"]
+      "aliases": [
+        "Paraguay"
+      ]
     },
     {
       "canonical_name": "Australia",
       "fifa_code": "AUS",
       "display_name": "Australia",
-      "aliases": ["Australia"]
+      "aliases": [
+        "Australia"
+      ]
     },
     {
       "canonical_name": "Germany",
       "fifa_code": "GER",
       "display_name": "Germany",
-      "aliases": ["Germany", "Deutschland"]
+      "aliases": [
+        "Germany",
+        "Deutschland"
+      ]
     },
     {
       "canonical_name": "Ecuador",
       "fifa_code": "ECU",
       "display_name": "Ecuador",
-      "aliases": ["Ecuador"]
+      "aliases": [
+        "Ecuador"
+      ]
     },
     {
       "canonical_name": "Japan",
       "fifa_code": "JPN",
       "display_name": "Japan",
-      "aliases": ["Japan", "Nippon"]
+      "aliases": [
+        "Japan",
+        "Nippon"
+      ]
     },
     {
       "canonical_name": "Sweden",
       "fifa_code": "SWE",
       "display_name": "Sweden",
-      "aliases": ["Sweden"]
+      "aliases": [
+        "Sweden"
+      ]
     },
     {
       "canonical_name": "Tunisia",
       "fifa_code": "TUN",
       "display_name": "Tunisia",
-      "aliases": ["Tunisia"]
+      "aliases": [
+        "Tunisia"
+      ]
     },
     {
       "canonical_name": "Belgium",
       "fifa_code": "BEL",
       "display_name": "Belgium",
-      "aliases": ["Belgium"]
+      "aliases": [
+        "Belgium"
+      ]
     },
     {
       "canonical_name": "Egypt",
       "fifa_code": "EGY",
       "display_name": "Egypt",
-      "aliases": ["Egypt"]
+      "aliases": [
+        "Egypt"
+      ]
     },
     {
       "canonical_name": "New Zealand",
       "fifa_code": "NZL",
       "display_name": "New Zealand",
-      "aliases": ["New Zealand"]
+      "aliases": [
+        "New Zealand"
+      ]
     },
     {
       "canonical_name": "Spain",
       "fifa_code": "ESP",
       "display_name": "Spain",
-      "aliases": ["Spain", "España"]
+      "aliases": [
+        "Spain",
+        "España"
+      ]
     },
     {
       "canonical_name": "Saudi Arabia",
       "fifa_code": "KSA",
       "display_name": "Saudi Arabia",
-      "aliases": ["Saudi Arabia", "KSA"]
+      "aliases": [
+        "Saudi Arabia",
+        "KSA"
+      ]
     },
     {
       "canonical_name": "Uruguay",
       "fifa_code": "URU",
       "display_name": "Uruguay",
-      "aliases": ["Uruguay"]
+      "aliases": [
+        "Uruguay"
+      ]
     },
     {
       "canonical_name": "France",
       "fifa_code": "FRA",
       "display_name": "France",
-      "aliases": ["France"]
+      "aliases": [
+        "France"
+      ]
     },
     {
       "canonical_name": "Senegal",
       "fifa_code": "SEN",
       "display_name": "Senegal",
-      "aliases": ["Senegal"]
+      "aliases": [
+        "Senegal"
+      ]
     },
     {
       "canonical_name": "Iraq",
       "fifa_code": "IRQ",
       "display_name": "Iraq",
-      "aliases": ["Iraq"]
+      "aliases": [
+        "Iraq"
+      ]
     },
     {
       "canonical_name": "Norway",
       "fifa_code": "NOR",
       "display_name": "Norway",
-      "aliases": ["Norway"]
+      "aliases": [
+        "Norway"
+      ]
     },
     {
       "canonical_name": "Argentina",
       "fifa_code": "ARG",
       "display_name": "Argentina",
-      "aliases": ["Argentina"]
+      "aliases": [
+        "Argentina"
+      ]
     },
     {
       "canonical_name": "Algeria",
       "fifa_code": "ALG",
       "display_name": "Algeria",
-      "aliases": ["Algeria"]
+      "aliases": [
+        "Algeria"
+      ]
     },
     {
       "canonical_name": "Austria",
       "fifa_code": "AUT",
       "display_name": "Austria",
-      "aliases": ["Austria"]
+      "aliases": [
+        "Austria"
+      ]
     },
     {
       "canonical_name": "Jordan",
       "fifa_code": "JOR",
       "display_name": "Jordan",
-      "aliases": ["Jordan"]
+      "aliases": [
+        "Jordan"
+      ]
     },
     {
       "canonical_name": "Portugal",
       "fifa_code": "POR",
       "display_name": "Portugal",
-      "aliases": ["Portugal"]
+      "aliases": [
+        "Portugal"
+      ]
     },
     {
       "canonical_name": "Uzbekistan",
       "fifa_code": "UZB",
       "display_name": "Uzbekistan",
-      "aliases": ["Uzbekistan"]
+      "aliases": [
+        "Uzbekistan"
+      ]
     },
     {
       "canonical_name": "Colombia",
       "fifa_code": "COL",
       "display_name": "Colombia",
-      "aliases": ["Colombia"]
+      "aliases": [
+        "Colombia"
+      ]
     },
     {
       "canonical_name": "Croatia",
       "fifa_code": "CRO",
       "display_name": "Croatia",
-      "aliases": ["Croatia"]
+      "aliases": [
+        "Croatia"
+      ]
     },
     {
       "canonical_name": "Ghana",
       "fifa_code": "GHA",
       "display_name": "Ghana",
-      "aliases": ["Ghana"]
+      "aliases": [
+        "Ghana"
+      ]
     },
     {
       "canonical_name": "Panama",
       "fifa_code": "PAN",
       "display_name": "Panama",
-      "aliases": ["Panama"]
+      "aliases": [
+        "Panama"
+      ]
     }
   ]
 }
