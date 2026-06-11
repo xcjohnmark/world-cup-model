@@ -17,6 +17,16 @@ export default function MatchCard({ match }: MatchCardProps) {
   const teamAScore = match.actual_team_a_score ?? 0;
   const teamBScore = match.actual_team_b_score ?? 0;
 
+  // Determine if model prediction matches actual result
+  const maxProb = Math.max(match.team_a_prob, match.draw_prob, match.team_b_prob);
+  const predictedOutcome =
+    maxProb === match.team_a_prob
+      ? "team_a"
+      : maxProb === match.team_b_prob
+      ? "team_b"
+      : "draw";
+  const isModelAccurate = predictedOutcome === match.actual_result;
+
   // Retrieve schedule details (date, stadium, city, kickoff time)
   const schedule = getMatchScheduleDetails(match.team_a, match.team_b);
 
@@ -121,10 +131,18 @@ export default function MatchCard({ match }: MatchCardProps) {
         />
       </div>
 
-      {/* Actual Result Info Row - text-sm for minimum 14px */}
+      {/* Actual Result Info Row (Mexico vs South Africa FT: 2-0    Model: Accurate) */}
       {hasResult && (
-        <div className="text-sm text-gray-500 font-sans italic mt-1.5">
-          Result: {match.team_a} {teamAScore}–{teamBScore} {match.team_b}
+        <div className="flex justify-between items-center text-[11px] font-mono text-gray-700 mt-1.5 w-full">
+          <span>
+            {match.team_a} vs {match.team_b} FT: {teamAScore}-{teamBScore}
+          </span>
+          <span>
+            Model:{" "}
+            <span className={isModelAccurate ? "text-green-600 font-bold" : "text-red-600 font-bold"}>
+              {isModelAccurate ? "Accurate" : "Inaccurate"}
+            </span>
+          </span>
         </div>
       )}
 

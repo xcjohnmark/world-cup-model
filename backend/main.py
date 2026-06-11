@@ -9,6 +9,8 @@ if project_root not in sys.path:
 import json
 import logging
 import importlib.util
+import threading
+import time
 from functools import lru_cache
 from typing import List, Dict, Any, Optional
 
@@ -138,6 +140,43 @@ app.state.bracket = None
 app.state.match_predictions = None
 app.state.leaderboard = None
 
+
+def run_scraper_task():
+    try:
+        logger.info("Starting background results scraping task...")
+        # Dynamically load the scraper script to avoid SyntaxError with numerical prefix module name
+        scripts_dir = os.path.join(project_root, "backend", "scripts")
+        scraper_path = os.path.join(scripts_dir, "11_results_scraper.py")
+        spec = importlib.util.spec_from_file_location("results_scraper", scraper_path)
+        results_scraper_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(results_scraper_mod)
+        run_scraper = results_scraper_mod.run_scraper
+        result = run_scraper()
+        
+        # If new matches were updated, refresh the in-memory data assets
+        if result.get("updated_matches"):
+            logger.info("Background scraper: New results found and updated. Refreshing in-memory data assets...")
+            startup_event()
+        else:
+            logger.info("Background scraper: No new results found.")
+    except Exception as e:
+        logger.error(f"Background scraper task error: {e}")
+
+
+def start_background_scraper():
+    def scraper_loop():
+        # Sleep for a short delay on startup so the main app loads first
+        time.sleep(15)
+        while True:
+            run_scraper_task()
+            # Run scraper every 15 minutes (900 seconds)
+            time.sleep(900)
+            
+    thread = threading.Thread(target=scraper_loop, daemon=True)
+    thread.start()
+    logger.info("Automated background scraper thread initialized.")
+
+
 # Startup event handler to load assets in memory
 @app.on_event("startup")
 def startup_event():
@@ -195,6 +234,8 @@ def startup_event():
         logger.error(f"Failed to load leaderboard_results.json: {e}")
         app.state.leaderboard = {}
         
+    # Start the automated scraper thread to check for live results
+    start_background_scraper()
     logger.info("FastAPI startup process complete.")
 
 
@@ -355,7 +396,13 @@ def get_leaderboard():
 def trigger_scrape_results():
     """Triggers the automated results scraper to update completed matches and recalculate standings."""
     try:
-        from backend.scripts.11_results_scraper import run_scraper
+        # Dynamically load the scraper script to avoid SyntaxError with numerical prefix module name
+        scripts_dir = os.path.join(project_root, "backend", "scripts")
+        scraper_path = os.path.join(scripts_dir, "11_results_scraper.py")
+        spec = importlib.util.spec_from_file_location("results_scraper", scraper_path)
+        results_scraper_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(results_scraper_mod)
+        run_scraper = results_scraper_mod.run_scraper
         result = run_scraper()
         
         # Refresh the in-memory cache if new results were scraped and written
