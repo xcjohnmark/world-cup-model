@@ -1,0 +1,72 @@
+[
+    {
+        "model_name": "Opta Power Rankings",
+        "accuracy": 0.5824,
+        "log_loss": 0.9103,
+        "type": "external",
+        "source_url": "Opta official website"
+    },
+    {
+        "model_name": "Logistic Regression",
+        "accuracy": 0.5754,
+        "log_loss": 0.9122,
+        "type": "internal",
+        "source_url": "Local Project"
+    },
+    {
+        "model_name": "FiveThirtyEight SPI",
+        "accuracy": 0.5788,
+        "log_loss": 0.9145,
+        "type": "external",
+        "source_url": "FiveThirtyEight official archive"
+    },
+    {
+        "model_name": "WC2026 Predictor (XGBoost)",
+        "accuracy": 0.574,
+        "log_loss": 0.9173,
+        "type": "internal",
+        "source_url": "Local Project"
+    },
+    {
+        "model_name": "Gracenote Nielsen",
+        "accuracy": 0.5752,
+        "log_loss": 0.9201,
+        "type": "external",
+        "source_url": "Gracenote official index"
+    },
+    {
+        "model_name": "Random Forest",
+        "accuracy": 0.5725,
+        "log_loss": 0.9215,
+        "type": "internal",
+        "source_url": "Local Project"
+    },
+    {
+        "model_name": "Elo-Only Baseline",
+        "accuracy": 0.5707,
+        "log_loss": 0.9322,
+        "type": "internal",
+        "source_url": "Local Project"
+    },
+    {
+        "model_name": "Random Baseline",
+        "accuracy": 0.2416,
+        "log_loss": 1.0986,
+        "type": "internal",
+        "source_url": "Local Project"
+    },
+    {
+        "model_name": "IBM Watson",
+        "accuracy": null,
+        "log_loss": null,
+        "type": "external",
+        "source_url": "IBM official WC predictions \u2014 updated manually"
+    },
+    {
+        "model_name": "Google Sports Analytics",
+        "accuracy": null,
+        "log_loss": null,
+        "type": "external",
+        "source_url": "Local Project"
+    }
+]

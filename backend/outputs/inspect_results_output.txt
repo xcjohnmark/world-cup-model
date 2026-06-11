@@ -1,0 +1,291 @@
+================================================================================
+STEP 1: Inspect results.csv
+================================================================================
+Loading data from: backend\data\raw\results.csv
+
+--------------------------------------------------
+2. Shape of the DataFrame:
+(49287, 10)
+
+Column names:
+['date', 'home_team', 'away_team', 'home_score', 'away_score', 'tournament', 'city', 'country', 'neutral', 'date_dt']
+
+Data types:
+date                     str
+home_team                str
+away_team                str
+home_score           float64
+away_score           float64
+tournament               str
+city                     str
+country                  str
+neutral                 bool
+date_dt       datetime64[us]
+dtype: object
+
+First 5 rows:
+         date home_team away_team  ...   country  neutral    date_dt
+0  1872-11-30  Scotland   England  ...  Scotland    False 1872-11-30
+1  1873-03-08   England  Scotland  ...   England    False 1873-03-08
+2  1874-03-07  Scotland   England  ...  Scotland    False 1874-03-07
+3  1875-03-06   England  Scotland  ...   England    False 1875-03-06
+4  1876-03-04  Scotland   England  ...  Scotland    False 1876-03-04
+
+[5 rows x 10 columns]
+--------------------------------------------------
+3. Date range (Min and Max date):
+Min Date: 1872-11-30
+Max Date: 2026-06-27
+--------------------------------------------------
+4. Null counts per column:
+date           0
+home_team      0
+away_team      0
+home_score    72
+away_score    72
+tournament     0
+city           0
+country        0
+neutral        0
+date_dt        0
+dtype: int64
+--------------------------------------------------
+5. Top 20 tournament types by count:
+tournament
+Friendly                                18252
+FIFA World Cup qualification             8771
+UEFA Euro qualification                  2824
+African Cup of Nations qualification     2327
+FIFA World Cup                           1036
+Copa AmÚrica                              869
+African Cup of Nations                    845
+AFC Asian Cup qualification               829
+UEFA Nations League                       658
+CECAFA Cup                                620
+CFU Caribbean Cup qualification           606
+Merdeka Tournament                        599
+British Home Championship                 523
+CONCACAF Nations League                   422
+AFC Asian Cup                             421
+Gold Cup                                  420
+Gulf Cup                                  410
+Island Games                              394
+UEFA Euro                                 388
+Asian Games                               368
+Name: count, dtype: int64
+--------------------------------------------------
+6. Count of matches where neutral is True vs False:
+neutral
+False    36248
+True     13039
+Name: count, dtype: int64
+--------------------------------------------------
+7. Count of matches per decade:
+1870s: 13
+1880s: 55
+1890s: 59
+1900s: 137
+1910s: 330
+1920s: 828
+1930s: 1079
+1940s: 833
+1950s: 1651
+1960s: 2971
+1970s: 4133
+1980s: 5025
+1990s: 6944
+2000s: 9525
+2010s: 9756
+2020s: 5948
+--------------------------------------------------
+8. Count of matches where home_score is null (expected 72):
+Count: 72
+--------------------------------------------------
+9. Matches where date >= 2026-06-01 (World Cup 2026 fixtures):
+             date               home_team               away_team  home_score  away_score      tournament             city        country  neutral    date_dt  decade
+49215  2026-06-11                  Mexico            South Africa         NaN         NaN  FIFA World Cup      Mexico City         Mexico    False 2026-06-11    2020
+49216  2026-06-11             South Korea          Czech Republic         NaN         NaN  FIFA World Cup          Zapopan         Mexico     True 2026-06-11    2020
+49217  2026-06-12                  Canada  Bosnia and Herzegovina         NaN         NaN  FIFA World Cup          Toronto         Canada    False 2026-06-12    2020
+49218  2026-06-12           United States                Paraguay         NaN         NaN  FIFA World Cup        Inglewood  United States    False 2026-06-12    2020
+49219  2026-06-13                   Qatar             Switzerland         NaN         NaN  FIFA World Cup      Santa Clara  United States     True 2026-06-13    2020
+49220  2026-06-13                  Brazil                 Morocco         NaN         NaN  FIFA World Cup  East Rutherford  United States     True 2026-06-13    2020
+49221  2026-06-13                   Haiti                Scotland         NaN         NaN  FIFA World Cup       Foxborough  United States     True 2026-06-13    2020
+49222  2026-06-13               Australia                  Turkey         NaN         NaN  FIFA World Cup        Vancouver         Canada     True 2026-06-13    2020
+49223  2026-06-14                 Germany                 Curaþao         NaN         NaN  FIFA World Cup          Houston  United States     True 2026-06-14    2020
+49224  2026-06-14             Ivory Coast                 Ecuador         NaN         NaN  FIFA World Cup     Philadelphia  United States     True 2026-06-14    2020
+49225  2026-06-14             Netherlands                   Japan         NaN         NaN  FIFA World Cup        Arlington  United States     True 2026-06-14    2020
+49226  2026-06-14                  Sweden                 Tunisia         NaN         NaN  FIFA World Cup        Guadalupe         Mexico     True 2026-06-14    2020
+49227  2026-06-15                 Belgium                   Egypt         NaN         NaN  FIFA World Cup          Seattle  United States     True 2026-06-15    2020
+49228  2026-06-15                    Iran             New Zealand         NaN         NaN  FIFA World Cup        Inglewood  United States     True 2026-06-15    2020
+49229  2026-06-15                   Spain              Cape Verde         NaN         NaN  FIFA World Cup          Atlanta  United States     True 2026-06-15    2020
+49230  2026-06-15            Saudi Arabia                 Uruguay         NaN         NaN  FIFA World Cup    Miami Gardens  United States     True 2026-06-15    2020
+49231  2026-06-16                  France                 Senegal         NaN         NaN  FIFA World Cup  East Rutherford  United States     True 2026-06-16    2020
+49232  2026-06-16                    Iraq                  Norway         NaN         NaN  FIFA World Cup       Foxborough  United States     True 2026-06-16    2020
+49233  2026-06-16               Argentina                 Algeria         NaN         NaN  FIFA World Cup      Kansas City  United States     True 2026-06-16    2020
+49234  2026-06-16                 Austria                  Jordan         NaN         NaN  FIFA World Cup      Santa Clara  United States     True 2026-06-16    2020
+49235  2026-06-17                Portugal                DR Congo         NaN         NaN  FIFA World Cup          Houston  United States     True 2026-06-17    2020
+49236  2026-06-17              Uzbekistan                Colombia         NaN         NaN  FIFA World Cup      Mexico City         Mexico     True 2026-06-17    2020
+49237  2026-06-17                 England                 Croatia         NaN         NaN  FIFA World Cup        Arlington  United States     True 2026-06-17    2020
+49238  2026-06-17                   Ghana                  Panama         NaN         NaN  FIFA World Cup          Toronto         Canada     True 2026-06-17    2020
+49239  2026-06-18          Czech Republic            South Africa         NaN         NaN  FIFA World Cup          Atlanta  United States     True 2026-06-18    2020
+49240  2026-06-18                  Mexico             South Korea         NaN         NaN  FIFA World Cup          Zapopan         Mexico    False 2026-06-18    2020
+49241  2026-06-18             Switzerland  Bosnia and Herzegovina         NaN         NaN  FIFA World Cup        Inglewood  United States     True 2026-06-18    2020
+49242  2026-06-18                  Canada                   Qatar         NaN         NaN  FIFA World Cup        Vancouver         Canada    False 2026-06-18    2020
+49243  2026-06-19                Scotland                 Morocco         NaN         NaN  FIFA World Cup       Foxborough  United States     True 2026-06-19    2020
+49244  2026-06-19                  Brazil                   Haiti         NaN         NaN  FIFA World Cup     Philadelphia  United States     True 2026-06-19    2020
+49245  2026-06-19           United States               Australia         NaN         NaN  FIFA World Cup          Seattle  United States    False 2026-06-19    2020
+49246  2026-06-19                  Turkey                Paraguay         NaN         NaN  FIFA World Cup      Santa Clara  United States     True 2026-06-19    2020
+49247  2026-06-20                 Germany             Ivory Coast         NaN         NaN  FIFA World Cup          Toronto         Canada     True 2026-06-20    2020
+49248  2026-06-20                 Ecuador                 Curaþao         NaN         NaN  FIFA World Cup      Kansas City  United States     True 2026-06-20    2020
+49249  2026-06-20             Netherlands                  Sweden         NaN         NaN  FIFA World Cup          Houston  United States     True 2026-06-20    2020
+49250  2026-06-20                 Tunisia                   Japan         NaN         NaN  FIFA World Cup        Guadalupe         Mexico     True 2026-06-20    2020
+49251  2026-06-21                 Belgium                    Iran         NaN         NaN  FIFA World Cup        Inglewood  United States     True 2026-06-21    2020
+49252  2026-06-21             New Zealand                   Egypt         NaN         NaN  FIFA World Cup        Vancouver         Canada     True 2026-06-21    2020
+49253  2026-06-21                   Spain            Saudi Arabia         NaN         NaN  FIFA World Cup          Atlanta  United States     True 2026-06-21    2020
+49254  2026-06-21                 Uruguay              Cape Verde         NaN         NaN  FIFA World Cup    Miami Gardens  United States     True 2026-06-21    2020
+49255  2026-06-22                  France                    Iraq         NaN         NaN  FIFA World Cup     Philadelphia  United States     True 2026-06-22    2020
+49256  2026-06-22                  Norway                 Senegal         NaN         NaN  FIFA World Cup  East Rutherford  United States     True 2026-06-22    2020
+49257  2026-06-22               Argentina                 Austria         NaN         NaN  FIFA World Cup        Arlington  United States     True 2026-06-22    2020
+49258  2026-06-22                  Jordan                 Algeria         NaN         NaN  FIFA World Cup      Santa Clara  United States     True 2026-06-22    2020
+49259  2026-06-23                Portugal              Uzbekistan         NaN         NaN  FIFA World Cup          Houston  United States     True 2026-06-23    2020
+49260  2026-06-23                Colombia                DR Congo         NaN         NaN  FIFA World Cup          Zapopan         Mexico     True 2026-06-23    2020
+49261  2026-06-23                 England                   Ghana         NaN         NaN  FIFA World Cup       Foxborough  United States     True 2026-06-23    2020
+49262  2026-06-23                  Panama                 Croatia         NaN         NaN  FIFA World Cup          Toronto         Canada     True 2026-06-23    2020
+49263  2026-06-24                  Mexico          Czech Republic         NaN         NaN  FIFA World Cup      Mexico City         Mexico    False 2026-06-24    2020
+49264  2026-06-24            South Africa             South Korea         NaN         NaN  FIFA World Cup        Guadalupe         Mexico     True 2026-06-24    2020
+49265  2026-06-24                  Canada             Switzerland         NaN         NaN  FIFA World Cup        Vancouver         Canada    False 2026-06-24    2020
+49266  2026-06-24  Bosnia and Herzegovina                   Qatar         NaN         NaN  FIFA World Cup          Seattle  United States     True 2026-06-24    2020
+49267  2026-06-24                Scotland                  Brazil         NaN         NaN  FIFA World Cup    Miami Gardens  United States     True 2026-06-24    2020
+49268  2026-06-24                 Morocco                   Haiti         NaN         NaN  FIFA World Cup          Atlanta  United States     True 2026-06-24    2020
+49269  2026-06-25           United States                  Turkey         NaN         NaN  FIFA World Cup        Inglewood  United States    False 2026-06-25    2020
+49270  2026-06-25                Paraguay               Australia         NaN         NaN  FIFA World Cup      Santa Clara  United States     True 2026-06-25    2020
+49271  2026-06-25                 Curaþao             Ivory Coast         NaN         NaN  FIFA World Cup     Philadelphia  United States     True 2026-06-25    2020
+49272  2026-06-25                 Ecuador                 Germany         NaN         NaN  FIFA World Cup  East Rutherford  United States     True 2026-06-25    2020
+49273  2026-06-25                   Japan                  Sweden         NaN         NaN  FIFA World Cup        Arlington  United States     True 2026-06-25    2020
+49274  2026-06-25                 Tunisia             Netherlands         NaN         NaN  FIFA World Cup      Kansas City  United States     True 2026-06-25    2020
+49275  2026-06-26                   Egypt                    Iran         NaN         NaN  FIFA World Cup          Seattle  United States     True 2026-06-26    2020
+49276  2026-06-26             New Zealand                 Belgium         NaN         NaN  FIFA World Cup        Vancouver         Canada     True 2026-06-26    2020
+49277  2026-06-26              Cape Verde            Saudi Arabia         NaN         NaN  FIFA World Cup          Houston  United States     True 2026-06-26    2020
+49278  2026-06-26                 Uruguay                   Spain         NaN         NaN  FIFA World Cup          Zapopan         Mexico     True 2026-06-26    2020
+49279  2026-06-26                  Norway                  France         NaN         NaN  FIFA World Cup       Foxborough  United States     True 2026-06-26    2020
+49280  2026-06-26                 Senegal                    Iraq         NaN         NaN  FIFA World Cup          Toronto         Canada     True 2026-06-26    2020
+49281  2026-06-27                 Algeria                 Austria         NaN         NaN  FIFA World Cup      Kansas City  United States     True 2026-06-27    2020
+49282  2026-06-27                  Jordan               Argentina         NaN         NaN  FIFA World Cup        Arlington  United States     True 2026-06-27    2020
+49283  2026-06-27                Colombia                Portugal         NaN         NaN  FIFA World Cup    Miami Gardens  United States     True 2026-06-27    2020
+49284  2026-06-27                DR Congo              Uzbekistan         NaN         NaN  FIFA World Cup          Atlanta  United States     True 2026-06-27    2020
+49285  2026-06-27                  Panama                 England         NaN         NaN  FIFA World Cup  East Rutherford  United States     True 2026-06-27    2020
+49286  2026-06-27                 Croatia                   Ghana         NaN         NaN  FIFA World Cup     Philadelphia  United States     True 2026-06-27    2020
+--------------------------------------------------
+10. Unique teams in WC 2026 matches (date >= 2026-06-01):
+Total Unique Teams: 48
+ - Algeria
+ - Argentina
+ - Australia
+ - Austria
+ - Belgium
+ - Bosnia and Herzegovina
+ - Brazil
+ - Canada
+ - Cape Verde
+ - Colombia
+ - Croatia
+ - Curaþao
+ - Czech Republic
+ - DR Congo
+ - Ecuador
+ - Egypt
+ - England
+ - France
+ - Germany
+ - Ghana
+ - Haiti
+ - Iran
+ - Iraq
+ - Ivory Coast
+ - Japan
+ - Jordan
+ - Mexico
+ - Morocco
+ - Netherlands
+ - New Zealand
+ - Norway
+ - Panama
+ - Paraguay
+ - Portugal
+ - Qatar
+ - Saudi Arabia
+ - Scotland
+ - Senegal
+ - South Africa
+ - South Korea
+ - Spain
+ - Sweden
+ - Switzerland
+ - Tunisia
+ - Turkey
+ - United States
+ - Uruguay
+ - Uzbekistan
+--------------------------------------------------
+
+================================================================================
+STEP 2: Inspect strength datasets
+================================================================================
+--- ELO RATING (elo-rating.csv) ---
+Loading data from: backend\data\raw\elo-rating.csv
+
+Shape: (244, 16)
+Columns: ['rank', 'team', 'rating', 'avgRank', 'avgRating', 'change1yRank', 'change1yRating', 'matchesTotal', 'matchesHome', 'matchesAway', 'matchesNeutral', 'matchesWins', 'matchesLosses', 'matchesDraws', 'goalsFor', 'goalsAgainst']
+
+Top 10 Elo Teams (rank, team, rating):
+   rank         team  rating
+0     1        Spain    2165
+1     2    Argentina    2113
+2     3       France    2081
+3     4      England    2020
+4     5       Brazil    1984
+5     5     Portugal    1984
+6     7     Colombia    1975
+7     8  Netherlands    1961
+8     9      Ecuador    1933
+9    10      Croatia    1930
+
+Total team count in Elo dataset: 244
+
+[NOTE] This file is for validation only. We will compute Elo dynamically.
+--------------------------------------------------
+
+--- FIFA RANKINGS (fifa-ranking.csv) ---
+Loading data from: backend\data\raw\fifa-ranking.csv
+
+Shape: (67472, 8)
+Columns: ['rank', 'country_full', 'country_abrv', 'total_points', 'previous_points', 'rank_change', 'confederation', 'rank_date']
+Date range of rank_date: 1992-12-31 to 2024-06-20
+Number of distinct ranking dates: 333
+Number of unique teams: 216
+
+Top 10 teams in the most recent ranking (2024-06-20):
+       rank country_full  total_points
+67471   1.0    Argentina       1860.14
+67335   2.0       France       1837.47
+67334   3.0      Belgium       1797.98
+67333   4.0       Brazil       1791.85
+67332   5.0      England       1787.88
+67313   6.0     Portugal       1747.04
+67331   7.0  Netherlands       1746.66
+67330   8.0        Spain       1729.92
+67329   9.0      Croatia       1728.30
+67328  10.0        Italy       1724.37
+
+Null counts per column:
+rank               9
+country_full       0
+country_abrv       0
+total_points       0
+previous_points    0
+rank_change        0
+confederation      0
+rank_date          0
+rank_date_dt       0
+dtype: int64
+--------------------------------------------------

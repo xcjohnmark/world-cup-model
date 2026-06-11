@@ -14,10 +14,10 @@ node_modules/
 # Data
 backend/data/raw/*.csv
 backend/data/cleaned/*.csv
-backend/outputs/
 
 # Models
 backend/models/*.pkl
+!backend/models/xgboost_calibrated.pkl
 
 # OS
 .DS_Store

@@ -1,0 +1,22 @@
+[
+    {
+        "team": "Argentina",
+        "win_prob": 0.157
+    },
+    {
+        "team": "Spain",
+        "win_prob": 0.131
+    },
+    {
+        "team": "France",
+        "win_prob": 0.103
+    },
+    {
+        "team": "England",
+        "win_prob": 0.083
+    },
+    {
+        "team": "Germany",
+        "win_prob": 0.049
+    }
+]
