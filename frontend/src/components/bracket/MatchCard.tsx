@@ -36,40 +36,34 @@ export default function MatchCard({ match }: MatchCardProps) {
     });
   };
 
-  // Option 1 color resolver
-  const getProbabilityColors = (prob: number, isDraw: boolean) => {
+  // Option 1 color resolver (Green, Blue, Red based on probability context)
+  const getProbabilityColors = (prob: number, isDraw: boolean, isHigherWin: boolean) => {
     if (isDraw) {
       return {
-        bg: "#FEF7E0", // soft pale gold
-        text: "#B06000", // muted amber
-        dot: "#B06000"
+        bg: "#E8F0FE", // soft blue
+        text: "#1A73E8", // blue
+        dot: "#1A73E8"
       };
     }
-    if (prob >= 0.50) {
+    if (isHigherWin) {
       return {
-        bg: "#E6F4EA", // soft mint-sage
-        text: "#137333", // deep forest green
+        bg: "#E6F4EA", // soft green
+        text: "#137333", // green
         dot: "#137333"
       };
     }
-    if (prob < 0.30) {
-      return {
-        bg: "#FCE8E6", // soft rose blush
-        text: "#C5221F", // muted crimson
-        dot: "#C5221F"
-      };
-    }
-    // Moderate win probability (30% - 49%)
+    // Lower win probability
     return {
-      bg: "#F1F3F4", // soft slate grey
-      text: "#424242", // muted slate
-      dot: "#757575"
+      bg: "#FCE8E6", // soft red
+      text: "#C5221F", // red
+      dot: "#C5221F"
     };
   };
 
-  const colorsA = getProbabilityColors(match.team_a_prob, false);
-  const colorsDraw = getProbabilityColors(match.draw_prob, true);
-  const colorsB = getProbabilityColors(match.team_b_prob, false);
+  const isTeamA_higher = match.team_a_prob >= match.team_b_prob;
+  const colorsA = getProbabilityColors(match.team_a_prob, false, isTeamA_higher);
+  const colorsDraw = getProbabilityColors(match.draw_prob, true, false);
+  const colorsB = getProbabilityColors(match.team_b_prob, false, !isTeamA_higher);
 
   return (
     <div className="py-2 border-b border-[#eee] text-black font-sans w-full">
