@@ -6,16 +6,7 @@ interface Top5ComparisonProps {
   externalPredictions: ExternalPredictionsResponse | null;
 }
 
-// Format date string (e.g. "2026-06-09T07:00:00Z" -> "June 9")
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return "";
-  try {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
-  } catch {
-    return dateStr;
-  }
-};
+
 
 export default function Top5Comparison({
   top5Teams,
@@ -53,10 +44,6 @@ export default function Top5Comparison({
     };
   });
 
-  // Extract cache date if scraper fell back to cache
-  const cacheDate = externalPredictions?.cache_date;
-  const formattedCache = cacheDate ? formatDate(cacheDate) : null;
-
   return (
     <div className="font-sans text-black my-6">
       {/* Section Header */}
@@ -71,21 +58,12 @@ export default function Top5Comparison({
             <tr className="border-b border-black text-[10px] uppercase">
               <th className="py-2.5 px-3 text-left font-bold border-r border-gray-200">
                 MY MODEL
-                <span className="block text-[8px] font-normal text-gray-500 lowercase font-sans mt-0.5">
-                  (Monte Carlo, June 2026)
-                </span>
               </th>
               <th className="py-2.5 px-3 text-left font-bold border-r border-gray-200">
                 OPTA ANALYTICS
-                <span className="block text-[8px] font-normal text-gray-500 lowercase font-sans mt-0.5">
-                  (Opta Analyst, 1 June 2026{formattedCache ? ` · cached ${formattedCache}` : ""})
-                </span>
               </th>
               <th className="py-2.5 px-3 text-left font-bold">
                 NATE SILVER (PELE)
-                <span className="block text-[8px] font-normal text-gray-500 lowercase font-sans mt-0.5">
-                  (Strength Rating, June 2026)
-                </span>
               </th>
             </tr>
           </thead>

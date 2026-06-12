@@ -19,9 +19,6 @@ export default function Navbar({ activeView, setActiveView }: NavbarProps) {
           <span className="text-base font-bold uppercase tracking-tight text-black font-serif block">
             WC 2026 Predictor
           </span>
-          <span className="block text-[9px] uppercase tracking-widest text-gray-500 font-sans mt-0.5">
-            XGBoost Simulation Model
-          </span>
         </div>
 
         {/* Right: Support Button */}
