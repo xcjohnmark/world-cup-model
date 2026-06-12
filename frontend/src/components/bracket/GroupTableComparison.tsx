@@ -96,7 +96,17 @@ export default function GroupTableComparison({
   predictedStandings.sort((a, b) => b.points - a.points);
 
   // Extract official standings list
-  const officialStandings = fifaStandings?.standings || [];
+  let officialStandings = fifaStandings?.standings || [];
+  if (officialStandings.length === 0) {
+    officialStandings = teams.map((team) => ({
+      team,
+      played: 0,
+      won: 0,
+      drawn: 0,
+      lost: 0,
+      points: 0,
+    })).sort((a, b) => a.team.localeCompare(b.team));
+  }
   const isStandingsActive = fifaStandings?.status && fifaStandings.status !== "not_started";
 
   // Check if accuracy is available (matches have been played)
@@ -171,36 +181,30 @@ export default function GroupTableComparison({
             FIFA Official Table (Group {groupLetter})
           </h4>
           
-          {!isStandingsActive || officialStandings.length === 0 ? (
-            <div className="border border-dashed border-gray-300 py-10 text-center text-xs text-gray-500 font-sans italic">
-              No results yet — standings will update upon match completion
-            </div>
-          ) : (
-            <table className="min-w-full text-xs font-mono">
-              <thead>
-                <tr className="border-b border-black">
-                  <th className="text-left font-bold py-1 px-1 uppercase text-[10px]">Team</th>
-                  <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">MP</th>
-                  <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">W</th>
-                  <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">D</th>
-                  <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">L</th>
-                  <th className="text-right font-bold py-1 px-1 uppercase text-[10px] w-12">Pts</th>
+          <table className="min-w-full text-xs font-mono">
+            <thead>
+              <tr className="border-b border-black">
+                <th className="text-left font-bold py-1 px-1 uppercase text-[10px]">Team</th>
+                <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">MP</th>
+                <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">W</th>
+                <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">D</th>
+                <th className="text-center font-bold py-1 px-1 uppercase text-[10px] w-10">L</th>
+                <th className="text-right font-bold py-1 px-1 uppercase text-[10px] w-12">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {officialStandings.map((row: GroupStanding) => (
+                <tr key={row.team} className="border-b border-gray-200">
+                  <td className="py-1.5 px-1 text-left font-bold text-black">{row.team}</td>
+                  <td className="py-1.5 px-1 text-center text-gray-600">{row.played}</td>
+                  <td className="py-1.5 px-1 text-center text-gray-600">{row.won}</td>
+                  <td className="py-1.5 px-1 text-center text-gray-600">{row.drawn}</td>
+                  <td className="py-1.5 px-1 text-center text-gray-600">{row.lost}</td>
+                  <td className="py-1.5 px-1 text-right font-bold text-black">{row.points}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {officialStandings.map((row: GroupStanding) => (
-                  <tr key={row.team} className="border-b border-gray-200">
-                    <td className="py-1.5 px-1 text-left font-bold text-black">{row.team}</td>
-                    <td className="py-1.5 px-1 text-center text-gray-600">{row.played}</td>
-                    <td className="py-1.5 px-1 text-center text-gray-600">{row.won}</td>
-                    <td className="py-1.5 px-1 text-center text-gray-600">{row.drawn}</td>
-                    <td className="py-1.5 px-1 text-center text-gray-600">{row.lost}</td>
-                    <td className="py-1.5 px-1 text-right font-bold text-black">{row.points}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

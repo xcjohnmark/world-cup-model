@@ -14,6 +14,9 @@ class PredictionItem(BaseModel):
     team_b: str = Field(..., description="Canonical name of Team B")
     team_b_prob: Optional[float] = Field(None, description="Win probability of Team B")
     probabilistic: Optional[bool] = Field(None, description="Whether the prediction is simulated/probabilistic")
+    actual_result: Optional[str] = Field(None, description="Actual result of the match")
+    actual_team_a_score: Optional[int] = Field(None, description="Actual score of Team A")
+    actual_team_b_score: Optional[int] = Field(None, description="Actual score of Team B")
 
 
 # --- Simulations/Probabilities Schemas ---
@@ -50,6 +53,8 @@ class BracketMatch(BaseModel):
     team_b: str
     team_b_prob: Optional[float] = None
     actual_result: Optional[str] = None
+    actual_team_a_score: Optional[int] = None
+    actual_team_b_score: Optional[int] = None
 
 class BracketGroup(BaseModel):
     teams: List[str]
