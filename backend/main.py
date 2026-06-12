@@ -847,16 +847,193 @@ def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")
     }
 
 
+def scrape_wikipedia_standings():
+    import requests
+    from bs4 import BeautifulSoup
+    import re
+    from backend.utils.team_standardizer import TeamStandardizer
+    
+    WIKI_URL = "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    
+    resp = requests.get(WIKI_URL, headers=headers, timeout=10)
+    resp.raise_for_status()
+    
+    soup = BeautifulSoup(resp.text, "html.parser")
+    tables = soup.find_all("table", class_="wikitable")
+    
+    standardizer = TeamStandardizer()
+    scraped_groups = {}
+    group_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+    group_index = 0
+    
+    for table in tables:
+        # Check headers to identify standings tables
+        headers_text = [th.text.strip().lower() for th in table.find_all("th")]
+        
+        is_standings = any("pld" in h or "p" == h for h in headers_text) and \
+                       any("pts" in h for h in headers_text) and \
+                       any("team" in h for h in headers_text)
+                       
+        if not is_standings:
+            continue
+            
+        if group_index >= len(group_letters):
+            break
+            
+        group_letter = group_letters[group_index]
+        standings_list = []
+        
+        rows = table.find_all("tr")
+        for row in rows:
+            cells = row.find_all(["td", "th"])
+            if not row.find_all("td"):
+                continue
+                
+            row_text = [c.text.strip() for c in cells]
+            if len(row_text) < 8:
+                continue
+                
+            # Clean and standardize team name
+            raw_team_name = cells[1].text.strip()
+            raw_team_name = re.sub(r'\s*\([^)]*\)', '', raw_team_name).strip()
+            raw_team_name = re.sub(r'^[^\w\s]+', '', raw_team_name).strip()
+            
+            display_name = standardizer.get_display_name(raw_team_name)
+            
+            try:
+                pld_idx = 2
+                w_idx = 3
+                d_idx = 4
+                l_idx = 5
+                gf_idx = 6
+                ga_idx = 7
+                gd_idx = 8
+                pts_idx = 9
+                
+                for idx, h in enumerate(headers_text):
+                    if h in ["pld", "p"]: pld_idx = idx
+                    elif h == "w": w_idx = idx
+                    elif h == "d": d_idx = idx
+                    elif h == "l": l_idx = idx
+                    elif h in ["gf", "f"]: gf_idx = idx
+                    elif h in ["ga", "a"]: ga_idx = idx
+                    elif h in ["gd", "diff"]: gd_idx = idx
+                    elif h in ["pts", "points"]: pts_idx = idx
+                    
+                played = int(row_text[pld_idx])
+                won = int(row_text[w_idx])
+                drawn = int(row_text[d_idx])
+                lost = int(row_text[l_idx])
+                goals_for = int(row_text[gf_idx])
+                goals_against = int(row_text[ga_idx])
+                
+                gd_str = row_text[gd_idx].replace("−", "-").replace("+", "")
+                goal_difference = int(gd_str)
+                
+                points = int(row_text[pts_idx])
+                
+                standings_list.append({
+                    "team": display_name,
+                    "played": played,
+                    "won": won,
+                    "drawn": drawn,
+                    "lost": lost,
+                    "points": points,
+                    "goals_for": goals_for,
+                    "goals_against": goals_against,
+                    "goal_difference": goal_difference
+                })
+            except Exception as e:
+                logger.warning(f"Error parsing Wikipedia row {row_text}: {e}")
+                continue
+                
+        if len(standings_list) == 4:
+            scraped_groups[f"Group {group_letter}"] = standings_list
+            group_index += 1
+            
+    if len(scraped_groups) < 12:
+        raise ValueError(f"Scraped only {len(scraped_groups)} groups from Wikipedia. Expected 12.")
+        
+    return scraped_groups
+
+
+def get_live_fifa_standings_data():
+    import datetime
+    
+    cache_path = os.path.join(project_root, "backend", "outputs", "fifa_standings_scraped.json")
+    
+    cache_data = None
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                cache_data = json.load(f)
+        except Exception as e:
+            logger.error(f"Error reading FIFA standings cache: {e}")
+            
+    is_fresh = False
+    if cache_data and "scraped_at" in cache_data:
+        try:
+            scraped_at = datetime.datetime.fromisoformat(cache_data["scraped_at"].replace("Z", "+00:00"))
+            now = datetime.datetime.now(datetime.timezone.utc)
+            if now - scraped_at < datetime.timedelta(minutes=10):
+                is_fresh = True
+        except Exception as e:
+            logger.warning(f"Error parsing standings cache timestamp: {e}")
+            
+    if is_fresh and cache_data and "groups" in cache_data and cache_data["groups"]:
+        return cache_data["groups"]
+        
+    try:
+        logger.info("FIFA standings cache is stale/missing. Running live scrape from Wikipedia...")
+        scraped_groups = scrape_wikipedia_standings()
+        
+        cache_data = {
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "groups": scraped_groups
+        }
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, indent=2)
+            
+        return scraped_groups
+        
+    except Exception as e:
+        logger.warning(f"Live scraping FIFA standings failed: {e}. Falling back to cache.")
+        if cache_data and "groups" in cache_data and cache_data["groups"]:
+            return cache_data["groups"]
+        else:
+            raise e
+
+
 @app.get("/fifa-standings", response_model=FifaStandingsResponse)
 def get_fifa_standings(group: str = Query(..., description="Group letter (A-L)")):
-    """Returns the current official FIFA group table for that group."""
+    """Returns the current official FIFA group table for that group, automated via web scraping with fallback."""
+    g_letter = group.upper().strip()
+    key = f"Group {g_letter}"
+    
+    # 1. Try to serve scraped standings
+    try:
+        scraped_data = get_live_fifa_standings_data()
+        if key in scraped_data:
+            standings = scraped_data[key]
+            
+            # Check if any matches have been played to determine status
+            total_played = sum(t.get("played", 0) for t in standings)
+            status = "not_started" if total_played == 0 else ("completed" if all(t.get("played", 0) == 3 for t in standings) else "active")
+            
+            return {
+                "group": g_letter,
+                "status": status,
+                "standings": standings
+            }
+    except Exception as e:
+        logger.warning(f"Failed to retrieve scraped standings for group {g_letter}: {e}. Falling back to computed standings from bracket_full.json.")
+        
+    # 2. Fallback: Compute standings dynamically from bracket_full.json
     from backend.utils.team_standardizer import TeamStandardizer
     if not app.state.bracket:
         raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
         
-    g_letter = group.upper().strip()
-    key = f"Group {g_letter}"
-    
     group_stage = app.state.bracket.get("group_stage", {})
     if key not in group_stage:
         raise HTTPException(status_code=400, detail=f"Group '{group}' is not a valid World Cup group (A-L).")
