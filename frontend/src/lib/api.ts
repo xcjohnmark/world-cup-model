@@ -12,6 +12,7 @@ export async function fetcher<T>(endpoint: string, options?: RequestInit): Promi
   const url = `${API_BASE}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
   try {
     const res = await fetch(url, {
+      cache: "no-store",
       ...options,
       headers: {
         "Content-Type": "application/json",
