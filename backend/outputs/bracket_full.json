@@ -16,9 +16,7 @@
                     "draw_prob": 0.228,
                     "team_b": "South Africa",
                     "team_b_prob": 0.1942,
-                    "actual_result": "team_a",
-                    "actual_team_a_score": 2,
-                    "actual_team_b_score": 0
+                    "actual_result": null
                 },
                 {
                     "match_id": "G002",
@@ -28,9 +26,7 @@
                     "draw_prob": 0.2863,
                     "team_b": "Czechia",
                     "team_b_prob": 0.2803,
-                    "actual_result": "team_a",
-                    "actual_team_a_score": 2,
-                    "actual_team_b_score": 1
+                    "actual_result": null
                 },
                 {
                     "match_id": "G025",
@@ -94,9 +90,7 @@
                     "draw_prob": 0.2317,
                     "team_b": "Bosnia and Herzegovina",
                     "team_b_prob": 0.1951,
-                    "actual_result": "draw",
-                    "actual_team_a_score": 1,
-                    "actual_team_b_score": 1
+                    "actual_result": null
                 },
                 {
                     "match_id": "G008",
@@ -151,7 +145,7 @@
             ],
             "predicted_qualifiers": [
                 "Switzerland",
-                "Qatar"
+                "Canada"
             ]
         },
         "Group C": {
@@ -244,9 +238,7 @@
                     "draw_prob": 0.2221,
                     "team_b": "Paraguay",
                     "team_b_prob": 0.1886,
-                    "actual_result": "team_a",
-                    "actual_team_a_score": 4,
-                    "actual_team_b_score": 1
+                    "actual_result": null
                 },
                 {
                     "match_id": "G005",
@@ -300,8 +292,8 @@
                 }
             ],
             "predicted_qualifiers": [
-                "United States",
-                "Australia"
+                "Australia",
+                "United States"
             ]
         },
         "Group E": {
@@ -1239,7 +1231,7 @@
     },
     "simulation_summary": {
         "total_simulations": 1000,
-        "run_date": "2026-06-12",
+        "run_date": "2026-06-13",
         "champion_probabilities": {
             "Argentina": 0.157,
             "Spain": 0.131,

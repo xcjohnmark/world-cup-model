@@ -724,24 +724,7 @@ def get_bracket_status():
     return {"group_stage_complete": True}
 
 
-@app.get("/group-accuracy", response_model=GroupAccuracyResponse)
-def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")):
-    """Compares predicted group standings vs FIFA official standings."""
-    from backend.utils.team_standardizer import TeamStandardizer
-    if not app.state.bracket:
-        raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
-        
-    g_letter = group.upper().strip()
-    key = f"Group {g_letter}"
-    
-    group_stage = app.state.bracket.get("group_stage", {})
-    if key not in group_stage:
-        raise HTTPException(status_code=400, detail=f"Group '{group}' is not a valid World Cup group (A-L).")
-        
-    group_data = group_stage[key]
-    teams = group_data["teams"]
-    matches = group_data["matches"]
-    
+def compute_group_accuracy_internal(teams, matches, standardizer, predictor):
     completed_matches = [m for m in matches if m.get("actual_result") is not None]
     if not completed_matches:
         return {
@@ -750,9 +733,6 @@ def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")
             "avg_points_diff": None
         }
         
-    standardizer = TeamStandardizer()
-    
-    # We will build predicted points and actual stats using standardized canonical names as the keys
     predicted_points = {standardizer.standardize(t): 0.0 for t in teams}
     actual_stats = {
         standardizer.standardize(t): {
@@ -767,11 +747,11 @@ def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")
     }
     
     # Load ELO for tiebreakers
-    if app.state.predictor is not None:
+    if predictor is not None:
         for t in teams:
             t_std = standardizer.standardize(t)
             try:
-                stats = app.state.predictor.get_team_features(t)
+                stats = predictor.get_team_features(t)
                 actual_stats[t_std]["elo"] = float(stats.get("elo", 1500.0))
             except Exception:
                 pass
@@ -845,6 +825,78 @@ def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")
         "ranking_total": 4,
         "avg_points_diff": avg_points_diff
     }
+
+
+@app.get("/group-comparison-all")
+def get_group_comparison_all():
+    """Returns standings and accuracy metrics for all 12 groups (A-L) in a single payload to allow frontend preloading."""
+    from backend.utils.team_standardizer import TeamStandardizer
+    if not app.state.bracket:
+        raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
+        
+    standardizer = TeamStandardizer()
+    group_stage = app.state.bracket.get("group_stage", {})
+    group_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
+    
+    try:
+        scraped_data = get_live_fifa_standings_data()
+    except Exception as e:
+        logger.warning(f"Failed to retrieve scraped standings for all groups: {e}")
+        scraped_data = {}
+        
+    result = {}
+    for g_letter in group_letters:
+        key = f"Group {g_letter}"
+        if key not in group_stage:
+            continue
+            
+        group_data = group_stage[key]
+        teams = group_data["teams"]
+        matches = group_data["matches"]
+        
+        # 1. Standings
+        standings = scraped_data.get(key, [])
+        total_played = sum(t.get("played", 0) for t in standings)
+        status = "not_started" if total_played == 0 else ("completed" if all(t.get("played", 0) == 3 for t in standings) else "active")
+        
+        fifa_standings = {
+            "group": g_letter,
+            "status": status,
+            "standings": standings
+        }
+        
+        # 2. Accuracy
+        group_accuracy = compute_group_accuracy_internal(teams, matches, standardizer, app.state.predictor)
+        
+        result[g_letter] = {
+            "fifaStandings": fifa_standings,
+            "groupAccuracy": group_accuracy
+        }
+        
+    return result
+
+
+@app.get("/group-accuracy", response_model=GroupAccuracyResponse)
+def get_group_accuracy(group: str = Query(..., description="Group letter (A-L)")):
+    """Compares predicted group standings vs FIFA official standings."""
+    from backend.utils.team_standardizer import TeamStandardizer
+    if not app.state.bracket:
+        raise HTTPException(status_code=404, detail="Bracket data is not loaded.")
+        
+    g_letter = group.upper().strip()
+    key = f"Group {g_letter}"
+    
+    group_stage = app.state.bracket.get("group_stage", {})
+    if key not in group_stage:
+        raise HTTPException(status_code=400, detail=f"Group '{group}' is not a valid World Cup group (A-L).")
+        
+    group_data = group_stage[key]
+    teams = group_data["teams"]
+    matches = group_data["matches"]
+    
+    standardizer = TeamStandardizer()
+    return compute_group_accuracy_internal(teams, matches, standardizer, app.state.predictor)
+
 
 
 def scrape_wikipedia_standings():
@@ -958,6 +1010,23 @@ def scrape_wikipedia_standings():
     return scraped_groups
 
 
+def run_scrape_in_background():
+    import datetime
+    try:
+        logger.info("Background thread: scraping Wikipedia standings...")
+        scraped_groups = scrape_wikipedia_standings()
+        cache_data = {
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "groups": scraped_groups
+        }
+        cache_path = os.path.join(project_root, "backend", "outputs", "fifa_standings_scraped.json")
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, indent=2)
+        logger.info("Background thread: Wikipedia standings cache updated successfully.")
+    except Exception as e:
+        logger.error(f"Background thread: scraping FIFA standings failed: {e}")
+
+
 def get_live_fifa_standings_data():
     import datetime
     
@@ -984,25 +1053,27 @@ def get_live_fifa_standings_data():
     if is_fresh and cache_data and "groups" in cache_data and cache_data["groups"]:
         return cache_data["groups"]
         
-    try:
-        logger.info("FIFA standings cache is stale/missing. Running live scrape from Wikipedia...")
-        scraped_groups = scrape_wikipedia_standings()
+    # Serve stale cache instantly and update it in the background
+    if cache_data and "groups" in cache_data and cache_data["groups"]:
+        logger.info("FIFA standings cache is stale. Serving stale data and launching background scrape...")
+        threading.Thread(target=run_scrape_in_background, daemon=True).start()
+        return cache_data["groups"]
         
+    # Bootstrap: no cache exists, perform blocking scrape once
+    logger.info("No FIFA standings cache exists. Performing initial blocking scrape...")
+    try:
+        scraped_groups = scrape_wikipedia_standings()
         cache_data = {
             "scraped_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "groups": scraped_groups
         }
         with open(cache_path, "w", encoding="utf-8") as f:
             json.dump(cache_data, f, indent=2)
-            
         return scraped_groups
-        
     except Exception as e:
-        logger.warning(f"Live scraping FIFA standings failed: {e}. Falling back to cache.")
-        if cache_data and "groups" in cache_data and cache_data["groups"]:
-            return cache_data["groups"]
-        else:
-            raise e
+        logger.error(f"Initial blocking scrape failed: {e}")
+        raise e
+
 
 
 @app.get("/fifa-standings", response_model=FifaStandingsResponse)
