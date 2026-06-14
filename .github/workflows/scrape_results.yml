@@ -1,6 +1,11 @@
 name: Auto-Scrape Match Results
 
 on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'backend/outputs/**'
   schedule:
     - cron: '*/30 * * * *' # Run every 30 minutes
   workflow_dispatch: # Allow running manually from the GitHub Actions tab
