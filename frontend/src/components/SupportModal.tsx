@@ -93,17 +93,19 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[200] overflow-y-auto">
       {/* Backdrop */}
       <div
         onClick={onClose}
         className="fixed inset-0 bg-black/40 backdrop-blur-[2px]"
       />
 
-      {/* Modal Container */}
-      <div
-        className="relative bg-white border border-black max-w-[480px] w-full p-6 font-sans shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] z-10 flex flex-col"
-      >
+      {/* Centering wrapper */}
+      <div className="flex min-h-full items-center justify-center p-4 pointer-events-none">
+        {/* Modal Container */}
+        <div
+          className="relative bg-white border border-black max-w-[480px] w-full p-6 font-sans shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] pointer-events-auto flex flex-col my-8"
+        >
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -258,6 +260,7 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
