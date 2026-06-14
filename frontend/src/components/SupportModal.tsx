@@ -46,12 +46,12 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
   const [qrLoaded, setQrLoaded] = useState(false);
 
   const networks = selectedAsset === "USDT" ? usdtNetworks : usdcNetworks;
-  const [selectedNetwork, setSelectedNetwork] = useState<NetworkOption>(networks[0]);
+  const [selectedNetwork, setSelectedNetwork] = useState<NetworkOption | null>(networks[0] || null);
 
   // Sync selected network when asset changes
   useEffect(() => {
     const defaultNetworks = selectedAsset === "USDT" ? usdtNetworks : usdcNetworks;
-    setSelectedNetwork(defaultNetworks[0]);
+    setSelectedNetwork(defaultNetworks[0] || null);
     setQrLoaded(false);
   }, [selectedAsset]);
 
@@ -61,6 +61,7 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
   }, [selectedNetwork]);
 
   const handleCopy = async () => {
+    if (!selectedNetwork) return;
     try {
       await navigator.clipboard.writeText(selectedNetwork.address);
       setCopied(true);
@@ -85,7 +86,9 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
     };
   }, [isOpen, onClose]);
 
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(selectedNetwork.address)}`;
+  const qrCodeUrl = selectedNetwork
+    ? `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(selectedNetwork.address)}`
+    : "";
 
   if (!isOpen) return null;
 
@@ -186,7 +189,7 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
                     key={net.name}
                     onClick={() => setSelectedNetwork(net)}
                     className={`px-3 py-1.5 border text-xs font-medium transition-none ${
-                      selectedNetwork.name === net.name
+                      selectedNetwork && selectedNetwork.name === net.name
                         ? "border-black bg-black text-white font-bold"
                         : "border-gray-200 text-black hover:border-black"
                     }`}
@@ -198,56 +201,67 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
             </div>
 
             {/* QR Code and Address Area */}
-            <div className="border border-black p-4 bg-gray-50 flex flex-col items-center justify-center mb-4">
-              {/* QR Code */}
-              <div className="w-[180px] h-[180px] bg-white border border-gray-200 flex items-center justify-center relative mb-4">
-                {!qrLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-white">
-                    <div className="w-5 h-5 border-2 border-black border-t-transparent animate-spin" />
+            {selectedNetwork ? (
+              <>
+                <div className="border border-black p-4 bg-gray-50 flex flex-col items-center justify-center mb-4">
+                  {/* QR Code */}
+                  <div className="w-[180px] h-[180px] bg-white border border-gray-200 flex items-center justify-center relative mb-4">
+                    {!qrLoaded && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white">
+                        <div className="w-5 h-5 border-2 border-black border-t-transparent animate-spin" />
+                      </div>
+                    )}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={qrCodeUrl}
+                      alt={`${selectedAsset} QR Code`}
+                      width={180}
+                      height={180}
+                      onLoad={() => setQrLoaded(true)}
+                      className={`transition-opacity duration-200 ${qrLoaded ? "opacity-100" : "opacity-0"}`}
+                    />
                   </div>
-                )}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={qrCodeUrl}
-                  alt={`${selectedAsset} QR Code`}
-                  width={180}
-                  height={180}
-                  onLoad={() => setQrLoaded(true)}
-                  className={`transition-opacity duration-200 ${qrLoaded ? "opacity-100" : "opacity-0"}`}
-                />
-              </div>
 
-              {/* Monospace Address Display */}
-              <div className="w-full flex items-center gap-2">
-                <div className="flex-1 bg-white border border-gray-200 p-2 font-mono text-[10px] break-all select-all text-center leading-normal text-black font-semibold min-h-[36px] flex items-center justify-center">
-                  {selectedNetwork.address}
-                </div>
-                <button
-                  onClick={handleCopy}
-                  className="p-2.5 border border-black bg-white hover:bg-black hover:text-white transition-none shrink-0"
-                  title="Copy Address"
-                >
+                  {/* Monospace Address Display */}
+                  <div className="w-full flex items-center gap-2">
+                    <div className="flex-1 bg-white border border-gray-200 p-2 font-mono text-[10px] break-all select-all text-center leading-normal text-black font-semibold min-h-[36px] flex items-center justify-center">
+                      {selectedNetwork.address}
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="p-2.5 border border-black bg-white hover:bg-black hover:text-white transition-none shrink-0"
+                      title="Copy Address"
+                    >
+                      {copied ? (
+                        <Check className="w-3.5 h-3.5 text-green-600 group-hover:text-white" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
                   {copied ? (
-                    <Check className="w-3.5 h-3.5 text-green-600 group-hover:text-white" />
-                  ) : (
-                    <Copy className="w-3.5 h-3.5" />
-                  )}
-                </button>
-              </div>
-              {copied ? (
-                <span className="text-[10px] text-green-600 font-bold mt-1.5 animate-pulse-subtle">
-                  Copied address to clipboard!
-                </span>
-              ) : null}
-            </div>
+                    <span className="text-[10px] text-green-600 font-bold mt-1.5 animate-pulse-subtle">
+                      Copied address to clipboard!
+                    </span>
+                  ) : null}
+                </div>
 
-            {/* Network Alert Warning */}
-            <div className="border border-[#ffcd00] bg-yellow-50/40 p-3 flex gap-2.5 items-start">
-              <AlertTriangle className="w-4 h-4 text-[#d97706] shrink-0 mt-0.5" />
-              <p className="text-[10px] leading-relaxed text-[#92400e] font-medium">
-                Please only send <strong className="font-bold">{selectedAsset}</strong> via the <strong className="font-bold">{selectedNetwork.displayName}</strong> network. Sending any other token or using a different network will result in permanent loss of funds.
-              </p>
-            </div>
+                {/* Network Alert Warning */}
+                <div className="border border-[#ffcd00] bg-yellow-50/40 p-3 flex gap-2.5 items-start">
+                  <AlertTriangle className="w-4 h-4 text-[#d97706] shrink-0 mt-0.5" />
+                  <p className="text-[10px] leading-relaxed text-[#92400e] font-medium">
+                    Please only send <strong className="font-bold">{selectedAsset}</strong> via the <strong className="font-bold">{selectedNetwork.displayName}</strong> network. Sending any other token or using a different network will result in permanent loss of funds.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="border border-black p-6 bg-gray-50 flex flex-col items-center justify-center mb-4 text-center">
+                <Wallet className="w-8 h-8 text-gray-400 mb-2" />
+                <p className="text-xs text-gray-500 font-medium leading-relaxed">
+                  No payment address configured. Please set environment variables for EVM, TRON, or Solana.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
