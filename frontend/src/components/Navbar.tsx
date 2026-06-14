@@ -3,9 +3,10 @@ import React from "react";
 interface NavbarProps {
   activeView: "bracket" | "predictions";
   setActiveView: (view: "bracket" | "predictions") => void;
+  onSupportClick: () => void;
 }
 
-export default function Navbar({ activeView, setActiveView }: NavbarProps) {
+export default function Navbar({ activeView, setActiveView, onSupportClick }: NavbarProps) {
   return (
     <nav className="sticky top-0 bg-white z-[100] border-b border-[#eee] py-3.5 w-full">
       {/* 
@@ -23,14 +24,12 @@ export default function Navbar({ activeView, setActiveView }: NavbarProps) {
 
         {/* Right: Support Button */}
         <div className="w-1/2 min-[600px]:w-auto min-[600px]:flex-1 flex justify-end order-2 min-[600px]:order-3">
-          <a
-            href="https://ko-fi.com/worldcupmodel"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={onSupportClick}
             className="px-3 py-1.5 border border-black text-[10px] font-bold uppercase hover:bg-black hover:text-white transition-none text-black text-center"
           >
             Support This Project
-          </a>
+          </button>
         </div>
 
         {/* Center: Toggle Buttons */}

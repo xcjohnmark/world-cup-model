@@ -123,3 +123,11 @@ export interface ExternalPredictionsResponse {
   nate_silver: NateSilverSection;
   cache_date?: string;
 }
+
+export interface GroupComparisonData {
+  fifaStandings: FifaStandingsResponse;
+  groupAccuracy: AccuracyMetric;
+}
+
+export type GroupComparisonAllResponse = Record<string, GroupComparisonData>;
+

@@ -16,7 +16,9 @@
                     "draw_prob": 0.228,
                     "team_b": "South Africa",
                     "team_b_prob": 0.1942,
-                    "actual_result": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 2,
+                    "actual_team_b_score": 0
                 },
                 {
                     "match_id": "G002",
@@ -26,7 +28,9 @@
                     "draw_prob": 0.2863,
                     "team_b": "Czechia",
                     "team_b_prob": 0.2803,
-                    "actual_result": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 2,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G025",
@@ -90,7 +94,9 @@
                     "draw_prob": 0.2317,
                     "team_b": "Bosnia and Herzegovina",
                     "team_b_prob": 0.1951,
-                    "actual_result": null
+                    "actual_result": "draw",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G008",
@@ -100,7 +106,9 @@
                     "draw_prob": 0.1972,
                     "team_b": "Switzerland",
                     "team_b_prob": 0.6635,
-                    "actual_result": null
+                    "actual_result": "draw",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G027",
@@ -145,7 +153,7 @@
             ],
             "predicted_qualifiers": [
                 "Switzerland",
-                "Canada"
+                "Qatar"
             ]
         },
         "Group C": {
@@ -164,7 +172,9 @@
                     "draw_prob": 0.2537,
                     "team_b": "Scotland",
                     "team_b_prob": 0.5182,
-                    "actual_result": null
+                    "actual_result": "team_b",
+                    "actual_team_a_score": 0,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G007",
@@ -174,7 +184,9 @@
                     "draw_prob": 0.288,
                     "team_b": "Morocco",
                     "team_b_prob": 0.4047,
-                    "actual_result": null
+                    "actual_result": "draw",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G029",
@@ -238,7 +250,9 @@
                     "draw_prob": 0.2221,
                     "team_b": "Paraguay",
                     "team_b_prob": 0.1886,
-                    "actual_result": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 4,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G005",
@@ -248,7 +262,9 @@
                     "draw_prob": 0.2917,
                     "team_b": "T\u00fcrkiye",
                     "team_b_prob": 0.2595,
-                    "actual_result": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 2,
+                    "actual_team_b_score": 0
                 },
                 {
                     "match_id": "G031",

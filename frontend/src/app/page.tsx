@@ -4,15 +4,15 @@ import { useState, useEffect } from "react";
 import { 
   fetchBracket,
   fetchBracketStatus,
-  fetchGroupAccuracy,
-  fetchFifaStandings,
   fetchTop5,
-  fetchExternalPredictions 
+  fetchExternalPredictions,
+  fetchGroupComparisonAll
 } from "@/lib/api";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BracketView from "@/components/BracketView";
 import PredictionsView from "@/components/PredictionsView";
+import SupportModal from "@/components/SupportModal";
 import { 
   AccuracyMetric, 
   TeamChampionProb,
@@ -25,6 +25,9 @@ export default function Home() {
   // Views: 'bracket' or 'predictions'
   const [activeView, setActiveView] = useState<"bracket" | "predictions">("bracket");
   
+  // Support Modal State
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
+  
   // Selected World Cup group for Bracket view (A to L)
   const [selectedGroup, setSelectedGroup] = useState<string>("A");
   
@@ -35,6 +38,9 @@ export default function Home() {
   const [groupAccuracy, setGroupAccuracy] = useState<AccuracyMetric | null>(null);
   const [externalPredictions, setExternalPredictions] = useState<ExternalPredictionsResponse | null>(null);
   const [top5Teams, setTop5Teams] = useState<TeamChampionProb[]>([]);
+  
+  // Preloaded standings and accuracy for all groups
+  const [groupComparisonAll, setGroupComparisonAll] = useState<Record<string, { fifaStandings: FifaStandingsResponse, groupAccuracy: AccuracyMetric }> | null>(null);
   
   // Loading & Error States
   const [loading, setLoading] = useState<boolean>(true);
@@ -47,22 +53,24 @@ export default function Home() {
   // Refresh controller for when matches are updated
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
 
-  // Fetch initial data (bracket structure, status, external predictions, and top 5)
+  // Fetch initial data (bracket structure, status, external predictions, top 5, and all group comparisons)
   useEffect(() => {
     async function loadInitialData() {
       try {
         setLoading(true);
-        const [bracket, status, external, top5] = await Promise.all([
+        const [bracket, status, external, top5, comparisonAll] = await Promise.all([
           fetchBracket(),
           fetchBracketStatus(),
           fetchExternalPredictions(),
-          fetchTop5()
+          fetchTop5(),
+          fetchGroupComparisonAll()
         ]);
         
         setBracketData(bracket);
         setBracketStatus(status);
         setExternalPredictions(external);
         setTop5Teams(top5);
+        setGroupComparisonAll(comparisonAll);
         setError(null);
       } catch (err) {
         console.error("Failed to load initial predictor data:", err);
@@ -75,29 +83,21 @@ export default function Home() {
     loadInitialData();
   }, [refreshTrigger]);
 
-  // Fetch group standings and accuracy when selected group or refresh trigger changes
+  // Load selected group standings instantly from memory cache when group selection changes
   useEffect(() => {
-    async function loadGroupData() {
-      if (!selectedGroup) return;
-      try {
-        setGroupLoading(true);
-        setGroupError(false);
-        const [standings, accuracy] = await Promise.all([
-          fetchFifaStandings(selectedGroup),
-          fetchGroupAccuracy(selectedGroup)
-        ]);
-        setFifaStandings(standings);
-        setGroupAccuracy(accuracy);
-      } catch (err) {
-        console.error(`Failed to load data for Group ${selectedGroup}:`, err);
-        setGroupError(true);
-      } finally {
-        setGroupLoading(false);
-      }
-    }
+    if (!groupComparisonAll || !selectedGroup) return;
     
-    loadGroupData();
-  }, [selectedGroup, refreshTrigger]);
+    const currentData = groupComparisonAll[selectedGroup];
+    if (currentData) {
+      setFifaStandings(currentData.fifaStandings);
+      setGroupAccuracy(currentData.groupAccuracy);
+      setGroupLoading(false);
+      setGroupError(false);
+    } else {
+      setFifaStandings(null);
+      setGroupAccuracy(null);
+    }
+  }, [selectedGroup, groupComparisonAll]);
 
   const triggerRefresh = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -109,7 +109,11 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Navbar */}
-      <Navbar activeView={activeView} setActiveView={setActiveView} />
+      <Navbar 
+        activeView={activeView} 
+        setActiveView={setActiveView} 
+        onSupportClick={() => setIsSupportModalOpen(true)}
+      />
 
       {/* Main Content Container */}
       <div className="journal-shell flex-1 py-6">
@@ -154,6 +158,12 @@ export default function Home() {
 
       {/* Footer */}
       <Footer runDate={runDate} totalSimulations={totalSimulations} />
+
+      {/* Support Modal */}
+      <SupportModal 
+        isOpen={isSupportModalOpen} 
+        onClose={() => setIsSupportModalOpen(false)} 
+      />
     </div>
   );
 }

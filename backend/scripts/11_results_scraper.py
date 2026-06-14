@@ -246,11 +246,11 @@ def run_scraper() -> dict:
     if updated_matches_list:
         logger.info(f"Successfully updated {len(updated_matches_list)} new match results. Running simulations...")
         
-        # Re-run simulator (08_simulator.py)
+        # Re-run simulator (08_simulator.py) with 10,000 simulations for fast execution
         scripts_dir = os.path.join(project_root, "backend", "scripts")
         simulator_path = os.path.join(scripts_dir, "08_simulator.py")
-        logger.info("Executing 08_simulator.py...")
-        subprocess.run([sys.executable, simulator_path], check=True)
+        logger.info("Executing 08_simulator.py with 10,000 runs...")
+        subprocess.run([sys.executable, simulator_path, "10000"], check=True)
         
         # Re-run bracket engine (09_bracket_engine.py) to rebuild layout files
         bracket_engine_path = os.path.join(scripts_dir, "09_bracket_engine.py")

@@ -139,8 +139,8 @@ class BracketEngine:
                             tb_std = self.standardizer.standardize(m["team_b"])
                             self.real_results[(ta_std, tb_std)] = {
                                 "result": m["actual_result"],
-                                "goals_a": int(m["actual_team_a_score"]),
-                                "goals_b": int(m["actual_team_b_score"])
+                                "goals_a": int(m.get("actual_team_a_score", 0)) if m.get("actual_team_a_score") is not None else 0,
+                                "goals_b": int(m.get("actual_team_b_score", 0)) if m.get("actual_team_b_score") is not None else 0
                             }
                 # Knockouts
                 for stage in ["round_of_32", "round_of_16", "quarterfinals", "semifinals", "final"]:
@@ -150,8 +150,8 @@ class BracketEngine:
                             tb_std = self.standardizer.standardize(m["team_b"])
                             self.real_results[(ta_std, tb_std)] = {
                                 "result": m["actual_result"],
-                                "goals_a": int(m.get("actual_team_a_score", 0)),
-                                "goals_b": int(m.get("actual_team_b_score", 0))
+                                "goals_a": int(m.get("actual_team_a_score", 0)) if m.get("actual_team_a_score") is not None else 0,
+                                "goals_b": int(m.get("actual_team_b_score", 0)) if m.get("actual_team_b_score") is not None else 0
                             }
             except Exception as e:
                 pass
@@ -805,6 +805,28 @@ def generate_bracket_json() -> dict:
         
     engine = BracketEngine()
     
+    # Helper to retrieve real result and scores for a matchup if they exist
+    def get_real_result_for_match(team_a: str, team_b: str):
+        ta_std = engine.standardizer.standardize(team_a)
+        tb_std = engine.standardizer.standardize(team_b)
+        
+        # Check direct pairing
+        if (ta_std, tb_std) in engine.real_results:
+            res = engine.real_results[(ta_std, tb_std)]
+            return res["result"], res["goals_a"], res["goals_b"]
+            
+        # Check reversed pairing
+        if (tb_std, ta_std) in engine.real_results:
+            res = engine.real_results[(tb_std, ta_std)]
+            reversed_result = "draw"
+            if res["result"] == "team_a":
+                reversed_result = "team_b"
+            elif res["result"] == "team_b":
+                reversed_result = "team_a"
+            return reversed_result, res["goals_b"], res["goals_a"]
+            
+        return None, None, None
+
     # Map standardized team name to their r32_prob and win_prob
     team_probs = {}
     win_probs = {}
@@ -830,6 +852,7 @@ def generate_bracket_json() -> dict:
         group_matches = []
         for m in all_preds[:72]:
             if m.get("group") == g_letter:
+                actual_res, actual_a_score, actual_b_score = get_real_result_for_match(m["team_a"], m["team_b"])
                 group_matches.append({
                     "match_id": m["match_id"],
                     "date": m["date"],
@@ -838,7 +861,9 @@ def generate_bracket_json() -> dict:
                     "draw_prob": m["draw_prob"],
                     "team_b": m["team_b"],
                     "team_b_prob": m["team_b_prob"],
-                    "actual_result": None
+                    "actual_result": actual_res,
+                    "actual_team_a_score": actual_a_score,
+                    "actual_team_b_score": actual_b_score
                 })
         group_stage_dict[f"Group {g_letter}"] = {
             "teams": team_list,
@@ -848,6 +873,7 @@ def generate_bracket_json() -> dict:
         
     # Helper to map match from flat predictions list
     def map_knockout_match(m):
+        actual_res, actual_a_score, actual_b_score = get_real_result_for_match(m["team_a"], m["team_b"])
         return {
             "match_id": m["match_id"],
             "date": m["date"],
@@ -856,7 +882,9 @@ def generate_bracket_json() -> dict:
             "draw_prob": m["draw_prob"],
             "team_b": m["team_b"],
             "team_b_prob": m["team_b_prob"],
-            "actual_result": None
+            "actual_result": actual_res,
+            "actual_team_a_score": actual_a_score,
+            "actual_team_b_score": actual_b_score
         }
         
     # 4. Structure knockout stages

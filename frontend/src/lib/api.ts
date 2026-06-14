@@ -69,3 +69,9 @@ export async function fetchTop5(): Promise<TeamChampionProb[]> {
 export async function fetchExternalPredictions(): Promise<ExternalPredictionsResponse> {
   return fetcher<ExternalPredictionsResponse>("/external-predictions");
 }
+
+// 7. Fetch standings and accuracy metrics for all groups (A-L) in a single request
+export async function fetchGroupComparisonAll(): Promise<Record<string, { fifaStandings: FifaStandingsResponse; groupAccuracy: AccuracyMetric }>> {
+  return fetcher<Record<string, { fifaStandings: FifaStandingsResponse; groupAccuracy: AccuracyMetric }>>("/group-comparison-all");
+}
+
