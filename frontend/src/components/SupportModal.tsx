@@ -119,7 +119,7 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
             Support the Project
           </h2>
           <p className="text-xs text-gray-500 mt-2 leading-relaxed">
-            WC 2026 Predictor is built and maintained independently. Your support helps cover server costs and data API subscriptions to keep the engine running.
+            Not all developers are rich or own a home lab like Tony Stark—some of us are just students learning, building, and maintaining projects independently. Your support goes a long way in helping cover custom domain costs, server fees, and API subscriptions to keep the predictor online.
           </p>
         </div>
 
