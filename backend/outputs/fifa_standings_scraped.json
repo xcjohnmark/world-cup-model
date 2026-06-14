@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-14T18:07:40.229007+00:00",
+  "scraped_at": "2026-06-14T20:03:50.495400+00:00",
   "groups": {
     "Group A": [
       {
@@ -188,17 +188,17 @@
     "Group E": [
       {
         "team": "Germany",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "points": 3,
+        "goals_for": 7,
+        "goals_against": 1,
+        "goal_difference": 6
       },
       {
-        "team": "Cura\u00e7ao",
+        "team": "Ecuador",
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -220,15 +220,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Ecuador",
-        "played": 0,
+        "team": "Cura\u00e7ao",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_for": 1,
+        "goals_against": 7,
+        "goal_difference": -6
       }
     ],
     "Group F": [
