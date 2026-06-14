@@ -138,18 +138,12 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
             Crypto Transfer
           </button>
 
-          {/* Fiat Method (Disabled / Coming Soon) */}
+          {/* Fiat Method (Disabled) */}
           <div
-            className="relative flex flex-col items-center justify-center p-3 border border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed group"
-            title="Naira & USD Card/Bank payments are coming soon"
+            className="flex items-center justify-center gap-2 p-3 border border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed text-xs font-bold uppercase"
           >
-            <div className="flex items-center gap-2 text-xs font-bold uppercase">
-              <CreditCard className="w-4 h-4 text-gray-300" />
-              Card / Bank
-            </div>
-            <span className="text-[8px] font-bold tracking-wider uppercase mt-1 bg-gray-200 text-gray-600 px-1 py-0.5 rounded-none">
-              Coming Soon
-            </span>
+            <CreditCard className="w-4 h-4 text-gray-300" />
+            Card / Bank
           </div>
         </div>
 
