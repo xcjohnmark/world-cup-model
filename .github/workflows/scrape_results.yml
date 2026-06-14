@@ -34,7 +34,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add backend/outputs/*.json
+          git add -f backend/outputs/*.json
           
           # Only commit and push if new scores were scraped and simulations ran
           if ! git diff --cached --quiet; then

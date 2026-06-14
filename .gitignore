@@ -14,7 +14,8 @@ node_modules/
 # Data
 backend/data/raw/*.csv
 backend/data/cleaned/*.csv
-backend/outputs/
+backend/outputs/*
+!backend/outputs/*.json
 
 # Models
 backend/models/*.pkl
