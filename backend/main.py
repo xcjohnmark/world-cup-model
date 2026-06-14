@@ -915,6 +915,23 @@ def scrape_wikipedia_standings():
     tables = soup.find_all("table", class_="wikitable")
     
     standardizer = TeamStandardizer()
+    
+    def clean_int(val: str) -> int:
+        # Remove footnote suffixes like [a], [b], [1], etc.
+        cleaned = re.sub(r'\[\w+\]', '', val)
+        # Remove spaces, plus signs, and replace unicode minus with standard hyphen
+        cleaned = cleaned.replace(" ", "").replace("+", "").replace("−", "-").strip()
+        if not cleaned:
+            return 0
+        try:
+            return int(cleaned)
+        except ValueError:
+            # Fallback to extracting first sequence of digits
+            match = re.search(r'-?\d+', cleaned)
+            if match:
+                return int(match.group(0))
+            return 0
+
     scraped_groups = {}
     group_letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"]
     group_index = 0
@@ -948,6 +965,7 @@ def scrape_wikipedia_standings():
                 
             # Clean and standardize team name
             raw_team_name = cells[1].text.strip()
+            raw_team_name = re.sub(r'\[\w+\]', '', raw_team_name).strip()  # Strip footnotes like [a]
             raw_team_name = re.sub(r'\s*\([^)]*\)', '', raw_team_name).strip()
             raw_team_name = re.sub(r'^[^\w\s]+', '', raw_team_name).strip()
             
@@ -973,17 +991,14 @@ def scrape_wikipedia_standings():
                     elif h in ["gd", "diff"]: gd_idx = idx
                     elif h in ["pts", "points"]: pts_idx = idx
                     
-                played = int(row_text[pld_idx])
-                won = int(row_text[w_idx])
-                drawn = int(row_text[d_idx])
-                lost = int(row_text[l_idx])
-                goals_for = int(row_text[gf_idx])
-                goals_against = int(row_text[ga_idx])
-                
-                gd_str = row_text[gd_idx].replace("−", "-").replace("+", "")
-                goal_difference = int(gd_str)
-                
-                points = int(row_text[pts_idx])
+                played = clean_int(row_text[pld_idx])
+                won = clean_int(row_text[w_idx])
+                drawn = clean_int(row_text[d_idx])
+                lost = clean_int(row_text[l_idx])
+                goals_for = clean_int(row_text[gf_idx])
+                goals_against = clean_int(row_text[ga_idx])
+                goal_difference = clean_int(row_text[gd_idx])
+                points = clean_int(row_text[pts_idx])
                 
                 standings_list.append({
                     "team": display_name,

@@ -261,6 +261,23 @@ def run_scraper() -> dict:
     else:
         logger.info("No new match results detected. Database is fully up-to-date.")
         
+    # 5. Also scrape and update FIFA standings cache (fifa_standings_scraped.json)
+    try:
+        logger.info("Scraping Wikipedia group standings...")
+        import datetime
+        from backend.main import scrape_wikipedia_standings
+        scraped_groups = scrape_wikipedia_standings()
+        cache_data = {
+            "scraped_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "groups": scraped_groups
+        }
+        cache_path = os.path.join(project_root, "backend", "outputs", "fifa_standings_scraped.json")
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache_data, f, indent=2)
+        logger.info("Wikipedia standings cache updated successfully in script run.")
+    except Exception as e:
+        logger.error(f"Failed to update Wikipedia standings cache: {e}")
+
     return {
         "status": "success",
         "updated_matches": updated_matches_list
