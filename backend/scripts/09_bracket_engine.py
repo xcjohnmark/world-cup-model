@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import random
-import pandas as pd
+import csv
 from functools import lru_cache
 
 # Add project root to python path if needed
@@ -108,10 +108,14 @@ class BracketEngine:
         penalty_rates_path = os.path.join(project_root, "backend", "data", "processed", "penalty_win_rates.csv")
         self.penalty_rates = {}
         if os.path.exists(penalty_rates_path):
-            df_rates = pd.read_csv(penalty_rates_path)
-            for _, row in df_rates.iterrows():
-                std_team = self.standardizer.standardize(row["team"])
-                self.penalty_rates[std_team] = float(row["penalty_win_rate"])
+            try:
+                with open(penalty_rates_path, "r", encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        std_team = self.standardizer.standardize(row["team"])
+                        self.penalty_rates[std_team] = float(row["penalty_win_rate"])
+            except Exception as e:
+                print(f"Error loading penalty win rates: {e}")
                 
         # Load group assignments
         groups_path = os.path.join(project_root, "backend", "data", "cleaned", "wc_2026_groups.json")

@@ -72,25 +72,19 @@ def import_prefixed_module(module_name: str, file_path: str):
     spec.loader.exec_module(module)
     return module
 
-# Structure imports of Phase 3–10 scripts cleanly at startup
+# Structure imports of required runtime scripts cleanly at startup
 scripts_dir = os.path.join(project_root, "backend", "scripts")
 
 try:
-    feature_builder = import_prefixed_module("feature_builder", os.path.join(scripts_dir, "03_feature_builder.py"))
-    dataset_builder = import_prefixed_module("dataset_builder", os.path.join(scripts_dir, "04_dataset_builder.py"))
-    model_trainer = import_prefixed_module("model_trainer", os.path.join(scripts_dir, "05_model_trainer.py"))
-    calibrator = import_prefixed_module("calibrator", os.path.join(scripts_dir, "06_calibrator.py"))
     predictor_mod = import_prefixed_module("predictor", os.path.join(scripts_dir, "07_predictor.py"))
-    simulator = import_prefixed_module("simulator", os.path.join(scripts_dir, "08_simulator.py"))
     bracket_engine = import_prefixed_module("bracket_engine", os.path.join(scripts_dir, "09_bracket_engine.py"))
-    leaderboard_mod = import_prefixed_module("leaderboard", os.path.join(scripts_dir, "10_leaderboard.py"))
     explainability = import_prefixed_module("explainability", os.path.join(scripts_dir, "11_explainability.py"))
 
     MatchPredictor = predictor_mod.MatchPredictor
     explain_match_difference = explainability.explain_match_difference
-    logger.info("Successfully imported all Phase 3–11 scripts.")
+    logger.info("Successfully imported active runtime scripts (Predictor, Bracket Engine, Explainability).")
 except Exception as e:
-    logger.error(f"Failed to import Phase 3-11 scripts: {e}")
+    logger.error(f"Failed to import runtime scripts: {e}")
     raise e
 
 # Configure CORS Middleware

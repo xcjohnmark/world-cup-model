@@ -4,8 +4,6 @@ import json
 import joblib
 import pandas as pd
 import numpy as np
-import shap
-import matplotlib.pyplot as plt
 
 # Add project root to python path if needed
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -61,6 +59,8 @@ def explain_match_difference(team_a: str, team_b: str, predictor: MatchPredictor
 
 
 def main():
+    import shap
+    import matplotlib.pyplot as plt
     print("=== Phase 11: SHAP Model Explainability Pipeline ===")
     
     processed_dir = os.path.join("backend", "data", "processed")
