@@ -19,10 +19,10 @@ interface NetworkOption {
 
 const ASSET_OPTIONS: CryptoAsset[] = ["USDT", "USDC"];
 
-// Read addresses from environment variables or fall back to empty strings
-const evmAddress = process.env.NEXT_PUBLIC_CRYPTO_EVM_ADDRESS || "";
+// Read addresses from environment variables or fall back to configured values
+const evmAddress = process.env.NEXT_PUBLIC_CRYPTO_EVM_ADDRESS || "0x44a85db3E66D74059A469ade98ED2A33E21Cd279";
 const tronAddress = process.env.NEXT_PUBLIC_CRYPTO_TRON_ADDRESS || "";
-const solanaAddress = process.env.NEXT_PUBLIC_CRYPTO_SOLANA_ADDRESS || "";
+const solanaAddress = process.env.NEXT_PUBLIC_CRYPTO_SOLANA_ADDRESS || "Ek9xMDhceBrCn7ArHEg8mZmTrHb6xdUmK8vdJ7JZxBgD";
 
 // Networks available for USDT
 const usdtNetworks: NetworkOption[] = [
