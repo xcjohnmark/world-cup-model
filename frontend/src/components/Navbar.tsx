@@ -16,19 +16,19 @@ export default function Navbar({ activeView, setActiveView, onSupportClick }: Na
       */}
       <div className="journal-shell flex flex-wrap min-[600px]:flex-nowrap justify-between items-center gap-y-3 gap-x-2">
         {/* Left: Site Title */}
-        <div className="w-1/2 min-[600px]:w-auto min-[600px]:flex-1 text-left">
+        <div className="min-[600px]:flex-1 text-left">
           <span className="text-base font-bold uppercase tracking-tight text-black font-serif block">
             WC 2026 Predictor
           </span>
         </div>
 
         {/* Right: Support Button */}
-        <div className="w-1/2 min-[600px]:w-auto min-[600px]:flex-1 flex justify-end order-2 min-[600px]:order-3">
+        <div className="flex justify-end order-2 min-[600px]:order-3 min-[600px]:flex-1">
           <button
             onClick={onSupportClick}
             className="px-3 py-1.5 border border-black text-[10px] font-bold uppercase hover:bg-black hover:text-white transition-none text-black text-center"
           >
-            Support This Project
+            SUPPORT PROJECT
           </button>
         </div>
 

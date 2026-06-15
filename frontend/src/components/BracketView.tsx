@@ -32,16 +32,50 @@ export default function BracketView({
   const groupMatches = bracketData?.group_stage?.[groupKey]?.matches || [];
   const isGroupStageComplete = bracketStatus?.group_stage_complete ?? false;
 
+  // Calculate total matches played and correct predictions across all groups
+  let totalPlayed = 0;
+  let correctCount = 0;
+
+  if (bracketData?.group_stage) {
+    Object.values(bracketData.group_stage).forEach((group) => {
+      group.matches.forEach((match) => {
+        const hasResult = match.actual_result !== null && match.actual_result !== undefined;
+        if (hasResult) {
+          totalPlayed++;
+          const maxProb = Math.max(match.team_a_prob, match.draw_prob, match.team_b_prob);
+          const predictedOutcome =
+            maxProb === match.team_a_prob
+              ? "team_a"
+              : maxProb === match.team_b_prob
+              ? "team_b"
+              : "draw";
+          if (predictedOutcome === match.actual_result) {
+            correctCount++;
+          }
+        }
+      });
+    });
+  }
+
+  const accuracy = totalPlayed > 0 ? ((correctCount / totalPlayed) * 100).toFixed(1) : "0.0";
+
   return (
     <div className="text-black font-sans">
       {/* View Title */}
-      <div className="border-b border-black pb-2 mb-6">
-        <h2 className="text-lg font-bold font-serif uppercase tracking-tight text-black">
-          Tournament Bracket & Group Stage
-        </h2>
-        <p className="text-xs text-gray-500 italic mt-0.5">
-          Group stage match predictions compared side-by-side with live FIFA standings.
-        </p>
+      <div className="border-b border-black pb-2 mb-6 flex flex-col md:flex-row md:justify-between md:items-end gap-3">
+        <div>
+          <h2 className="text-lg font-bold font-serif uppercase tracking-tight text-black">
+            Tournament Bracket & Group Stage
+          </h2>
+          <p className="text-xs text-gray-500 italic mt-0.5">
+            Group stage match predictions compared side-by-side with live FIFA standings.
+          </p>
+        </div>
+        {totalPlayed > 0 && (
+          <div className="bg-[#f9fafb] border border-black px-3 py-1.5 text-xs font-mono font-bold text-black self-start md:self-auto shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            Matches Predicted Correctly: <span className="underline">{correctCount}/{totalPlayed}</span> ({accuracy}%)
+          </div>
+        )}
       </div>
 
       {/* Group Selector Bar */}
