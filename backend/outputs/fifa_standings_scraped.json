@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-15T20:21:00.337872+00:00",
+  "scraped_at": "2026-06-15T22:33:14.797724+00:00",
   "groups": {
     "Group A": [
       {
@@ -280,24 +280,24 @@
     "Group G": [
       {
         "team": "Belgium",
-        "played": 0,
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
         "goal_difference": 0
       },
       {
         "team": "Egypt",
-        "played": 0,
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
         "goal_difference": 0
       },
       {
