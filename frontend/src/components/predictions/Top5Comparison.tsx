@@ -171,7 +171,14 @@ export default function Top5Comparison({
         {/* Card 2: Opta Analytics */}
         <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex justify-between items-center border-b border-black pb-2 mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-black">OPTA ANALYTICS</span>
+            <a
+              href="https://theanalyst.com/articles/who-will-win-2026-fifa-world-cup-predictions-opta-supercomputer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-bold uppercase tracking-wider text-black hover:underline"
+            >
+              OPTA ANALYTICS
+            </a>
             <ModelInfoTooltip
               modelKey="opta"
               title="Opta Predictions"
@@ -203,7 +210,14 @@ export default function Top5Comparison({
         {/* Card 3: Nate Silver (PELE) */}
         <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex justify-between items-center border-b border-black pb-2 mb-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-black">NATE SILVER (PELE)</span>
+            <a
+              href="https://www.natesilver.net/p/world-cup-2026-odds-predictions"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-bold uppercase tracking-wider text-black hover:underline"
+            >
+              NATE SILVER (PELE)
+            </a>
             <ModelInfoTooltip
               modelKey="ns"
               title="Nate Silver (PELE)"
@@ -235,8 +249,25 @@ export default function Top5Comparison({
 
       {/* Table Legend/Explanation Note */}
       <p className="text-[11px] text-gray-500 italic font-sans mt-5 leading-relaxed">
-        Note: My model and Opta express predictions as win probability (%). Nate Silver&apos;s PELE model
-        outputs a team strength rating — a different methodology producing a different output format.
+        Note: My model and{" "}
+        <a
+          href="https://theanalyst.com/articles/who-will-win-2026-fifa-world-cup-predictions-opta-supercomputer"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-black"
+        >
+          Opta
+        </a>{" "}
+        express predictions as win probability (%).{" "}
+        <a
+          href="https://www.natesilver.net/p/world-cup-2026-odds-predictions"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-black"
+        >
+          Nate Silver
+        </a>
+        &apos;s PELE model outputs a team strength rating — a different methodology producing a different output format.
         Both are valid approaches to the same question.
       </p>
     </div>

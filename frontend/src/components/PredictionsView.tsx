@@ -19,7 +19,25 @@ export default function PredictionsView({
           Model Forecasts & Predictions
         </h2>
         <p className="text-xs text-gray-500 italic mt-0.5">
-          Comparing Monte Carlo simulation models with Opta Analytics and Nate Silver PELE ratings.
+          Comparing Monte Carlo simulation models with{" "}
+          <a
+            href="https://theanalyst.com/articles/who-will-win-2026-fifa-world-cup-predictions-opta-supercomputer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-black"
+          >
+            Opta Analytics
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.natesilver.net/p/world-cup-2026-odds-predictions"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-black"
+          >
+            Nate Silver
+          </a>{" "}
+          PELE ratings.
         </p>
       </div>
 
