@@ -130,103 +130,111 @@ export default function Top5Comparison({
   return (
     <div className="font-sans text-black my-6">
       {/* Section Header */}
-      <h3 className="text-sm font-bold uppercase tracking-widest text-black mb-3 border-b-2 border-black pb-1">
+      <h3 className="text-sm font-bold uppercase tracking-widest text-black mb-4 border-b-2 border-black pb-1">
         TOP 5 WORLD CUP WINNER PREDICTIONS
       </h3>
 
-      {/* Comparison Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-[600px] w-full text-xs font-mono border-t border-b border-black">
-          <thead>
-            <tr className="border-b border-black text-[10px] uppercase">
-              <th className="py-2.5 px-3 text-left font-bold border-r border-gray-200">
-                <span className="align-middle">MY MODEL</span>
-                <ModelInfoTooltip
-                  modelKey="my"
-                  title="My XGBoost Simulator"
-                  methodology="Monte Carlo Tournament Simulation"
-                  description="Simulates the entire World Cup bracket 1,000,000 times using a machine learning model trained on historical match results, current FIFA rankings, Elo ratings, and team form trends."
-                  activeTooltip={activeTooltip}
-                  setActiveTooltip={setActiveTooltip}
-                  align="left"
-                />
-              </th>
-              <th className="py-2.5 px-3 text-left font-bold border-r border-gray-200">
-                <span className="align-middle">OPTA ANALYTICS</span>
-                <ModelInfoTooltip
-                  modelKey="opta"
-                  title="Opta Predictions"
-                  methodology="Proprietary Power Rankings & Betting Odds"
-                  description="Calculates outcome probabilities based on historical statistics, opponent strengths, betting markets, and Opta's proprietary global team power rankings."
-                  activeTooltip={activeTooltip}
-                  setActiveTooltip={setActiveTooltip}
-                  align="left"
-                />
-              </th>
-              <th className="py-2.5 px-3 text-left font-bold">
-                <span className="align-middle">NATE SILVER (PELE)</span>
-                <ModelInfoTooltip
-                  modelKey="ns"
-                  title="Nate Silver (PELE)"
-                  methodology="Soccer Strength Rating Model"
-                  description="Nate Silver's PELE soccer rating outputs a team strength rating (numerical value representing overall quality) rather than a direct progression percentage."
-                  activeTooltip={activeTooltip}
-                  setActiveTooltip={setActiveTooltip}
-                  align="right"
-                />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.rank} className="border-b border-gray-200">
-                {/* Column 1: My Model */}
-                <td className="py-2 px-3 border-r border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <span className="inline-flex items-center">
-                      <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black inline-flex items-center">
-                        <Flag countryName={row.my.text} />
-                        {row.my.text}
-                      </span>
+      {/* Grid of Stacked Cards (stacks vertically on mobile, columns on desktop) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Card 1: My Model */}
+        <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex justify-between items-center border-b border-black pb-2 mb-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-black">MY MODEL</span>
+            <ModelInfoTooltip
+              modelKey="my"
+              title="My XGBoost Simulator"
+              methodology="Monte Carlo Tournament Simulation"
+              description="Simulates the entire World Cup bracket 1,000,000 times using a machine learning model trained on historical match results, current FIFA rankings, Elo ratings, and team form trends."
+              activeTooltip={activeTooltip}
+              setActiveTooltip={setActiveTooltip}
+              align="right"
+            />
+          </div>
+          <table className="w-full text-xs font-mono">
+            <tbody>
+              {rows.map((row) => (
+                <tr key={`my-${row.rank}`} className="border-b border-gray-100 last:border-0">
+                  <td className="py-2.5 text-left">
+                    <span className="text-gray-400 mr-2">{row.rank}.</span>
+                    <span className="font-bold text-black inline-flex items-center">
+                      <Flag countryName={row.my.text} />
+                      {row.my.text}
                     </span>
-                    <span className="font-bold text-gray-700">{row.my.val}</span>
-                  </div>
-                </td>
-                {/* Column 2: Opta */}
-                <td className="py-2 px-3 border-r border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <span className="inline-flex items-center">
-                      <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black inline-flex items-center">
-                        <Flag countryName={row.opta.text} />
-                        {row.opta.text}
-                      </span>
+                  </td>
+                  <td className="py-2.5 text-right font-bold text-gray-700">{row.my.val}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Card 2: Opta Analytics */}
+        <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex justify-between items-center border-b border-black pb-2 mb-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-black">OPTA ANALYTICS</span>
+            <ModelInfoTooltip
+              modelKey="opta"
+              title="Opta Predictions"
+              methodology="Proprietary Power Rankings & Betting Odds"
+              description="Calculates outcome probabilities based on historical statistics, opponent strengths, betting markets, and Opta's proprietary global team power rankings."
+              activeTooltip={activeTooltip}
+              setActiveTooltip={setActiveTooltip}
+              align="right"
+            />
+          </div>
+          <table className="w-full text-xs font-mono">
+            <tbody>
+              {rows.map((row) => (
+                <tr key={`opta-${row.rank}`} className="border-b border-gray-100 last:border-0">
+                  <td className="py-2.5 text-left">
+                    <span className="text-gray-400 mr-2">{row.rank}.</span>
+                    <span className="font-bold text-black inline-flex items-center">
+                      <Flag countryName={row.opta.text} />
+                      {row.opta.text}
                     </span>
-                    <span className="font-bold text-gray-700">{row.opta.val}</span>
-                  </div>
-                </td>
-                {/* Column 3: Nate Silver */}
-                <td className="py-2 px-3">
-                  <div className="flex justify-between items-center">
-                    <span className="inline-flex items-center">
-                      <span className="text-gray-400 mr-1.5">{row.rank}.</span>
-                      <span className="font-bold text-black inline-flex items-center">
-                        <Flag countryName={row.ns.text} />
-                        {row.ns.text}
-                      </span>
+                  </td>
+                  <td className="py-2.5 text-right font-bold text-gray-700">{row.opta.val}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Card 3: Nate Silver (PELE) */}
+        <div className="border border-black p-4 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex justify-between items-center border-b border-black pb-2 mb-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-black">NATE SILVER (PELE)</span>
+            <ModelInfoTooltip
+              modelKey="ns"
+              title="Nate Silver (PELE)"
+              methodology="Soccer Strength Rating Model"
+              description="Nate Silver's PELE soccer rating outputs a team strength rating (numerical value representing overall quality) rather than a direct progression percentage."
+              activeTooltip={activeTooltip}
+              setActiveTooltip={setActiveTooltip}
+              align="right"
+            />
+          </div>
+          <table className="w-full text-xs font-mono">
+            <tbody>
+              {rows.map((row) => (
+                <tr key={`ns-${row.rank}`} className="border-b border-gray-100 last:border-0">
+                  <td className="py-2.5 text-left">
+                    <span className="text-gray-400 mr-2">{row.rank}.</span>
+                    <span className="font-bold text-black inline-flex items-center">
+                      <Flag countryName={row.ns.text} />
+                      {row.ns.text}
                     </span>
-                    <span className="font-bold text-gray-700">{row.ns.val}</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td className="py-2.5 text-right font-bold text-gray-700">{row.ns.val}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Table Legend/Explanation Note */}
-      <p className="text-[11px] text-gray-500 italic font-sans mt-3 leading-relaxed">
+      <p className="text-[11px] text-gray-500 italic font-sans mt-5 leading-relaxed">
         Note: My model and Opta express predictions as win probability (%). Nate Silver&apos;s PELE model
         outputs a team strength rating — a different methodology producing a different output format.
         Both are valid approaches to the same question.
