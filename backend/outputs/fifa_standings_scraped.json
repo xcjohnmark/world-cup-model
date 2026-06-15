@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-15T00:06:54.854852+00:00",
+  "scraped_at": "2026-06-15T05:34:23.243507+00:00",
   "groups": {
     "Group A": [
       {
@@ -198,26 +198,26 @@
         "goal_difference": 6
       },
       {
-        "team": "Ecuador",
-        "played": 0,
-        "won": 0,
+        "team": "C\u00f4te d'Ivoire",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
+        "points": 3,
+        "goals_for": 1,
         "goals_against": 0,
-        "goal_difference": 0
+        "goal_difference": 1
       },
       {
-        "team": "C\u00f4te d'Ivoire",
-        "played": 0,
+        "team": "Ecuador",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
         "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_against": 1,
+        "goal_difference": -1
       },
       {
         "team": "Cura\u00e7ao",
@@ -232,6 +232,17 @@
       }
     ],
     "Group F": [
+      {
+        "team": "Sweden",
+        "played": 1,
+        "won": 1,
+        "drawn": 0,
+        "lost": 0,
+        "points": 3,
+        "goals_for": 5,
+        "goals_against": 1,
+        "goal_difference": 4
+      },
       {
         "team": "Japan",
         "played": 1,
@@ -255,26 +266,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Sweden",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
         "team": "Tunisia",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_for": 1,
+        "goals_against": 5,
+        "goal_difference": -4
       }
     ],
     "Group G": [
