@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-16T19:27:22.651483+00:00",
+  "scraped_at": "2026-06-16T22:00:21.299840+00:00",
   "groups": {
     "Group A": [
       {
@@ -372,17 +372,17 @@
     "Group I": [
       {
         "team": "France",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 1,
+        "goal_difference": 2
       },
       {
-        "team": "Senegal",
+        "team": "Norway",
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -404,15 +404,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Norway",
-        "played": 0,
+        "team": "Senegal",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_for": 1,
+        "goals_against": 3,
+        "goal_difference": -2
       }
     ],
     "Group J": [
