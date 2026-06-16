@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-15T22:33:14.797724+00:00",
+  "scraped_at": "2026-06-16T00:23:06.074286+00:00",
   "groups": {
     "Group A": [
       {
@@ -325,6 +325,28 @@
     ],
     "Group H": [
       {
+        "team": "Uruguay",
+        "played": 1,
+        "won": 0,
+        "drawn": 1,
+        "lost": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
+        "goal_difference": 0
+      },
+      {
+        "team": "Saudi Arabia",
+        "played": 1,
+        "won": 0,
+        "drawn": 1,
+        "lost": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
+        "goal_difference": 0
+      },
+      {
         "team": "Spain",
         "played": 1,
         "won": 0,
@@ -342,28 +364,6 @@
         "drawn": 1,
         "lost": 0,
         "points": 1,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "Uruguay",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "Saudi Arabia",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
         "goals_for": 0,
         "goals_against": 0,
         "goal_difference": 0

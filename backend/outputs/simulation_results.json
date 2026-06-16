@@ -3,435 +3,435 @@
     "teams": [
         {
             "team": "Argentina",
-            "win_prob": 0.1403,
-            "final_prob": 0.2231,
-            "semifinal_prob": 0.3232,
-            "quarterfinal_prob": 0.4641,
-            "r16_prob": 0.662,
-            "r32_prob": 0.9493
+            "win_prob": 0.1388,
+            "final_prob": 0.2154,
+            "semifinal_prob": 0.321,
+            "quarterfinal_prob": 0.4689,
+            "r16_prob": 0.6709,
+            "r32_prob": 0.9498
         },
         {
             "team": "Spain",
-            "win_prob": 0.1263,
-            "final_prob": 0.1986,
-            "semifinal_prob": 0.3062,
-            "quarterfinal_prob": 0.4357,
-            "r16_prob": 0.627,
-            "r32_prob": 0.9439
+            "win_prob": 0.1273,
+            "final_prob": 0.2075,
+            "semifinal_prob": 0.3112,
+            "quarterfinal_prob": 0.444,
+            "r16_prob": 0.6337,
+            "r32_prob": 0.945
         },
         {
             "team": "France",
-            "win_prob": 0.1032,
-            "final_prob": 0.172,
-            "semifinal_prob": 0.2833,
-            "quarterfinal_prob": 0.4289,
-            "r16_prob": 0.6421,
-            "r32_prob": 0.9209
+            "win_prob": 0.0986,
+            "final_prob": 0.1625,
+            "semifinal_prob": 0.2733,
+            "quarterfinal_prob": 0.4247,
+            "r16_prob": 0.6434,
+            "r32_prob": 0.9197
         },
         {
             "team": "England",
-            "win_prob": 0.078,
-            "final_prob": 0.1411,
-            "semifinal_prob": 0.2467,
-            "quarterfinal_prob": 0.4089,
-            "r16_prob": 0.6188,
-            "r32_prob": 0.9341
+            "win_prob": 0.0782,
+            "final_prob": 0.1407,
+            "semifinal_prob": 0.2421,
+            "quarterfinal_prob": 0.4074,
+            "r16_prob": 0.6186,
+            "r32_prob": 0.9339
         },
         {
             "team": "Morocco",
-            "win_prob": 0.051,
-            "final_prob": 0.0998,
-            "semifinal_prob": 0.1969,
-            "quarterfinal_prob": 0.3439,
-            "r16_prob": 0.5484,
-            "r32_prob": 0.9367
+            "win_prob": 0.0524,
+            "final_prob": 0.1007,
+            "semifinal_prob": 0.1982,
+            "quarterfinal_prob": 0.3434,
+            "r16_prob": 0.5521,
+            "r32_prob": 0.9412
         },
         {
             "team": "Portugal",
-            "win_prob": 0.0498,
-            "final_prob": 0.0949,
-            "semifinal_prob": 0.1756,
-            "quarterfinal_prob": 0.3228,
-            "r16_prob": 0.5258,
-            "r32_prob": 0.855
+            "win_prob": 0.0488,
+            "final_prob": 0.0955,
+            "semifinal_prob": 0.1777,
+            "quarterfinal_prob": 0.3232,
+            "r16_prob": 0.5288,
+            "r32_prob": 0.8587
         },
         {
             "team": "Germany",
             "win_prob": 0.0472,
-            "final_prob": 0.1003,
-            "semifinal_prob": 0.2027,
-            "quarterfinal_prob": 0.3515,
-            "r16_prob": 0.661,
-            "r32_prob": 0.9932
+            "final_prob": 0.0938,
+            "semifinal_prob": 0.1943,
+            "quarterfinal_prob": 0.3394,
+            "r16_prob": 0.6544,
+            "r32_prob": 0.9949
         },
         {
             "team": "Croatia",
-            "win_prob": 0.0404,
-            "final_prob": 0.0788,
-            "semifinal_prob": 0.1544,
-            "quarterfinal_prob": 0.285,
-            "r16_prob": 0.4849,
-            "r32_prob": 0.8418
-        },
-        {
-            "team": "Colombia",
-            "win_prob": 0.0365,
-            "final_prob": 0.0708,
-            "semifinal_prob": 0.143,
-            "quarterfinal_prob": 0.2825,
-            "r16_prob": 0.4752,
-            "r32_prob": 0.8388
-        },
-        {
-            "team": "Netherlands",
-            "win_prob": 0.036,
-            "final_prob": 0.0837,
-            "semifinal_prob": 0.1707,
-            "quarterfinal_prob": 0.3288,
-            "r16_prob": 0.5167,
-            "r32_prob": 0.9417
+            "win_prob": 0.0412,
+            "final_prob": 0.0831,
+            "semifinal_prob": 0.1596,
+            "quarterfinal_prob": 0.2842,
+            "r16_prob": 0.4859,
+            "r32_prob": 0.8462
         },
         {
             "team": "Brazil",
-            "win_prob": 0.0352,
-            "final_prob": 0.0746,
-            "semifinal_prob": 0.1515,
-            "quarterfinal_prob": 0.2901,
-            "r16_prob": 0.4894,
-            "r32_prob": 0.8997
+            "win_prob": 0.0384,
+            "final_prob": 0.0805,
+            "semifinal_prob": 0.1566,
+            "quarterfinal_prob": 0.2938,
+            "r16_prob": 0.4937,
+            "r32_prob": 0.9041
         },
         {
-            "team": "Japan",
-            "win_prob": 0.0317,
-            "final_prob": 0.0653,
-            "semifinal_prob": 0.133,
-            "quarterfinal_prob": 0.2609,
-            "r16_prob": 0.4563,
-            "r32_prob": 0.8689
+            "team": "Netherlands",
+            "win_prob": 0.037,
+            "final_prob": 0.0838,
+            "semifinal_prob": 0.1738,
+            "quarterfinal_prob": 0.331,
+            "r16_prob": 0.5114,
+            "r32_prob": 0.9389
         },
         {
             "team": "Belgium",
-            "win_prob": 0.0311,
-            "final_prob": 0.0689,
-            "semifinal_prob": 0.1418,
-            "quarterfinal_prob": 0.2945,
-            "r16_prob": 0.5487,
-            "r32_prob": 0.8928
+            "win_prob": 0.0345,
+            "final_prob": 0.0752,
+            "semifinal_prob": 0.1446,
+            "quarterfinal_prob": 0.2952,
+            "r16_prob": 0.5451,
+            "r32_prob": 0.8919
         },
         {
-            "team": "Australia",
-            "win_prob": 0.0239,
-            "final_prob": 0.0556,
-            "semifinal_prob": 0.1219,
-            "quarterfinal_prob": 0.2737,
-            "r16_prob": 0.563,
-            "r32_prob": 0.9721
+            "team": "Japan",
+            "win_prob": 0.0336,
+            "final_prob": 0.0655,
+            "semifinal_prob": 0.1345,
+            "quarterfinal_prob": 0.2607,
+            "r16_prob": 0.4433,
+            "r32_prob": 0.8669
+        },
+        {
+            "team": "Colombia",
+            "win_prob": 0.0304,
+            "final_prob": 0.0694,
+            "semifinal_prob": 0.1399,
+            "quarterfinal_prob": 0.2757,
+            "r16_prob": 0.4705,
+            "r32_prob": 0.8365
         },
         {
             "team": "Senegal",
-            "win_prob": 0.0222,
-            "final_prob": 0.0504,
-            "semifinal_prob": 0.1088,
-            "quarterfinal_prob": 0.2202,
-            "r16_prob": 0.4425,
-            "r32_prob": 0.7787
+            "win_prob": 0.0232,
+            "final_prob": 0.0535,
+            "semifinal_prob": 0.1107,
+            "quarterfinal_prob": 0.2261,
+            "r16_prob": 0.4409,
+            "r32_prob": 0.7744
+        },
+        {
+            "team": "Australia",
+            "win_prob": 0.0205,
+            "final_prob": 0.0473,
+            "semifinal_prob": 0.1143,
+            "quarterfinal_prob": 0.2675,
+            "r16_prob": 0.5562,
+            "r32_prob": 0.9717
         },
         {
             "team": "IR Iran",
-            "win_prob": 0.0171,
-            "final_prob": 0.0427,
-            "semifinal_prob": 0.0988,
-            "quarterfinal_prob": 0.2329,
-            "r16_prob": 0.4815,
-            "r32_prob": 0.8311
+            "win_prob": 0.0165,
+            "final_prob": 0.0419,
+            "semifinal_prob": 0.0956,
+            "quarterfinal_prob": 0.2279,
+            "r16_prob": 0.4765,
+            "r32_prob": 0.8433
         },
         {
             "team": "United States",
-            "win_prob": 0.0147,
-            "final_prob": 0.0394,
-            "semifinal_prob": 0.0938,
-            "quarterfinal_prob": 0.2393,
-            "r16_prob": 0.5173,
-            "r32_prob": 0.9724
+            "win_prob": 0.016,
+            "final_prob": 0.0435,
+            "semifinal_prob": 0.0956,
+            "quarterfinal_prob": 0.237,
+            "r16_prob": 0.5215,
+            "r32_prob": 0.9696
         },
         {
             "team": "Mexico",
-            "win_prob": 0.0137,
-            "final_prob": 0.04,
-            "semifinal_prob": 0.0993,
-            "quarterfinal_prob": 0.2225,
-            "r16_prob": 0.5613,
-            "r32_prob": 0.9786
+            "win_prob": 0.0154,
+            "final_prob": 0.0407,
+            "semifinal_prob": 0.1038,
+            "quarterfinal_prob": 0.2272,
+            "r16_prob": 0.5661,
+            "r32_prob": 0.9765
         },
         {
             "team": "C\u00f4te d'Ivoire",
-            "win_prob": 0.0125,
-            "final_prob": 0.034,
-            "semifinal_prob": 0.0819,
-            "quarterfinal_prob": 0.1823,
-            "r16_prob": 0.4568,
-            "r32_prob": 0.9456
-        },
-        {
-            "team": "Uruguay",
-            "win_prob": 0.0122,
-            "final_prob": 0.0305,
-            "semifinal_prob": 0.0737,
-            "quarterfinal_prob": 0.1649,
-            "r16_prob": 0.3549,
-            "r32_prob": 0.7783
+            "win_prob": 0.0123,
+            "final_prob": 0.0331,
+            "semifinal_prob": 0.0857,
+            "quarterfinal_prob": 0.1902,
+            "r16_prob": 0.4566,
+            "r32_prob": 0.9479
         },
         {
             "team": "Switzerland",
-            "win_prob": 0.0094,
-            "final_prob": 0.028,
-            "semifinal_prob": 0.075,
-            "quarterfinal_prob": 0.2012,
-            "r16_prob": 0.4718,
-            "r32_prob": 0.8803
+            "win_prob": 0.0098,
+            "final_prob": 0.0279,
+            "semifinal_prob": 0.0796,
+            "quarterfinal_prob": 0.2007,
+            "r16_prob": 0.4829,
+            "r32_prob": 0.8785
         },
         {
-            "team": "Ecuador",
-            "win_prob": 0.0082,
-            "final_prob": 0.0191,
-            "semifinal_prob": 0.0451,
-            "quarterfinal_prob": 0.118,
-            "r16_prob": 0.276,
-            "r32_prob": 0.5951
+            "team": "Uruguay",
+            "win_prob": 0.0087,
+            "final_prob": 0.0234,
+            "semifinal_prob": 0.0595,
+            "quarterfinal_prob": 0.1415,
+            "r16_prob": 0.3033,
+            "r32_prob": 0.6814
         },
         {
             "team": "Norway",
-            "win_prob": 0.0081,
-            "final_prob": 0.023,
-            "semifinal_prob": 0.0578,
-            "quarterfinal_prob": 0.1438,
-            "r16_prob": 0.3223,
-            "r32_prob": 0.6773
-        },
-        {
-            "team": "Austria",
-            "win_prob": 0.0075,
-            "final_prob": 0.0206,
-            "semifinal_prob": 0.0463,
-            "quarterfinal_prob": 0.1125,
-            "r16_prob": 0.2721,
-            "r32_prob": 0.6497
+            "win_prob": 0.0087,
+            "final_prob": 0.0233,
+            "semifinal_prob": 0.0599,
+            "quarterfinal_prob": 0.1383,
+            "r16_prob": 0.3161,
+            "r32_prob": 0.6817
         },
         {
             "team": "Egypt",
-            "win_prob": 0.0065,
-            "final_prob": 0.0199,
-            "semifinal_prob": 0.0547,
-            "quarterfinal_prob": 0.1352,
-            "r16_prob": 0.3587,
-            "r32_prob": 0.7525
+            "win_prob": 0.0078,
+            "final_prob": 0.0219,
+            "semifinal_prob": 0.0617,
+            "quarterfinal_prob": 0.1441,
+            "r16_prob": 0.3603,
+            "r32_prob": 0.7544
+        },
+        {
+            "team": "Austria",
+            "win_prob": 0.0076,
+            "final_prob": 0.02,
+            "semifinal_prob": 0.0496,
+            "quarterfinal_prob": 0.1189,
+            "r16_prob": 0.2863,
+            "r32_prob": 0.6493
         },
         {
             "team": "Algeria",
-            "win_prob": 0.0063,
-            "final_prob": 0.0146,
-            "semifinal_prob": 0.0425,
-            "quarterfinal_prob": 0.1077,
-            "r16_prob": 0.2609,
-            "r32_prob": 0.6474
+            "win_prob": 0.0065,
+            "final_prob": 0.0174,
+            "semifinal_prob": 0.0414,
+            "quarterfinal_prob": 0.109,
+            "r16_prob": 0.2634,
+            "r32_prob": 0.6436
+        },
+        {
+            "team": "Ecuador",
+            "win_prob": 0.0057,
+            "final_prob": 0.0171,
+            "semifinal_prob": 0.0398,
+            "quarterfinal_prob": 0.1126,
+            "r16_prob": 0.2823,
+            "r32_prob": 0.6044
         },
         {
             "team": "Korea Republic",
-            "win_prob": 0.0045,
-            "final_prob": 0.0161,
-            "semifinal_prob": 0.0521,
-            "quarterfinal_prob": 0.1455,
-            "r16_prob": 0.4291,
-            "r32_prob": 0.9149
+            "win_prob": 0.0056,
+            "final_prob": 0.0169,
+            "semifinal_prob": 0.0551,
+            "quarterfinal_prob": 0.1474,
+            "r16_prob": 0.4221,
+            "r32_prob": 0.9132
         },
         {
             "team": "Panama",
-            "win_prob": 0.0042,
-            "final_prob": 0.0131,
-            "semifinal_prob": 0.0355,
-            "quarterfinal_prob": 0.0957,
-            "r16_prob": 0.2294,
-            "r32_prob": 0.5633
+            "win_prob": 0.0047,
+            "final_prob": 0.0159,
+            "semifinal_prob": 0.0388,
+            "quarterfinal_prob": 0.0989,
+            "r16_prob": 0.2303,
+            "r32_prob": 0.5596
         },
         {
             "team": "T\u00fcrkiye",
-            "win_prob": 0.0032,
-            "final_prob": 0.0111,
-            "semifinal_prob": 0.0346,
-            "quarterfinal_prob": 0.0817,
-            "r16_prob": 0.2038,
-            "r32_prob": 0.4917
+            "win_prob": 0.0041,
+            "final_prob": 0.0115,
+            "semifinal_prob": 0.0355,
+            "quarterfinal_prob": 0.0889,
+            "r16_prob": 0.21,
+            "r32_prob": 0.5043
         },
         {
             "team": "Uzbekistan",
-            "win_prob": 0.0032,
-            "final_prob": 0.0088,
-            "semifinal_prob": 0.0283,
-            "quarterfinal_prob": 0.0815,
-            "r16_prob": 0.2098,
-            "r32_prob": 0.574
-        },
-        {
-            "team": "Canada",
-            "win_prob": 0.0031,
-            "final_prob": 0.0076,
-            "semifinal_prob": 0.0284,
-            "quarterfinal_prob": 0.089,
-            "r16_prob": 0.2531,
-            "r32_prob": 0.618
-        },
-        {
-            "team": "Czechia",
-            "win_prob": 0.0024,
-            "final_prob": 0.0069,
-            "semifinal_prob": 0.0192,
-            "quarterfinal_prob": 0.0579,
-            "r16_prob": 0.1654,
-            "r32_prob": 0.4025
+            "win_prob": 0.0035,
+            "final_prob": 0.0101,
+            "semifinal_prob": 0.029,
+            "quarterfinal_prob": 0.0839,
+            "r16_prob": 0.2129,
+            "r32_prob": 0.5723
         },
         {
             "team": "Scotland",
-            "win_prob": 0.0023,
-            "final_prob": 0.0096,
-            "semifinal_prob": 0.0336,
-            "quarterfinal_prob": 0.1009,
-            "r16_prob": 0.2689,
-            "r32_prob": 0.7703
+            "win_prob": 0.0029,
+            "final_prob": 0.0113,
+            "semifinal_prob": 0.0342,
+            "quarterfinal_prob": 0.1056,
+            "r16_prob": 0.274,
+            "r32_prob": 0.7743
         },
         {
             "team": "Sweden",
-            "win_prob": 0.0016,
-            "final_prob": 0.0091,
-            "semifinal_prob": 0.0349,
-            "quarterfinal_prob": 0.1153,
-            "r16_prob": 0.3223,
-            "r32_prob": 0.9268
+            "win_prob": 0.0027,
+            "final_prob": 0.0098,
+            "semifinal_prob": 0.0317,
+            "quarterfinal_prob": 0.116,
+            "r16_prob": 0.3295,
+            "r32_prob": 0.928
+        },
+        {
+            "team": "Canada",
+            "win_prob": 0.0026,
+            "final_prob": 0.0084,
+            "semifinal_prob": 0.0289,
+            "quarterfinal_prob": 0.0873,
+            "r16_prob": 0.2652,
+            "r32_prob": 0.6182
         },
         {
             "team": "Qatar",
-            "win_prob": 0.0013,
-            "final_prob": 0.0074,
+            "win_prob": 0.0025,
+            "final_prob": 0.007,
             "semifinal_prob": 0.024,
-            "quarterfinal_prob": 0.0905,
-            "r16_prob": 0.293,
-            "r32_prob": 0.756
+            "quarterfinal_prob": 0.0874,
+            "r16_prob": 0.291,
+            "r32_prob": 0.7466
+        },
+        {
+            "team": "Czechia",
+            "win_prob": 0.0021,
+            "final_prob": 0.0068,
+            "semifinal_prob": 0.0193,
+            "quarterfinal_prob": 0.0606,
+            "r16_prob": 0.1669,
+            "r32_prob": 0.408
         },
         {
             "team": "Iraq",
-            "win_prob": 0.0013,
-            "final_prob": 0.0039,
-            "semifinal_prob": 0.0117,
-            "quarterfinal_prob": 0.037,
-            "r16_prob": 0.1006,
-            "r32_prob": 0.2805
+            "win_prob": 0.0009,
+            "final_prob": 0.0025,
+            "semifinal_prob": 0.0118,
+            "quarterfinal_prob": 0.0362,
+            "r16_prob": 0.0999,
+            "r32_prob": 0.2838
         },
         {
             "team": "Congo DR",
-            "win_prob": 0.001,
-            "final_prob": 0.0035,
-            "semifinal_prob": 0.0138,
-            "quarterfinal_prob": 0.0442,
-            "r16_prob": 0.1273,
-            "r32_prob": 0.387
-        },
-        {
-            "team": "Saudi Arabia",
-            "win_prob": 0.0006,
-            "final_prob": 0.0035,
-            "semifinal_prob": 0.0105,
-            "quarterfinal_prob": 0.0378,
-            "r16_prob": 0.123,
-            "r32_prob": 0.4438
-        },
-        {
-            "team": "Tunisia",
-            "win_prob": 0.0006,
-            "final_prob": 0.0016,
-            "semifinal_prob": 0.0049,
-            "quarterfinal_prob": 0.0161,
-            "r16_prob": 0.0419,
-            "r32_prob": 0.1189
+            "win_prob": 0.0008,
+            "final_prob": 0.004,
+            "semifinal_prob": 0.0134,
+            "quarterfinal_prob": 0.042,
+            "r16_prob": 0.1264,
+            "r32_prob": 0.3926
         },
         {
             "team": "Cabo Verde",
-            "win_prob": 0.0004,
-            "final_prob": 0.0024,
-            "semifinal_prob": 0.0114,
-            "quarterfinal_prob": 0.0314,
-            "r16_prob": 0.1186,
-            "r32_prob": 0.4661
+            "win_prob": 0.0007,
+            "final_prob": 0.0019,
+            "semifinal_prob": 0.0098,
+            "quarterfinal_prob": 0.0331,
+            "r16_prob": 0.1113,
+            "r32_prob": 0.4654
         },
         {
-            "team": "South Africa",
+            "team": "Ghana",
             "win_prob": 0.0004,
-            "final_prob": 0.0018,
-            "semifinal_prob": 0.0073,
-            "quarterfinal_prob": 0.0291,
-            "r16_prob": 0.1058,
-            "r32_prob": 0.327
+            "final_prob": 0.0015,
+            "semifinal_prob": 0.0043,
+            "quarterfinal_prob": 0.0183,
+            "r16_prob": 0.071,
+            "r32_prob": 0.281
         },
         {
             "team": "Bosnia and Herzegovina",
             "win_prob": 0.0004,
-            "final_prob": 0.0009,
-            "semifinal_prob": 0.006,
-            "quarterfinal_prob": 0.0235,
-            "r16_prob": 0.1011,
-            "r32_prob": 0.3531
-        },
-        {
-            "team": "Ghana",
-            "win_prob": 0.0002,
-            "final_prob": 0.0011,
-            "semifinal_prob": 0.0047,
-            "quarterfinal_prob": 0.0193,
-            "r16_prob": 0.0709,
-            "r32_prob": 0.2813
+            "final_prob": 0.0012,
+            "semifinal_prob": 0.0074,
+            "quarterfinal_prob": 0.0258,
+            "r16_prob": 0.0998,
+            "r32_prob": 0.3453
         },
         {
             "team": "Paraguay",
-            "win_prob": 0.0001,
-            "final_prob": 0.001,
-            "semifinal_prob": 0.0045,
-            "quarterfinal_prob": 0.0155,
-            "r16_prob": 0.0558,
-            "r32_prob": 0.2021
+            "win_prob": 0.0004,
+            "final_prob": 0.0008,
+            "semifinal_prob": 0.0039,
+            "quarterfinal_prob": 0.0148,
+            "r16_prob": 0.0581,
+            "r32_prob": 0.201
         },
         {
-            "team": "Cura\u00e7ao",
-            "win_prob": 0.0001,
-            "final_prob": 0.0002,
-            "semifinal_prob": 0.0012,
-            "quarterfinal_prob": 0.0055,
-            "r16_prob": 0.0262,
-            "r32_prob": 0.1115
+            "team": "Saudi Arabia",
+            "win_prob": 0.0003,
+            "final_prob": 0.0028,
+            "semifinal_prob": 0.0109,
+            "quarterfinal_prob": 0.042,
+            "r16_prob": 0.1381,
+            "r32_prob": 0.5184
         },
         {
-            "team": "New Zealand",
-            "win_prob": 0.0001,
-            "final_prob": 0.0001,
-            "semifinal_prob": 0.0016,
-            "quarterfinal_prob": 0.01,
-            "r16_prob": 0.0641,
-            "r32_prob": 0.2526
+            "team": "South Africa",
+            "win_prob": 0.0002,
+            "final_prob": 0.0018,
+            "semifinal_prob": 0.0077,
+            "quarterfinal_prob": 0.0285,
+            "r16_prob": 0.0986,
+            "r32_prob": 0.3165
         },
         {
             "team": "Jordan",
+            "win_prob": 0.0001,
+            "final_prob": 0.0001,
+            "semifinal_prob": 0.0022,
+            "quarterfinal_prob": 0.0131,
+            "r16_prob": 0.0727,
+            "r32_prob": 0.3816
+        },
+        {
+            "team": "Tunisia",
             "win_prob": 0.0,
-            "final_prob": 0.0005,
-            "semifinal_prob": 0.0025,
-            "quarterfinal_prob": 0.0156,
-            "r16_prob": 0.073,
-            "r32_prob": 0.3705
+            "final_prob": 0.0009,
+            "semifinal_prob": 0.0038,
+            "quarterfinal_prob": 0.0148,
+            "r16_prob": 0.04,
+            "r32_prob": 0.1185
         },
         {
             "team": "Haiti",
             "win_prob": 0.0,
-            "final_prob": 0.0001,
-            "semifinal_prob": 0.0007,
-            "quarterfinal_prob": 0.0052,
-            "r16_prob": 0.0215,
-            "r32_prob": 0.1122
+            "final_prob": 0.0002,
+            "semifinal_prob": 0.0014,
+            "quarterfinal_prob": 0.0056,
+            "r16_prob": 0.0232,
+            "r32_prob": 0.1129
+        },
+        {
+            "team": "New Zealand",
+            "win_prob": 0.0,
+            "final_prob": 0.0,
+            "semifinal_prob": 0.002,
+            "quarterfinal_prob": 0.0111,
+            "r16_prob": 0.0664,
+            "r32_prob": 0.2445
+        },
+        {
+            "team": "Cura\u00e7ao",
+            "win_prob": 0.0,
+            "final_prob": 0.0,
+            "semifinal_prob": 0.0009,
+            "quarterfinal_prob": 0.0061,
+            "r16_prob": 0.0284,
+            "r32_prob": 0.1096
         }
     ]
 }
