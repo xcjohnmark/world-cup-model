@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-16T00:23:06.074286+00:00",
+  "scraped_at": "2026-06-16T05:42:26.466306+00:00",
   "groups": {
     "Group A": [
       {
@@ -279,6 +279,28 @@
     ],
     "Group G": [
       {
+        "team": "New Zealand",
+        "played": 1,
+        "won": 0,
+        "drawn": 1,
+        "lost": 0,
+        "points": 1,
+        "goals_for": 2,
+        "goals_against": 2,
+        "goal_difference": 0
+      },
+      {
+        "team": "IR Iran",
+        "played": 1,
+        "won": 0,
+        "drawn": 1,
+        "lost": 0,
+        "points": 1,
+        "goals_for": 2,
+        "goals_against": 2,
+        "goal_difference": 0
+      },
+      {
         "team": "Belgium",
         "played": 1,
         "won": 0,
@@ -298,28 +320,6 @@
         "points": 1,
         "goals_for": 1,
         "goals_against": 1,
-        "goal_difference": 0
-      },
-      {
-        "team": "IR Iran",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "New Zealand",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
         "goal_difference": 0
       }
     ],
