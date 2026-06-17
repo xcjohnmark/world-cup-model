@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-17T18:39:21.761968+00:00",
+  "scraped_at": "2026-06-17T21:00:36.060064+00:00",
   "groups": {
     "Group A": [
       {
@@ -463,18 +463,29 @@
     ],
     "Group K": [
       {
-        "team": "Portugal",
-        "played": 0,
+        "team": "Congo DR",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
         "goal_difference": 0
       },
       {
-        "team": "Congo DR",
+        "team": "Portugal",
+        "played": 1,
+        "won": 0,
+        "drawn": 1,
+        "lost": 0,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 1,
+        "goal_difference": 0
+      },
+      {
+        "team": "Colombia",
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -486,17 +497,6 @@
       },
       {
         "team": "Uzbekistan",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "Colombia",
         "played": 0,
         "won": 0,
         "drawn": 0,
