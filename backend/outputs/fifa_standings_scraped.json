@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-17T01:59:27.247986+00:00",
+  "scraped_at": "2026-06-17T07:09:00.044325+00:00",
   "groups": {
     "Group A": [
       {
@@ -418,47 +418,47 @@
     "Group J": [
       {
         "team": "Argentina",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
+        "points": 3,
+        "goals_for": 3,
         "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "Algeria",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goal_difference": 3
       },
       {
         "team": "Austria",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 1,
+        "goal_difference": 2
       },
       {
         "team": "Jordan",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
+        "points": 0,
+        "goals_for": 1,
+        "goals_against": 3,
+        "goal_difference": -2
+      },
+      {
+        "team": "Algeria",
+        "played": 1,
+        "won": 0,
+        "drawn": 0,
+        "lost": 1,
         "points": 0,
         "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_against": 3,
+        "goal_difference": -3
       }
     ],
     "Group K": [
