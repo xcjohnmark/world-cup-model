@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-16T23:24:28.264618+00:00",
+  "scraped_at": "2026-06-17T01:59:27.247986+00:00",
   "groups": {
     "Group A": [
       {
@@ -371,6 +371,17 @@
     ],
     "Group I": [
       {
+        "team": "Norway",
+        "played": 1,
+        "won": 1,
+        "drawn": 0,
+        "lost": 0,
+        "points": 3,
+        "goals_for": 4,
+        "goals_against": 1,
+        "goal_difference": 3
+      },
+      {
         "team": "France",
         "played": 1,
         "won": 1,
@@ -382,28 +393,6 @@
         "goal_difference": 2
       },
       {
-        "team": "Norway",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
-        "team": "Iraq",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
         "team": "Senegal",
         "played": 1,
         "won": 0,
@@ -413,6 +402,17 @@
         "goals_for": 1,
         "goals_against": 3,
         "goal_difference": -2
+      },
+      {
+        "team": "Iraq",
+        "played": 1,
+        "won": 0,
+        "drawn": 0,
+        "lost": 1,
+        "points": 0,
+        "goals_for": 1,
+        "goals_against": 4,
+        "goal_difference": -3
       }
     ],
     "Group J": [
