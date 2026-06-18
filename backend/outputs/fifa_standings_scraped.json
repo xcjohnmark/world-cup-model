@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-18T16:21:52.453264+00:00",
+  "scraped_at": "2026-06-18T18:40:08.028051+00:00",
   "groups": {
     "Group A": [
       {
@@ -26,24 +26,24 @@
       },
       {
         "team": "Czechia",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 0,
-        "goals_for": 1,
-        "goals_against": 2,
+        "points": 1,
+        "goals_for": 2,
+        "goals_against": 3,
         "goal_difference": -1
       },
       {
         "team": "South Africa",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 2,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 3,
         "goal_difference": -2
       }
     ],
