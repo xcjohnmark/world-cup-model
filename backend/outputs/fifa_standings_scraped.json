@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-18T00:07:08.585471+00:00",
+  "scraped_at": "2026-06-18T05:12:16.496334+00:00",
   "groups": {
     "Group A": [
       {
@@ -463,6 +463,17 @@
     ],
     "Group K": [
       {
+        "team": "Colombia",
+        "played": 1,
+        "won": 1,
+        "drawn": 0,
+        "lost": 0,
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 1,
+        "goal_difference": 2
+      },
+      {
         "team": "Congo DR",
         "played": 1,
         "won": 0,
@@ -485,26 +496,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Colombia",
-        "played": 0,
-        "won": 0,
-        "drawn": 0,
-        "lost": 0,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
-      },
-      {
         "team": "Uzbekistan",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_for": 1,
+        "goals_against": 3,
+        "goal_difference": -2
       }
     ],
     "Group L": [
@@ -520,26 +520,26 @@
         "goal_difference": 2
       },
       {
-        "team": "Panama",
-        "played": 0,
-        "won": 0,
+        "team": "Ghana",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "points": 0,
-        "goals_for": 0,
+        "points": 3,
+        "goals_for": 1,
         "goals_against": 0,
-        "goal_difference": 0
+        "goal_difference": 1
       },
       {
-        "team": "Ghana",
-        "played": 0,
+        "team": "Panama",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 0,
         "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
+        "goals_against": 1,
+        "goal_difference": -1
       },
       {
         "team": "Croatia",
