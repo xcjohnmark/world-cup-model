@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-18T23:14:49.342219+00:00",
+  "scraped_at": "2026-06-19T02:12:18.144725+00:00",
   "groups": {
     "Group A": [
       {
@@ -49,6 +49,17 @@
     ],
     "Group B": [
       {
+        "team": "Canada",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "points": 4,
+        "goals_for": 7,
+        "goals_against": 1,
+        "goal_difference": 6
+      },
+      {
         "team": "Switzerland",
         "played": 2,
         "won": 1,
@@ -60,28 +71,6 @@
         "goal_difference": 3
       },
       {
-        "team": "Canada",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 1,
-        "goals_against": 1,
-        "goal_difference": 0
-      },
-      {
-        "team": "Qatar",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 1,
-        "goals_against": 1,
-        "goal_difference": 0
-      },
-      {
         "team": "Bosnia and Herzegovina",
         "played": 2,
         "won": 0,
@@ -91,6 +80,17 @@
         "goals_for": 2,
         "goals_against": 5,
         "goal_difference": -3
+      },
+      {
+        "team": "Qatar",
+        "played": 2,
+        "won": 0,
+        "drawn": 1,
+        "lost": 1,
+        "points": 1,
+        "goals_for": 1,
+        "goals_against": 7,
+        "goal_difference": -6
       }
     ],
     "Group C": [
