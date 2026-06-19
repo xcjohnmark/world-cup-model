@@ -1,28 +1,28 @@
 {
-  "scraped_at": "2026-06-19T02:12:18.144725+00:00",
+  "scraped_at": "2026-06-19T07:35:52.155147+00:00",
   "groups": {
     "Group A": [
       {
         "team": "Mexico",
-        "played": 1,
-        "won": 1,
+        "played": 2,
+        "won": 2,
         "drawn": 0,
         "lost": 0,
-        "points": 3,
-        "goals_for": 2,
+        "points": 6,
+        "goals_for": 3,
         "goals_against": 0,
-        "goal_difference": 2
+        "goal_difference": 3
       },
       {
         "team": "Korea Republic",
-        "played": 1,
+        "played": 2,
         "won": 1,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 3,
         "goals_for": 2,
-        "goals_against": 1,
-        "goal_difference": 1
+        "goals_against": 2,
+        "goal_difference": 0
       },
       {
         "team": "Czechia",
