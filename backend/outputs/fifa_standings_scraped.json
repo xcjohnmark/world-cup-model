@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-19T23:59:03.336683+00:00",
+  "scraped_at": "2026-06-20T03:27:42.697930+00:00",
   "groups": {
     "Group A": [
       {
@@ -95,6 +95,17 @@
     ],
     "Group C": [
       {
+        "team": "Brazil",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "points": 4,
+        "goals_for": 4,
+        "goals_against": 1,
+        "goal_difference": 3
+      },
+      {
         "team": "Morocco",
         "played": 2,
         "won": 1,
@@ -117,26 +128,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Brazil",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 1,
-        "goals_against": 1,
-        "goal_difference": 0
-      },
-      {
         "team": "Haiti",
-        "played": 1,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "points": 0,
         "goals_for": 0,
-        "goals_against": 1,
-        "goal_difference": -1
+        "goals_against": 4,
+        "goal_difference": -4
       }
     ],
     "Group D": [
