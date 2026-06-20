@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-20T17:52:16.264220+00:00",
+  "scraped_at": "2026-06-20T19:08:17.976103+00:00",
   "groups": {
     "Group A": [
       {
@@ -233,29 +233,29 @@
     ],
     "Group F": [
       {
-        "team": "Sweden",
-        "played": 1,
+        "team": "Netherlands",
+        "played": 2,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "points": 3,
-        "goals_for": 5,
-        "goals_against": 1,
+        "points": 4,
+        "goals_for": 7,
+        "goals_against": 3,
         "goal_difference": 4
       },
       {
-        "team": "Japan",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 2,
-        "goals_against": 2,
+        "team": "Sweden",
+        "played": 2,
+        "won": 1,
+        "drawn": 0,
+        "lost": 1,
+        "points": 3,
+        "goals_for": 6,
+        "goals_against": 6,
         "goal_difference": 0
       },
       {
-        "team": "Netherlands",
+        "team": "Japan",
         "played": 1,
         "won": 0,
         "drawn": 1,
