@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-20T21:59:08.179782+00:00",
+  "scraped_at": "2026-06-20T23:07:11.196677+00:00",
   "groups": {
     "Group A": [
       {
@@ -188,25 +188,25 @@
     "Group E": [
       {
         "team": "Germany",
-        "played": 1,
-        "won": 1,
+        "played": 2,
+        "won": 2,
         "drawn": 0,
         "lost": 0,
-        "points": 3,
-        "goals_for": 7,
-        "goals_against": 1,
-        "goal_difference": 6
+        "points": 6,
+        "goals_for": 9,
+        "goals_against": 2,
+        "goal_difference": 7
       },
       {
         "team": "C\u00f4te d'Ivoire",
-        "played": 1,
+        "played": 2,
         "won": 1,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 3,
-        "goals_for": 1,
-        "goals_against": 0,
-        "goal_difference": 1
+        "goals_for": 2,
+        "goals_against": 2,
+        "goal_difference": 0
       },
       {
         "team": "Ecuador",
