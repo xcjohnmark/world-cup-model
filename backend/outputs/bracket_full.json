@@ -642,9 +642,9 @@
                     "draw_prob": 0.1746,
                     "team_b": "Saudi Arabia",
                     "team_b_prob": 0.0708,
-                    "actual_result": null,
-                    "actual_team_a_score": null,
-                    "actual_team_b_score": null
+                    "actual_result": "team_a",
+                    "actual_team_a_score": 4,
+                    "actual_team_b_score": 0
                 },
                 {
                     "match_id": "G040",
