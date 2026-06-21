@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-21T01:45:07.294925+00:00",
+  "scraped_at": "2026-06-21T06:42:51.502869+00:00",
   "groups": {
     "Group A": [
       {
@@ -210,22 +210,22 @@
       },
       {
         "team": "Ecuador",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 0,
+        "points": 1,
         "goals_for": 0,
         "goals_against": 1,
         "goal_difference": -1
       },
       {
         "team": "Cura\u00e7ao",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 0,
+        "points": 1,
         "goals_for": 1,
         "goals_against": 7,
         "goal_difference": -6
@@ -244,6 +244,17 @@
         "goal_difference": 4
       },
       {
+        "team": "Japan",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "points": 4,
+        "goals_for": 6,
+        "goals_against": 2,
+        "goal_difference": 4
+      },
+      {
         "team": "Sweden",
         "played": 2,
         "won": 1,
@@ -255,26 +266,15 @@
         "goal_difference": 0
       },
       {
-        "team": "Japan",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 2,
-        "goals_against": 2,
-        "goal_difference": 0
-      },
-      {
         "team": "Tunisia",
-        "played": 1,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "points": 0,
         "goals_for": 1,
-        "goals_against": 5,
-        "goal_difference": -4
+        "goals_against": 9,
+        "goal_difference": -8
       }
     ],
     "Group G": [
