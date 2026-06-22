@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-21T22:59:18.756917+00:00",
+  "scraped_at": "2026-06-22T00:11:08.782296+00:00",
   "groups": {
     "Group A": [
       {
@@ -337,13 +337,24 @@
       },
       {
         "team": "Uruguay",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
-        "points": 1,
-        "goals_for": 1,
-        "goals_against": 1,
+        "points": 2,
+        "goals_for": 3,
+        "goals_against": 3,
+        "goal_difference": 0
+      },
+      {
+        "team": "Cabo Verde",
+        "played": 2,
+        "won": 0,
+        "drawn": 2,
+        "lost": 0,
+        "points": 2,
+        "goals_for": 2,
+        "goals_against": 2,
         "goal_difference": 0
       },
       {
@@ -356,17 +367,6 @@
         "goals_for": 1,
         "goals_against": 5,
         "goal_difference": -4
-      },
-      {
-        "team": "Cabo Verde",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "points": 1,
-        "goals_for": 0,
-        "goals_against": 0,
-        "goal_difference": 0
       }
     ],
     "Group I": [
