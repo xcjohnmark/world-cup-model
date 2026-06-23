@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-23T01:28:36.407557+00:00",
+  "scraped_at": "2026-06-23T05:38:47.310377+00:00",
   "groups": {
     "Group A": [
       {
@@ -383,25 +383,25 @@
       },
       {
         "team": "Norway",
-        "played": 1,
-        "won": 1,
+        "played": 2,
+        "won": 2,
         "drawn": 0,
         "lost": 0,
-        "points": 3,
-        "goals_for": 4,
-        "goals_against": 1,
-        "goal_difference": 3
+        "points": 6,
+        "goals_for": 7,
+        "goals_against": 3,
+        "goal_difference": 4
       },
       {
         "team": "Senegal",
-        "played": 1,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "points": 0,
-        "goals_for": 1,
-        "goals_against": 3,
-        "goal_difference": -2
+        "goals_for": 3,
+        "goals_against": 6,
+        "goal_difference": -3
       },
       {
         "team": "Iraq",
@@ -439,25 +439,25 @@
         "goal_difference": 0
       },
       {
-        "team": "Jordan",
-        "played": 1,
-        "won": 0,
+        "team": "Algeria",
+        "played": 2,
+        "won": 1,
         "drawn": 0,
         "lost": 1,
-        "points": 0,
-        "goals_for": 1,
-        "goals_against": 3,
+        "points": 3,
+        "goals_for": 2,
+        "goals_against": 4,
         "goal_difference": -2
       },
       {
-        "team": "Algeria",
-        "played": 1,
+        "team": "Jordan",
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 3,
+        "goals_for": 2,
+        "goals_against": 5,
         "goal_difference": -3
       }
     ],
