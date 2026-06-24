@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-24T22:44:29.670806+00:00",
+  "scraped_at": "2026-06-24T23:57:27.131119+00:00",
   "groups": {
     "Group A": [
       {
@@ -107,14 +107,14 @@
       },
       {
         "team": "Morocco",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "points": 4,
-        "goals_for": 2,
-        "goals_against": 1,
-        "goal_difference": 1
+        "points": 7,
+        "goals_for": 6,
+        "goals_against": 3,
+        "goal_difference": 3
       },
       {
         "team": "Scotland",
@@ -129,14 +129,14 @@
       },
       {
         "team": "Haiti",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
+        "lost": 3,
         "points": 0,
-        "goals_for": 0,
-        "goals_against": 4,
-        "goal_difference": -4
+        "goals_for": 2,
+        "goals_against": 8,
+        "goal_difference": -6
       }
     ],
     "Group D": [
