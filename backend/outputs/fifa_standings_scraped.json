@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-23T23:51:16.900467+00:00",
+  "scraped_at": "2026-06-24T02:05:58.420999+00:00",
   "groups": {
     "Group A": [
       {
@@ -531,25 +531,25 @@
         "goal_difference": 1
       },
       {
-        "team": "Panama",
-        "played": 1,
-        "won": 0,
+        "team": "Croatia",
+        "played": 2,
+        "won": 1,
         "drawn": 0,
         "lost": 1,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 1,
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 4,
         "goal_difference": -1
       },
       {
-        "team": "Croatia",
-        "played": 1,
+        "team": "Panama",
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "points": 0,
-        "goals_for": 2,
-        "goals_against": 4,
+        "goals_for": 0,
+        "goals_against": 2,
         "goal_difference": -2
       }
     ]
