@@ -1,50 +1,50 @@
 {
-  "scraped_at": "2026-06-25T02:39:55.101480+00:00",
+  "scraped_at": "2026-06-25T06:39:38.774626+00:00",
   "groups": {
     "Group A": [
       {
         "team": "Mexico",
-        "played": 2,
-        "won": 2,
+        "played": 3,
+        "won": 3,
         "drawn": 0,
         "lost": 0,
-        "points": 6,
-        "goals_for": 3,
+        "points": 9,
+        "goals_for": 6,
         "goals_against": 0,
-        "goal_difference": 3
+        "goal_difference": 6
       },
       {
-        "team": "Korea Republic",
-        "played": 2,
+        "team": "South Africa",
+        "played": 3,
         "won": 1,
-        "drawn": 0,
-        "lost": 1,
-        "points": 3,
-        "goals_for": 2,
-        "goals_against": 2,
-        "goal_difference": 0
-      },
-      {
-        "team": "Czechia",
-        "played": 2,
-        "won": 0,
         "drawn": 1,
         "lost": 1,
-        "points": 1,
+        "points": 4,
         "goals_for": 2,
         "goals_against": 3,
         "goal_difference": -1
       },
       {
-        "team": "South Africa",
-        "played": 2,
+        "team": "Korea Republic",
+        "played": 3,
+        "won": 1,
+        "drawn": 0,
+        "lost": 2,
+        "points": 3,
+        "goals_for": 2,
+        "goals_against": 3,
+        "goal_difference": -1
+      },
+      {
+        "team": "Czechia",
+        "played": 3,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
+        "lost": 2,
         "points": 1,
-        "goals_for": 1,
-        "goals_against": 3,
-        "goal_difference": -2
+        "goals_for": 2,
+        "goals_against": 6,
+        "goal_difference": -4
       }
     ],
     "Group B": [
