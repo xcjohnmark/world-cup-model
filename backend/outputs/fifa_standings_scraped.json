@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-25T20:28:05.987670+00:00",
+  "scraped_at": "2026-06-25T22:00:39.347617+00:00",
   "groups": {
     "Group A": [
       {
@@ -188,47 +188,47 @@
     "Group E": [
       {
         "team": "Germany",
-        "played": 2,
+        "played": 3,
         "won": 2,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 6,
-        "goals_for": 9,
-        "goals_against": 2,
-        "goal_difference": 7
+        "goals_for": 10,
+        "goals_against": 4,
+        "goal_difference": 6
       },
       {
         "team": "C\u00f4te d'Ivoire",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 0,
         "lost": 1,
-        "points": 3,
+        "points": 6,
+        "goals_for": 4,
+        "goals_against": 2,
+        "goal_difference": 2
+      },
+      {
+        "team": "Ecuador",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "points": 4,
         "goals_for": 2,
         "goals_against": 2,
         "goal_difference": 0
       },
       {
-        "team": "Ecuador",
-        "played": 2,
-        "won": 0,
-        "drawn": 1,
-        "lost": 1,
-        "points": 1,
-        "goals_for": 0,
-        "goals_against": 1,
-        "goal_difference": -1
-      },
-      {
         "team": "Cura\u00e7ao",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
+        "lost": 2,
         "points": 1,
         "goals_for": 1,
-        "goals_against": 7,
-        "goal_difference": -6
+        "goals_against": 9,
+        "goal_difference": -8
       }
     ],
     "Group F": [
