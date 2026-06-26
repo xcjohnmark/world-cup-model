@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-26T01:35:19.425994+00:00",
+  "scraped_at": "2026-06-26T06:00:50.777846+00:00",
   "groups": {
     "Group A": [
       {
@@ -142,47 +142,47 @@
     "Group D": [
       {
         "team": "United States",
-        "played": 2,
+        "played": 3,
         "won": 2,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "points": 6,
-        "goals_for": 6,
-        "goals_against": 1,
-        "goal_difference": 5
+        "goals_for": 8,
+        "goals_against": 4,
+        "goal_difference": 4
       },
       {
         "team": "Australia",
-        "played": 2,
+        "played": 3,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 3,
+        "points": 4,
         "goals_for": 2,
         "goals_against": 2,
         "goal_difference": 0
       },
       {
         "team": "Paraguay",
-        "played": 2,
+        "played": 3,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "points": 3,
+        "points": 4,
         "goals_for": 2,
         "goals_against": 4,
         "goal_difference": -2
       },
       {
         "team": "T\u00fcrkiye",
-        "played": 2,
-        "won": 0,
+        "played": 3,
+        "won": 1,
         "drawn": 0,
         "lost": 2,
-        "points": 0,
-        "goals_for": 0,
-        "goals_against": 3,
-        "goal_difference": -3
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 5,
+        "goal_difference": -2
       }
     ],
     "Group E": [
