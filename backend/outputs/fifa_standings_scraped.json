@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-26T21:02:28.899106+00:00",
+  "scraped_at": "2026-06-26T22:41:15.096244+00:00",
   "groups": {
     "Group A": [
       {
@@ -394,25 +394,25 @@
       },
       {
         "team": "Senegal",
-        "played": 2,
-        "won": 0,
+        "played": 3,
+        "won": 1,
         "drawn": 0,
         "lost": 2,
-        "points": 0,
-        "goals_for": 3,
+        "points": 3,
+        "goals_for": 8,
         "goals_against": 6,
-        "goal_difference": -3
+        "goal_difference": 2
       },
       {
         "team": "Iraq",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
+        "lost": 3,
         "points": 0,
         "goals_for": 1,
-        "goals_against": 7,
-        "goal_difference": -6
+        "goals_against": 12,
+        "goal_difference": -11
       }
     ],
     "Group J": [
