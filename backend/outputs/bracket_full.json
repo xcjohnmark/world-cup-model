@@ -494,9 +494,9 @@
                     "draw_prob": 0.174,
                     "team_b": "Netherlands",
                     "team_b_prob": 0.6925,
-                    "actual_result": null,
-                    "actual_team_a_score": null,
-                    "actual_team_b_score": null
+                    "actual_result": "team_b",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 3
                 },
                 {
                     "match_id": "G057",
@@ -506,9 +506,9 @@
                     "draw_prob": 0.2396,
                     "team_b": "Sweden",
                     "team_b_prob": 0.1549,
-                    "actual_result": null,
-                    "actual_team_a_score": null,
-                    "actual_team_b_score": null
+                    "actual_result": "draw",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 1
                 }
             ],
             "predicted_qualifiers": [
@@ -1439,7 +1439,7 @@
     },
     "simulation_summary": {
         "total_simulations": 1000,
-        "run_date": "2026-06-25",
+        "run_date": "2026-06-26",
         "champion_probabilities": {
             "Argentina": 0.157,
             "Spain": 0.131,
