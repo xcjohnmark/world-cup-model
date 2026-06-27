@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-27T02:03:15.773165+00:00",
+  "scraped_at": "2026-06-27T06:07:02.813986+00:00",
   "groups": {
     "Group A": [
       {
@@ -279,48 +279,48 @@
     ],
     "Group G": [
       {
-        "team": "Egypt",
-        "played": 2,
+        "team": "Belgium",
+        "played": 3,
         "won": 1,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
-        "points": 4,
-        "goals_for": 4,
+        "points": 5,
+        "goals_for": 6,
         "goals_against": 2,
+        "goal_difference": 4
+      },
+      {
+        "team": "Egypt",
+        "played": 3,
+        "won": 1,
+        "drawn": 2,
+        "lost": 0,
+        "points": 5,
+        "goals_for": 5,
+        "goals_against": 3,
         "goal_difference": 2
       },
       {
         "team": "IR Iran",
-        "played": 2,
+        "played": 3,
         "won": 0,
-        "drawn": 2,
+        "drawn": 3,
         "lost": 0,
-        "points": 2,
-        "goals_for": 2,
-        "goals_against": 2,
-        "goal_difference": 0
-      },
-      {
-        "team": "Belgium",
-        "played": 2,
-        "won": 0,
-        "drawn": 2,
-        "lost": 0,
-        "points": 2,
-        "goals_for": 1,
-        "goals_against": 1,
+        "points": 3,
+        "goals_for": 3,
+        "goals_against": 3,
         "goal_difference": 0
       },
       {
         "team": "New Zealand",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
+        "lost": 2,
         "points": 1,
-        "goals_for": 3,
-        "goals_against": 5,
-        "goal_difference": -2
+        "goals_for": 4,
+        "goals_against": 10,
+        "goal_difference": -6
       }
     ],
     "Group H": [

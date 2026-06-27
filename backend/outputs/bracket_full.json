@@ -580,9 +580,9 @@
                     "draw_prob": 0.2766,
                     "team_b": "IR Iran",
                     "team_b_prob": 0.4908,
-                    "actual_result": null,
-                    "actual_team_a_score": null,
-                    "actual_team_b_score": null
+                    "actual_result": "draw",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 1
                 },
                 {
                     "match_id": "G062",
@@ -592,9 +592,9 @@
                     "draw_prob": 0.1092,
                     "team_b": "Belgium",
                     "team_b_prob": 0.782,
-                    "actual_result": null,
-                    "actual_team_a_score": null,
-                    "actual_team_b_score": null
+                    "actual_result": "team_b",
+                    "actual_team_a_score": 1,
+                    "actual_team_b_score": 5
                 }
             ],
             "predicted_qualifiers": [
