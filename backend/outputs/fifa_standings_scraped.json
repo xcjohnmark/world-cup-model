@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-27T22:53:13.162640+00:00",
+  "scraped_at": "2026-06-27T23:53:05.454252+00:00",
   "groups": {
     "Group A": [
       {
@@ -510,47 +510,47 @@
     "Group L": [
       {
         "team": "England",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "points": 4,
-        "goals_for": 4,
+        "points": 7,
+        "goals_for": 6,
         "goals_against": 2,
-        "goal_difference": 2
-      },
-      {
-        "team": "Ghana",
-        "played": 2,
-        "won": 1,
-        "drawn": 1,
-        "lost": 0,
-        "points": 4,
-        "goals_for": 1,
-        "goals_against": 0,
-        "goal_difference": 1
+        "goal_difference": 4
       },
       {
         "team": "Croatia",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 0,
         "lost": 1,
-        "points": 3,
-        "goals_for": 3,
-        "goals_against": 4,
-        "goal_difference": -1
+        "points": 6,
+        "goals_for": 5,
+        "goals_against": 5,
+        "goal_difference": 0
+      },
+      {
+        "team": "Ghana",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "points": 4,
+        "goals_for": 2,
+        "goals_against": 2,
+        "goal_difference": 0
       },
       {
         "team": "Panama",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
+        "lost": 3,
         "points": 0,
         "goals_for": 0,
-        "goals_against": 2,
-        "goal_difference": -2
+        "goals_against": 4,
+        "goal_difference": -4
       }
     ]
   }
