@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-06-26T23:53:43.135083+00:00",
+  "scraped_at": "2026-06-27T02:03:15.773165+00:00",
   "groups": {
     "Group A": [
       {
@@ -326,44 +326,44 @@
     "Group H": [
       {
         "team": "Spain",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "points": 4,
-        "goals_for": 4,
+        "points": 7,
+        "goals_for": 5,
         "goals_against": 0,
-        "goal_difference": 4
-      },
-      {
-        "team": "Uruguay",
-        "played": 2,
-        "won": 0,
-        "drawn": 2,
-        "lost": 0,
-        "points": 2,
-        "goals_for": 3,
-        "goals_against": 3,
-        "goal_difference": 0
+        "goal_difference": 5
       },
       {
         "team": "Cabo Verde",
-        "played": 2,
+        "played": 3,
         "won": 0,
-        "drawn": 2,
+        "drawn": 3,
         "lost": 0,
-        "points": 2,
+        "points": 3,
         "goals_for": 2,
         "goals_against": 2,
         "goal_difference": 0
       },
       {
-        "team": "Saudi Arabia",
-        "played": 2,
+        "team": "Uruguay",
+        "played": 3,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 1,
-        "points": 1,
+        "points": 2,
+        "goals_for": 3,
+        "goals_against": 4,
+        "goal_difference": -1
+      },
+      {
+        "team": "Saudi Arabia",
+        "played": 3,
+        "won": 0,
+        "drawn": 2,
+        "lost": 1,
+        "points": 2,
         "goals_for": 1,
         "goals_against": 5,
         "goal_difference": -4
