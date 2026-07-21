@@ -12,6 +12,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BracketView from "@/components/BracketView";
 import PredictionsView from "@/components/PredictionsView";
+import AboutView from "@/components/AboutView";
 import SupportModal from "@/components/SupportModal";
 import { 
   AccuracyMetric, 
@@ -22,8 +23,8 @@ import {
 } from "@/lib/types";
 
 export default function Home() {
-  // Views: 'bracket' or 'predictions'
-  const [activeView, setActiveView] = useState<"bracket" | "predictions">("bracket");
+  // Views: 'bracket' or 'predictions' or 'about'
+  const [activeView, setActiveView] = useState<"bracket" | "predictions" | "about">("bracket");
   
   // Support Modal State
   const [isSupportModalOpen, setIsSupportModalOpen] = useState<boolean>(false);
@@ -146,11 +147,13 @@ export default function Home() {
                 groupLoading={groupLoading}
                 groupError={groupError}
               />
-            ) : (
+            ) : activeView === "predictions" ? (
               <PredictionsView
                 top5Teams={top5Teams}
                 externalPredictions={externalPredictions}
               />
+            ) : (
+              <AboutView />
             )}
           </main>
         )}

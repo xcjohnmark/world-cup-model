@@ -1,8 +1,8 @@
 import React from "react";
 
 interface NavbarProps {
-  activeView: "bracket" | "predictions";
-  setActiveView: (view: "bracket" | "predictions") => void;
+  activeView: "bracket" | "predictions" | "about";
+  setActiveView: (view: "bracket" | "predictions" | "about") => void;
   onSupportClick: () => void;
 }
 
@@ -53,6 +53,16 @@ export default function Navbar({ activeView, setActiveView, onSupportClick }: Na
             }`}
           >
             PREDICTIONS
+          </button>
+          <button
+            onClick={() => setActiveView("about")}
+            className={`text-xs tracking-widest font-bold font-sans py-1 transition-none border-b-2 ${
+              activeView === "about"
+                ? "border-black text-black"
+                : "border-transparent text-gray-400 hover:text-black"
+            }`}
+          >
+            ABOUT
           </button>
         </div>
       </div>
