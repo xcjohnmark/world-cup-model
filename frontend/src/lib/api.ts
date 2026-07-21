@@ -45,6 +45,11 @@ export async function fetchBracket(stage?: string, group?: string): Promise<Brac
   return fetcher<BracketFull>(endpoint);
 }
 
+// 1b. Fetch actual bracket structure
+export async function fetchActualBracket(): Promise<BracketFull> {
+  return fetcher<BracketFull>("/bracket/actual");
+}
+
 // 2. Fetch bracket completion status (locked/unlocked)
 export async function fetchBracketStatus(): Promise<{ group_stage_complete: boolean }> {
   return fetcher<{ group_stage_complete: boolean }>("/bracket-status");

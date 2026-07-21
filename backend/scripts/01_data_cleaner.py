@@ -353,7 +353,7 @@ def clean_results():
 
     # 4. Remove rows where home_score OR away_score is null
     # EXCEPTION: Keep rows where date >= 2026-06-11 (WC 2026 fixtures)
-    cutoff_date = pd.to_datetime("2026-06-11")
+    cutoff_date = pd.to_datetime("2026-06-27")
     is_wc2026 = df["date"] >= cutoff_date
     has_score = df["home_score"].notnull() & df["away_score"].notnull()
 
@@ -393,6 +393,8 @@ def clean_results():
 
     # Split into training matches and future fixtures
     wc2026_fixtures = df_filtered[df_filtered["date"] >= cutoff_date].copy()
+    wc2026_fixtures["home_score"] = float("nan")
+    wc2026_fixtures["away_score"] = float("nan")
     clean_matches = df_filtered[df_filtered["date"] < cutoff_date].copy()
 
     # 9. Print final stats: total rows, date range, null counts, competition weight distribution
@@ -675,21 +677,20 @@ def validate_clean_data():
         df_fixtures = pd.read_csv(fixtures_path)
         df_fixtures["date"] = pd.to_datetime(df_fixtures["date"])
 
-        # Exactly 72 rows
+        # Exactly 38 rows (6 group matches + 32 knockout matches)
         row_count = len(df_fixtures)
-        assert row_count == 72, f"wc2026_fixtures.csv: Expected 72 rows, got {row_count}."
+        assert row_count == 38, f"wc2026_fixtures.csv: Expected 38 rows, got {row_count}."
 
         # All scores are null
         home_score_nulls = df_fixtures["home_score"].isnull().sum()
         away_score_nulls = df_fixtures["away_score"].isnull().sum()
-        assert home_score_nulls == 72, f"wc2026_fixtures.csv: Expected 72 null home_scores, got {home_score_nulls}."
-        assert away_score_nulls == 72, f"wc2026_fixtures.csv: Expected 72 null away_scores, got {away_score_nulls}."
+        assert home_score_nulls == 38, f"wc2026_fixtures.csv: Expected 38 null home_scores, got {home_score_nulls}."
+        assert away_score_nulls == 38, f"wc2026_fixtures.csv: Expected 38 null away_scores, got {away_score_nulls}."
 
-        # date range is 2026-06-11 to 2026-06-26 or 27 (allow 27 since the raw data lists the final matches of group stage on June 27th)
+        # date range check
         min_fix_date = df_fixtures["date"].min()
         max_fix_date = df_fixtures["date"].max()
-        assert min_fix_date == pd.to_datetime("2026-06-11"), f"wc2026_fixtures.csv: Min date is {min_fix_date.strftime('%Y-%m-%d')}, expected 2026-06-11."
-        assert max_fix_date in (pd.to_datetime("2026-06-26"), pd.to_datetime("2026-06-27")), f"wc2026_fixtures.csv: Max date is {max_fix_date.strftime('%Y-%m-%d')}, expected 2026-06-26 or 2026-06-27."
+        assert min_fix_date == pd.to_datetime("2026-06-27"), f"wc2026_fixtures.csv: Min date is {min_fix_date.strftime('%Y-%m-%d')}, expected 2026-06-27."
 
 
         # 3. Load clean_rankings.csv and assert

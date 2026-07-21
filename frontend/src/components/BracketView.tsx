@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AccuracyMetric, BracketFull, FifaStandingsResponse } from "@/lib/types";
 import GroupSection from "./bracket/GroupSection";
 import GroupTableComparison from "./bracket/GroupTableComparison";
 import KnockoutBracket from "./bracket/KnockoutBracket";
+import { fetchActualBracket } from "@/lib/api";
 
 interface BracketViewProps {
   bracketData: BracketFull | null;
@@ -26,18 +27,30 @@ export default function BracketView({
   groupError,
 }: BracketViewProps) {
   const groupsList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+  const [bracketType, setBracketType] = useState<"predicted" | "actual">("predicted");
+  const [actualBracketData, setActualBracketData] = useState<BracketFull | null>(null);
+
+  useEffect(() => {
+    if (bracketType === "actual" && !actualBracketData) {
+      fetchActualBracket()
+        .then((data) => setActualBracketData(data))
+        .catch((err) => console.error("Failed to load actual bracket data:", err));
+    }
+  }, [bracketType, actualBracketData]);
+
+  const currentBracketData = bracketType === "predicted" ? bracketData : (actualBracketData || bracketData);
 
   // Extract matches for the selected group from bracketData
   const groupKey = `Group ${selectedGroup}`;
-  const groupMatches = bracketData?.group_stage?.[groupKey]?.matches || [];
+  const groupMatches = currentBracketData?.group_stage?.[groupKey]?.matches || [];
   const isGroupStageComplete = bracketStatus?.group_stage_complete ?? false;
 
   // Calculate total matches played and correct predictions across all groups
   let totalPlayed = 0;
   let correctCount = 0;
 
-  if (bracketData?.group_stage) {
-    Object.values(bracketData.group_stage).forEach((group) => {
+  if (currentBracketData?.group_stage) {
+    Object.values(currentBracketData.group_stage).forEach((group) => {
       group.matches.forEach((match) => {
         const hasResult = match.actual_result !== null && match.actual_result !== undefined;
         if (hasResult) {
@@ -71,7 +84,32 @@ export default function BracketView({
             Group stage match predictions compared side-by-side with live FIFA standings.
           </p>
         </div>
-        {totalPlayed > 0 && (
+
+        {/* Toggle between Predicted and Actual brackets */}
+        <div className="flex gap-2 self-start md:self-auto my-2 md:my-0">
+          <button
+            onClick={() => setBracketType("predicted")}
+            className={`px-3 py-1.5 border border-black text-xs font-bold uppercase transition-none ${
+              bracketType === "predicted"
+                ? "bg-black text-white"
+                : "bg-white text-black hover:bg-gray-100"
+            }`}
+          >
+            Predicted Bracket
+          </button>
+          <button
+            onClick={() => setBracketType("actual")}
+            className={`px-3 py-1.5 border border-black text-xs font-bold uppercase transition-none ${
+              bracketType === "actual"
+                ? "bg-black text-white"
+                : "bg-white text-black hover:bg-gray-100"
+            }`}
+          >
+            Actual Bracket
+          </button>
+        </div>
+
+        {totalPlayed > 0 && bracketType === "predicted" && (
           <div className="bg-[#f9fafb] border border-black px-3 py-1.5 text-xs font-mono font-bold text-black self-start md:self-auto shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
             Matches Predicted Correctly: <span className="underline">{correctCount}/{totalPlayed}</span> ({accuracy}%)
           </div>
@@ -125,7 +163,7 @@ export default function BracketView({
         </h3>
 
         <KnockoutBracket
-          bracketData={bracketData}
+          bracketData={currentBracketData}
           isGroupStageComplete={isGroupStageComplete}
         />
       </div>

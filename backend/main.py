@@ -131,6 +131,7 @@ app.state.predictor = None
 app.state.world_cup_probs = None
 app.state.top5_teams = None
 app.state.bracket = None
+app.state.bracket_actual = None
 app.state.match_predictions = None
 app.state.leaderboard = None
 
@@ -213,6 +214,13 @@ def startup_event():
     except Exception as e:
         logger.error(f"Failed to load bracket_full.json: {e}")
         app.state.bracket = {}
+
+    try:
+        app.state.bracket_actual = load_json_file("outputs/bracket_actual.json")
+        logger.info("bracket_actual.json loaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to load bracket_actual.json: {e}")
+        app.state.bracket_actual = {}
 
     try:
         app.state.match_predictions = load_json_file("outputs/match_predictions.json")
@@ -344,6 +352,14 @@ def get_bracket():
     if not app.state.bracket:
         raise HTTPException(status_code=404, detail="bracket_full.json not found on server.")
     return app.state.bracket
+
+
+@app.get("/api/bracket/actual", response_model=BracketFull)
+def get_bracket_actual():
+    """Returns the actual round-by-round tournament tree (bracket_actual.json)."""
+    if not app.state.bracket_actual:
+        raise HTTPException(status_code=404, detail="bracket_actual.json not found on server.")
+    return app.state.bracket_actual
 
 
 @app.get("/api/predict", response_model=CustomMatchResponse)

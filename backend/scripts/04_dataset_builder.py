@@ -255,7 +255,7 @@ def create_train_test_split(training_data_df: pd.DataFrame = None) -> tuple:
     """
     Performs a chronological split of the doubled training dataset.
     Train: everything before 2022-01-01.
-    Test: 2022-01-01 to 2026-06-11 (WC 2026 start date).
+    Test: 2022-01-01 to 2026-06-27 (end of WC 2026 group stage).
     Saves split matrices (X_train, X_test, y_train, y_test) and feature names list.
     """
     # 1. Load training_data.csv if training_data_df is not provided
@@ -277,7 +277,7 @@ def create_train_test_split(training_data_df: pd.DataFrame = None) -> tuple:
         
     # 3. Create the split
     train_mask = df["date"] < pd.to_datetime("2022-01-01")
-    test_mask = (df["date"] >= pd.to_datetime("2022-01-01")) & (df["date"] < pd.to_datetime("2026-06-11"))
+    test_mask = (df["date"] >= pd.to_datetime("2022-01-01")) & (df["date"] < pd.to_datetime("2026-06-27"))
     
     train_df = df[train_mask].copy()
     test_df = df[test_mask].copy()
