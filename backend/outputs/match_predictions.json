@@ -796,11 +796,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Korea Republic",
-        "team_a_prob": 0.4777,
+        "team_a": "South Africa",
+        "team_a_prob": 0.5487,
         "draw_prob": 0.0,
-        "team_b": "Canada",
-        "team_b_prob": 0.5223,
+        "team_b": "Bosnia and Herzegovina",
+        "team_b_prob": 0.4513,
         "probabilistic": true
     },
     {
@@ -809,10 +809,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Germany",
-        "team_a_prob": 0.855,
+        "team_a_prob": 0.5816,
         "draw_prob": 0.0,
-        "team_b": "Qatar",
-        "team_b_prob": 0.145,
+        "team_b": "Switzerland",
+        "team_b_prob": 0.4184,
         "probabilistic": true
     },
     {
@@ -821,10 +821,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Netherlands",
-        "team_a_prob": 0.4266,
+        "team_a_prob": 0.512,
         "draw_prob": 0.0,
-        "team_b": "Brazil",
-        "team_b_prob": 0.5734,
+        "team_b": "Morocco",
+        "team_b_prob": 0.488,
         "probabilistic": true
     },
     {
@@ -832,11 +832,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Morocco",
-        "team_a_prob": 0.6236,
+        "team_a": "Brazil",
+        "team_a_prob": 0.6513,
         "draw_prob": 0.0,
         "team_b": "Japan",
-        "team_b_prob": 0.3764,
+        "team_b_prob": 0.3487,
         "probabilistic": true
     },
     {
@@ -845,10 +845,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "France",
-        "team_a_prob": 0.8021,
+        "team_a_prob": 0.7338,
         "draw_prob": 0.0,
-        "team_b": "Scotland",
-        "team_b_prob": 0.1979,
+        "team_b": "Australia",
+        "team_b_prob": 0.2662,
         "probabilistic": true
     },
     {
@@ -856,11 +856,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Ecuador",
-        "team_a_prob": 0.4764,
+        "team_a": "C\u00f4te d'Ivoire",
+        "team_a_prob": 0.4842,
         "draw_prob": 0.0,
         "team_b": "Senegal",
-        "team_b_prob": 0.5236,
+        "team_b_prob": 0.5158,
         "probabilistic": true
     },
     {
@@ -869,10 +869,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Mexico",
-        "team_a_prob": 0.6177,
+        "team_a_prob": 0.634,
         "draw_prob": 0.0,
-        "team_b": "C\u00f4te d'Ivoire",
-        "team_b_prob": 0.3823,
+        "team_b": "Ecuador",
+        "team_b_prob": 0.366,
         "probabilistic": true
     },
     {
@@ -881,10 +881,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "England",
-        "team_a_prob": 0.8066,
+        "team_a_prob": 0.4944,
         "draw_prob": 0.0,
-        "team_b": "Uzbekistan",
-        "team_b_prob": 0.1934,
+        "team_b": "Colombia",
+        "team_b_prob": 0.5056,
         "probabilistic": true
     },
     {
@@ -892,11 +892,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Australia",
-        "team_a_prob": 0.5938,
+        "team_a": "United States",
+        "team_a_prob": 0.6489,
         "draw_prob": 0.0,
-        "team_b": "Algeria",
-        "team_b_prob": 0.4062,
+        "team_b": "Sweden",
+        "team_b_prob": 0.3511,
         "probabilistic": true
     },
     {
@@ -916,11 +916,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Colombia",
-        "team_a_prob": 0.5555,
+        "team_a": "Congo DR",
+        "team_a_prob": 0.2883,
         "draw_prob": 0.0,
         "team_b": "Croatia",
-        "team_b_prob": 0.4445,
+        "team_b_prob": 0.7117,
         "probabilistic": true
     },
     {
@@ -929,10 +929,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Spain",
-        "team_a_prob": 0.6979,
+        "team_a_prob": 0.8053,
         "draw_prob": 0.0,
-        "team_b": "Austria",
-        "team_b_prob": 0.3022,
+        "team_b": "Algeria",
+        "team_b_prob": 0.1947,
         "probabilistic": true
     },
     {
@@ -940,11 +940,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "Switzerland",
-        "team_a_prob": 0.5215,
+        "team_a": "Canada",
+        "team_a_prob": 0.3824,
         "draw_prob": 0.0,
-        "team_b": "Egypt",
-        "team_b_prob": 0.4785,
+        "team_b": "Austria",
+        "team_b_prob": 0.6176,
         "probabilistic": true
     },
     {
@@ -953,10 +953,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Argentina",
-        "team_a_prob": 0.8138,
+        "team_a_prob": 0.8899,
         "draw_prob": 0.0,
-        "team_b": "Uruguay",
-        "team_b_prob": 0.1862,
+        "team_b": "Cabo Verde",
+        "team_b_prob": 0.1101,
         "probabilistic": true
     },
     {
@@ -965,10 +965,10 @@
         "group": null,
         "date": "2026-06-28",
         "team_a": "Portugal",
-        "team_a_prob": 0.7132,
+        "team_a_prob": 0.7667,
         "draw_prob": 0.0,
-        "team_b": "T\u00fcrkiye",
-        "team_b_prob": 0.2868,
+        "team_b": "Ghana",
+        "team_b_prob": 0.2333,
         "probabilistic": true
     },
     {
@@ -976,11 +976,11 @@
         "stage": "Round of 32",
         "group": null,
         "date": "2026-06-28",
-        "team_a": "United States",
-        "team_a_prob": 0.6021,
+        "team_a": "Paraguay",
+        "team_a_prob": 0.3233,
         "draw_prob": 0.0,
-        "team_b": "IR Iran",
-        "team_b_prob": 0.3979,
+        "team_b": "Egypt",
+        "team_b_prob": 0.6767,
         "probabilistic": true
     },
     {
@@ -1000,11 +1000,11 @@
         "stage": "Round of 16",
         "group": null,
         "date": "2026-07-04",
-        "team_a": "Canada",
-        "team_a_prob": 0.2644,
+        "team_a": "South Africa",
+        "team_a_prob": 0.1982,
         "draw_prob": 0.0,
-        "team_b": "Brazil",
-        "team_b_prob": 0.7356,
+        "team_b": "Netherlands",
+        "team_b_prob": 0.8018,
         "probabilistic": true
     },
     {
@@ -1012,11 +1012,11 @@
         "stage": "Round of 16",
         "group": null,
         "date": "2026-07-04",
-        "team_a": "Morocco",
-        "team_a_prob": 0.6153,
+        "team_a": "Brazil",
+        "team_a_prob": 0.6425,
         "draw_prob": 0.0,
         "team_b": "Senegal",
-        "team_b_prob": 0.3847,
+        "team_b_prob": 0.3575,
         "probabilistic": true
     },
     {
@@ -1025,10 +1025,10 @@
         "group": null,
         "date": "2026-07-04",
         "team_a": "Mexico",
-        "team_a_prob": 0.4468,
+        "team_a_prob": 0.4261,
         "draw_prob": 0.0,
-        "team_b": "England",
-        "team_b_prob": 0.5532,
+        "team_b": "Colombia",
+        "team_b_prob": 0.5739,
         "probabilistic": true
     },
     {
@@ -1036,11 +1036,11 @@
         "stage": "Round of 16",
         "group": null,
         "date": "2026-07-04",
-        "team_a": "Colombia",
-        "team_a_prob": 0.3315,
+        "team_a": "Croatia",
+        "team_a_prob": 0.2726,
         "draw_prob": 0.0,
         "team_b": "Spain",
-        "team_b_prob": 0.6685,
+        "team_b_prob": 0.7274,
         "probabilistic": true
     },
     {
@@ -1048,11 +1048,11 @@
         "stage": "Round of 16",
         "group": null,
         "date": "2026-07-04",
-        "team_a": "Australia",
-        "team_a_prob": 0.2712,
+        "team_a": "United States",
+        "team_a_prob": 0.3948,
         "draw_prob": 0.0,
         "team_b": "Belgium",
-        "team_b_prob": 0.7288,
+        "team_b_prob": 0.6052,
         "probabilistic": true
     },
     {
@@ -1061,10 +1061,10 @@
         "group": null,
         "date": "2026-07-04",
         "team_a": "Argentina",
-        "team_a_prob": 0.7271,
+        "team_a_prob": 0.7637,
         "draw_prob": 0.0,
-        "team_b": "United States",
-        "team_b_prob": 0.2729,
+        "team_b": "Egypt",
+        "team_b_prob": 0.2363,
         "probabilistic": true
     },
     {
@@ -1072,11 +1072,11 @@
         "stage": "Round of 16",
         "group": null,
         "date": "2026-07-04",
-        "team_a": "Switzerland",
-        "team_a_prob": 0.3634,
+        "team_a": "Austria",
+        "team_a_prob": 0.3624,
         "draw_prob": 0.0,
         "team_b": "Portugal",
-        "team_b_prob": 0.6366,
+        "team_b_prob": 0.6376,
         "probabilistic": true
     },
     {
@@ -1085,10 +1085,10 @@
         "group": null,
         "date": "2026-07-09",
         "team_a": "France",
-        "team_a_prob": 0.5878,
+        "team_a_prob": 0.6778,
         "draw_prob": 0.0,
-        "team_b": "Brazil",
-        "team_b_prob": 0.4122,
+        "team_b": "Netherlands",
+        "team_b_prob": 0.3222,
         "probabilistic": true
     },
     {
@@ -1108,11 +1108,11 @@
         "stage": "Quarter-finals",
         "group": null,
         "date": "2026-07-09",
-        "team_a": "Morocco",
-        "team_a_prob": 0.4687,
+        "team_a": "Brazil",
+        "team_a_prob": 0.5204,
         "draw_prob": 0.0,
-        "team_b": "England",
-        "team_b_prob": 0.5313,
+        "team_b": "Colombia",
+        "team_b_prob": 0.4796,
         "probabilistic": true
     },
     {
@@ -1144,11 +1144,11 @@
         "stage": "Semi-finals",
         "group": null,
         "date": "2026-07-14",
-        "team_a": "England",
-        "team_a_prob": 0.326,
+        "team_a": "Brazil",
+        "team_a_prob": 0.3816,
         "draw_prob": 0.0,
         "team_b": "Argentina",
-        "team_b_prob": 0.674,
+        "team_b_prob": 0.6184,
         "probabilistic": true
     },
     {
@@ -1157,10 +1157,10 @@
         "group": null,
         "date": "2026-07-18",
         "team_a": "France",
-        "team_a_prob": 0.6465,
+        "team_a_prob": 0.5878,
         "draw_prob": 0.0,
-        "team_b": "England",
-        "team_b_prob": 0.3535,
+        "team_b": "Brazil",
+        "team_b_prob": 0.4122,
         "probabilistic": true
     },
     {

@@ -141,7 +141,7 @@ def main():
     # Sort teams by win probability (descending), then final, then semifinal
     results_list.sort(key=lambda x: (x["win_prob"], x["final_prob"], x["semifinal_prob"], x["quarterfinal_prob"]), reverse=True)
     
-    # 7. Save to backend/outputs/simulation_results.json
+    # 7. Save to backend/outputs/simulation_results.json, world_cup_probabilities.json, and top5_teams.json
     output_dir = os.path.join("backend", "outputs")
     os.makedirs(output_dir, exist_ok=True)
     
@@ -153,8 +153,20 @@ def main():
     
     with open(output_path, "w") as f:
         json.dump(output_data, f, indent=4)
+
+    prob_path = os.path.join(output_dir, "world_cup_probabilities.json")
+    with open(prob_path, "w") as f:
+        json.dump(output_data, f, indent=4)
+
+    top5_path = os.path.join(output_dir, "top5_teams.json")
+    top5_data = [
+        {"team": r["team"], "win_prob": r["win_prob"]}
+        for r in results_list[:5]
+    ]
+    with open(top5_path, "w") as f:
+        json.dump(top5_data, f, indent=4)
         
-    print(f"\n[SUCCESS] Saved simulation results to: {output_path}")
+    print(f"\n[SUCCESS] Saved simulation results, probabilities, and top 5 to: {output_dir}")
     
     # 8. Print formatted standings table (Top 25 teams)
     print("\n" + "=" * 80)
