@@ -1,22 +1,22 @@
 [
     {
-        "team": "Argentina",
-        "win_prob": 0.2579
+        "team": "Spain",
+        "win_prob": 0.311
     },
     {
-        "team": "Spain",
-        "win_prob": 0.1909
+        "team": "Argentina",
+        "win_prob": 0.1723
     },
     {
         "team": "France",
-        "win_prob": 0.1374
+        "win_prob": 0.0903
     },
     {
         "team": "Morocco",
-        "win_prob": 0.0704
+        "win_prob": 0.0751
     },
     {
         "team": "Brazil",
-        "win_prob": 0.0631
+        "win_prob": 0.0686
     }
 ]
